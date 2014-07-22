@@ -33,28 +33,8 @@ router.get('/:name', function (req, res, next) {
             "name": name,
             "id": "0",
             "amount": "200456",
-            "weight": "20"
         },
-        "allClasses": [
-            {
-                "name": "http",
-                "id": "0",
-                "amount": "200456",
-                "weight" : "20"
-            },
-            {
-                "name": "cdn",
-                "id": "1",
-                "amount": "200456",
-                "weight" : "20"
-            },
-            {
-                "name": "game",
-                "id": "2",
-                "amount": "200456",
-                "weight" : "20"
-            }                
-        ],
+
         "product": [
             {
                 "name": "qq.com",
@@ -63,7 +43,7 @@ router.get('/:name', function (req, res, next) {
                 "id": "0"
             }
         ],
-        "pageSum": "10"
+        "count": "10000"
     };
     res.json(json);
 });
@@ -108,7 +88,7 @@ router.get('/:class/:product', function (req, res, next) {
         ],
 
         class: className,
-        pageSum: 5
+        count: 200000
     };
 
     res.json(json);
@@ -130,32 +110,11 @@ router.get('/:class/:product/:child', function (req, res, next) {
         {value: "192.184.56.23",id:"1"},
         {value: "120.114.71.22",id:"2"},
         {value: "198.142.26.22",id:"3"}
-        ],
-
-        product: [
-            {
-                "name": "mail.qq.com",
-                "id": "0",
-                "amount": "200456",
-                "weight" : "20"
-            },
-            {
-                "name": "game.qq.com",
-                "id": "1",
-                "amount": "200456",
-                "weight" : "20"
-            },
-            {
-                "name": "weixin.qq.com",
-                "id": "2",
-                "amount": "200456",
-                "weight" : "20"
-            }    
-        ],            
+        ],           
 
         class: className,
         parent: product,
-        pageSum: 20
+        count: 20000
     };
 
     res.json(json);
