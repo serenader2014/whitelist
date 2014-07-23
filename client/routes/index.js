@@ -43,19 +43,34 @@ router.get('/:class/:product', function (req, res) {
     var productName = req.params.productName;
     var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
         responseProduct.on('data', function (rawProduct) {
-            var products = JSON.parse(rawProduct);
-            var requestSiblings = http.request(target+'/'+className, function (responseSiblings) {
-                responseSiblings.on('data', function (rawSibling) {
-                    var siblings = JSON.parse(rawSibling);
-                    res.render('product', {siblings: siblings, products: products});
-                });
-            });
+            var product = JSON.parse(rawProduct);
 
-            requestSiblings.end();
+            res.render('product', {product:product});
         });
     });
 
     requestProduct.end();
 });
+
+router.get('/:class/:product/:child', function (req, res) {
+    var className = req.params.class;
+    var productName = req.params.product;
+    var childName = req.params.child;
+    var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName, function (responseChild) {
+        responseChild.on('data', function (rawChild) {
+            var child = JSON.parse(rawChild);
+            var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
+                responseProduct.on('data', function (rawProduct) {
+                    var product = JSON.parse(rawProduct);
+                    res.render('child', {child: child, product: product});
+                });
+            });
+
+            requestProduct.end();
+        });
+    }) ;  
+    requestChild.end();
+});
+
 
 module.exports = router;

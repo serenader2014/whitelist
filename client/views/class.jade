@@ -26,15 +26,14 @@ block content
                                 span: button.btn.btn-default.wl-btn 编辑
                         - classes.forEach(function (item,index) {
                             li
-                                a(href='javascript:;',data-class='#{item.name}',data-id='#{item.id}') 
+                                a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}') 
                                     | #{item.name}
                                     span.badge.wl-num #{item.amount}
-                                    span.badge.wl-weight #{item.weight}
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
-
+                        li: a(href='') #{product.current.name}
                     hr
                     div.table-responsive
                         button.btn.btn-default.wl-edit-btn(type='button') 编辑
