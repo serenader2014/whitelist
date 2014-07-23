@@ -55,6 +55,7 @@ router.get('/:class/:product', function (req, res, next) {
         productName = req.params.product;
     var json = {
         "current": {
+            "className":className,
             "name": productName,
             "id": 0,
             "amount": "200000",
