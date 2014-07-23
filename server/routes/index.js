@@ -41,7 +41,9 @@ router.get('/:name', function (req, res, next) {
                 "weight": "20",
                 "amount": "20000",
                 "id": "0"
-            }
+            },
+
+
         ],
         "count": "10000"
     };
@@ -49,7 +51,7 @@ router.get('/:name', function (req, res, next) {
 });
 
 
-
+//http://localhost/http/qq.com
 router.get('/:class/:product', function (req, res, next) {
     var className = req.params.class,
         productName = req.params.product;
@@ -85,6 +87,8 @@ router.get('/:class/:product', function (req, res, next) {
                 "amount": "200456",
                 "weight" : "20"
             }    
+
+
         ],
 
         class: className,
