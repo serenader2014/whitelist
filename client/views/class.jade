@@ -26,9 +26,7 @@ block content
                                 span: button.btn.btn-default.wl-btn 编辑
                         - classes.forEach(function (item,index) {
                             li
-                                a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}') 
-                                    | #{item.name}
-                                    span.badge.wl-weight #{item.weight}
+                                a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}') #{item.name}
                                     span.badge.wl-num #{item.amount}
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
@@ -48,15 +46,16 @@ block content
                             tbody.wl-product-body
                             - product.product.forEach(function (item,index) {
                                 td
-                                    a(href='#{product.current.name}/#{item.name}',data-product='#{item.name}',data-id='#{item.id}').wl-item 
-                                        | #{item.name}
-                                        span.wl-stat
-                                        span.wl-weight #{item.weight}
-                                        span.wl-num #{item.amount}
+                                    a.wl-item(href='javascript:;',data-product='#{item.name}',data-id='#{item.id}') #{item.name}
+                                    span.wl-stat
+                                    span.wl-weight #{item.weight}
+                                    span.wl-num #{item.amount}
                             - })
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
+                                - for (var i = 1; i <= Math.ceil(product.count/100); i ++ )
+                                    li: a(href='/#{product.current.name}/page/#{i}') #{i}
                                 li: a.wl-next-page(href='') &raquo;
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
             div.modal-dialog
@@ -75,3 +74,36 @@ block content
                     div.modal-footer
                         button.btn.btn-default(type='button',data-dismiss='modal') Cancel
                         button.btn.btn-primary(type='button') Save changes
+block extra_script
+    script.
+        $(".wl-list a").each(function (index, item) {
+            $(item).editable({
+                title: "Input the value",
+                type: "text",
+                pk: $(this).data("id"),
+                url: ""
+            });
+        });
+
+        $(".wl-list a").editable("toggleDisabled");
+
+        $(".table a").each(function (index, item) {
+            $(item).editable({
+                title: "Input the value",
+                type: "text",
+                pk: $(this).data("id"),
+                url: "/wl/ip"
+            });
+        });
+
+        $(".table a").editable("toggleDisabled");
+
+        $("body").on("click", ".wl-edit-btn", function(){
+            $(".table a").editable("toggleDisabled");
+            $(this).html($(this).html()==="编辑"? "取消" : "编辑");
+        });
+        $("body").on("click", ".wl-btn", function () {
+            $(".wl-list a:not(.wl-btn)").editable("toggleDisabled");
+            $(this).html($(this).html()==="编辑" ? "取消" : "编辑");
+        });
+

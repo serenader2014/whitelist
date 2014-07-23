@@ -43,7 +43,7 @@ router.get('/:name', function (req, res, next) {
                 "id": "0"
             }
         ],
-        "count": "10000"
+        "count": "5239"
     };
     res.json(json);
 });
@@ -55,7 +55,6 @@ router.get('/:class/:product', function (req, res, next) {
         productName = req.params.product;
     var json = {
         "current": {
-            "className":className,
             "name": productName,
             "id": 0,
             "amount": "200000",
