@@ -24,8 +24,15 @@ block content
                             p 
                                 | 分类
                                 span: button.btn.btn-default.wl-btn 编辑
+                        - classes.forEach(function (item,index) {
+                            li
+                                a(href='javascript:;',data-class='#{item.name}',data-id='#{item.id}') 
+                                    | #{item.name}
+                                    span.badge.wl-num #{item.amount}
+                                    span.badge.wl-weight #{item.weight}
+                        - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
-                    h2.sub-header #{current}//
+                    h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
 
                     hr
@@ -39,7 +46,14 @@ block content
                                     th 产品
                                     th 产品
                             tbody.wl-product-body
-
+                            - product.product.forEach(function (item,index) {
+                                td
+                                    a(href='javascript:;',data-product='#{item.name}',data-id='#{item.id}').wl-item 
+                                        | #{item.name}
+                                        span.wl-stat
+                                        span.wl-weight #{item.weight}
+                                        span.wl-num #{item.amount}
+                            - })
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;

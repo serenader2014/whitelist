@@ -20,13 +20,14 @@ router.get('/', function(req, res) {
 
 router.get('/:class', function (req, res) {
     var className = req.params.class;
-    var request = http.request(target+'/'+className, function (response) {
-        response.on('data', function (chunk) {
-            var data = JSON.parse(chunk);
+    var requestProduct = http.request(target+'/'+className, function (responseProduct) {
+        responseProduct.on('data', function (rawProduct) {
+            var product = JSON.parse(rawProduct);
             var requestClass = http.request(target, function (responseClass) {
-                responseClass.on('data', function (chunk) {
-                    var classes = JSON.parse(chunk);
-                    res.render('class', {classes: classes, product: data});
+                responseClass.on('data', function (rawClass) {
+                    var classes = JSON.parse(rawClass);
+                    res.render('class', {classes: classes, product: product});
+                    // console.log([classes, product]);
                 });
             });
 
@@ -34,7 +35,7 @@ router.get('/:class', function (req, res) {
         });
     });
 
-    request.end();
+    requestProduct.end();
 });
 
 router.get('/:class/:product', function (req, res) {
