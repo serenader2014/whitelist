@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
         "weight" : "20"
     },
     {
-        "name": "game",
+        "name": "online game",
         "id": "2",
         "amount": "200456",
         "weight" : "20"

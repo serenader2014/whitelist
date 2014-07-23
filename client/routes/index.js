@@ -11,8 +11,8 @@ router.get('/', function(req, res) {
         response.setEncoding('utf8');
         response.on('data', function (chunk) {
             var data = JSON.parse(chunk);
-            
-        })
+             res.render('index', {classes: data});
+        });
     });
 
     request.end();
