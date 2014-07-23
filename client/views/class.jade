@@ -25,9 +25,15 @@ block content
                                 | 分类
                                 span: button.btn.btn-default.wl-btn 编辑
                         - classes.forEach(function (item,index) {
-                            li
-                                a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}') #{item.name}
-                                    span.badge.wl-num #{item.amount}
+                            - if (item.name === product.current.name) {
+                                li.active
+                                    a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}') #{item.name}
+                                        span.badge.wl-num #{item.amount}
+                            - } else {
+                                li
+                                    a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}') #{item.name}
+                                        span.badge.wl-num #{item.amount}
+                            - }
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{product.current.name}
@@ -46,7 +52,7 @@ block content
                             tbody.wl-product-body
                             - product.product.forEach(function (item,index) {
                                 td
-                                    a.wl-item(href='javascript:;',data-product='#{item.name}',data-id='#{item.id}') #{item.name}
+                                    a.wl-item(href='/#{product.current.name}/#{item.name}',data-product='#{item.name}',data-id='#{item.id}') #{item.name}
                                     span.wl-stat
                                     span.wl-weight #{item.weight}
                                     span.wl-num #{item.amount}
