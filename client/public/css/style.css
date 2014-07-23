@@ -220,3 +220,7 @@ body {
   background: url(../img/HTTP.jpg);
   background-size: 100%;
 }
+
+.wl-btn{
+  float: right;
+}
