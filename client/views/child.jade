@@ -24,20 +24,27 @@ block content
                             p
                                 | 产品
                                 span: button.btn.btn-default.wl-btn 编辑
+                        - var l = sidebarLink.split('/page/')[0]
                         - product.product.forEach(function (item,index){
-                            li
-                                - var l = url.split('/page/')[0]
-                                a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
-                                    | #{item.name}
-                                    span.badge.wl-weight #{item.weight}
-                                    span.badge.wl-num #{item.amount}
+                            - if (item.name === child.current.name)
+                                li.active
+                                    a(href='#{l}#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                        | #{item.name}
+                                        span.badge.wl-weight #{item.weight}
+                                        span.badge.wl-num #{item.amount}                                    
+                            - else 
+                                li
+                                    a(href='#{l}#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                        | #{item.name}
+                                        span.badge.wl-weight #{item.weight}
+                                        span.badge.wl-num #{item.amount}
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
-                    h2.sub-header #{product.current.name}
+                    h2.sub-header #{child.current.name}
                     ol.breadcrumb.wl-header-nav
                         - var tmp = '';
-                        - var l = url.split('/page/')[0]
-                        - l.split('/').forEach(function (item, index) {
+                        - var u = url.split('/page/')[0];
+                        - u.split('/').forEach(function (item, index) {
                             - tmp = tmp + item +'/';
                             - if (item)
                                 li: a(href='#{tmp}') #{item}
@@ -53,7 +60,7 @@ block content
                                     th IP
                                     th IP
                             tbody.wl-product-body
-                                - product.ip.forEach(function (item,index) {
+                                - child.ip.forEach(function (item,index) {
                                 td
                                     a(href='javascript:;',data-id='#{item.id}')
                                         | #{item.value}
@@ -64,9 +71,9 @@ block content
                                 - for(var i = 1; i <= product.count/100; i++)
                                     - if ((url.split('/page/')[1])*1 && (url.split('/page/')[1])*1 === i)
                                         li.active: a(href='#{l}/page/#{i}') #{i}
-                                    - else
-                                        - var a = (url.split('/page/')[1])
-                                        li: a(href='#{l}/page/#{i}') #{i}
+                                    - else 
+                                        - var u = url.split('/page/')[0]
+                                        li: a(href='#{u}/page/#{i}') #{i}
                                 li: a.wl-next-page(href='') &raquo;
     
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
