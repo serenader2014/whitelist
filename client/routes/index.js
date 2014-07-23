@@ -18,4 +18,19 @@ router.get('/', function(req, res) {
     request.end();
 });
 
+router.get('/:class', function (req, res) {
+    var className = req.params.class;
+    var request = http.request(target+className, function (response) {
+        response.on('data', function (chunk) {
+            var data = JSON.parse(chunk);
+            var requestClass = http.request(target, function (responseClass) {
+                responseClass.on('data', function (chunk) {
+                    var classes = JSON.parse(chunk);
+                    res.render('class', {classes: classes, product: data});
+                });
+            });
+        });
+    });
+});
+
 module.exports = router;

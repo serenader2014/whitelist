@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>White list for Zhidu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-editable.css">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="js/ie-emulation-modes-warning.js"></script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-editable.js"></script>
+    <script src='js/underscore-min.js'></script>
+    <script src='js/backbone-min.js'></script>
+    <script src="js/script.js"></script>
+    <script type="text" >
+    定义HTTP等分类为第一级分类，qq.com等顶级域名为第二级分类，mail.qq.com等二级域名为第三分类。
+    {
+      第一级分类_id: "",
+      第一级分类名称: "",
+      number: "",
+      weight: ""
+    }
+    url: http://example.com/
+    </script>
+    <script type="text/template" id="wl-index-template">
+    <div class="container wl-index">
+      <div class="jumbotron wl-main">
+        <h1 class="wl-header"><a href="index.html">Zhidu</a></h1>
+        <p>
+          <input type="text" class="form-control wl-index-search" placeholder="Search">
+        </p>
+      </div>    
+    </div>
+    </script>
+
+
+
+    <script type="text/template" id="wl-class">
+          <div class="col-sm-6 col-md-3 wl-tile">
+            <div class="wl-container">
+              <a href="javascript:;" class="wl-class-link" data-class="{{#title}}">
+                <img src="img/W020140225523488980515.jpg" alt="other" width="100%">
+                <span class="wl-title">{{#title}}</span>
+              </a>
+            </div>
+          </div>          
+    </script>
+
+
+
+    <script type="text/template" id="wl-product-template">
+    <div class="wl-class">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">智度</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="#" class="wl-add-product" data-toggle="modal" data-target="#add">添加产品</a></li>
+              <li><a href="#" class="wl-add-class" data-toggle="modal" data-target="#add">添加分类</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+              <input type="text" class="form-control wl-search" placeholder="Search...">
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-3 col-md-3 sidebar">
+            <ul class="nav nav-sidebar wl-list">
+              <li class="wl-sidebar-header"><p>分类 <span><button class="btn btn-default wl-btn">编辑</button></span></p></li>
+
+            </ul>
+          </div>
+          <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+            <h2 class="sub-header">{{#current}}</h2>
+            <ol class="breadcrumb wl-header-nav">
+            </ol>
+            <hr>
+            <div class="table-responsive">
+              <button type="button" class="btn btn-default wl-edit-btn">编辑</button>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>产品</th>
+                    <th>产品</th>
+                    <th>产品</th>
+                    <th>产品</th>
+                  </tr>
+                </thead>
+                <tbody class="wl-product-body">
+
+                </tbody>
+              </table>
+              <div class="wl-pager">
+                <ul class="pagination">
+                  <li><a href="#" class="wl-prev-page">&laquo;</a></li>
+
+                  <li><a href="#" class="wl-next-page">&raquo;</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">添加产品</h4>
+            </div>
+            <div class="modal-body">
+              <select name="id" id="" class="form-control input-lg wl-select">
+                <option value="none">无</option>
+                <option value="">HTTP</option>
+                <option value="">CDN</option>
+                <option value="">游戏</option>
+              </select>
+              <select name="id" id="" class="form-control input-lg wl-select">
+                <option value="none">无</option>
+                <option value="">qq.com</option>
+              </select>       
+              <input type="text" class="form-control wl-input" placeholder="子产品">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">添加分类</h4>
+            </div>
+            <div class="modal-body">
+              <select name="id" id="" class="form-control input-lg wl-select">
+                <option value="">HTTP</option>
+                <option value="">CDN</option>
+                <option value="">游戏</option>
+              </select>
+              <select name="id" id="" class="form-control input-lg wl-select">
+                <option value="">qq.com</option>
+                <option value="">CDN</option>
+                <option value="">游戏</option>
+              </select>       
+              <input type="text" class="form-control wl-input" placeholder="子产品">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </script>
+
+    <script type="text/template" id="wl-left-template">
+              <li class="">
+                <a href="javascript:;" class="{{#className}}"  data-class="{{#name}}" data-id="{{#id}}">{{#name}}
+                  <span class="badge wl-num">{{#number}}</span><span class="badge wl-weight">{{#weight}}</span>
+                </a>
+              </li>
+    </script>
+
+    <script type="text/template" id="wl-rightmiddle-template">
+                    <td>
+                      <a href="javascript:;" class="wl-item" data-product="{{#name}}" data-id="{{#id}}">{{#name}}</a>
+                      <span class="wl-stat">
+                        <span class="wl-weight">{{#weight}}</span>
+                        <span class="wl-num">{{#number}}</span>
+                      </span>
+                    </td>
+    </script>
+    <script type="text/template" id="wl-rightbottom-template">
+    <li><a href="javascript:;" data-page="{{#i}}">{{#i}}</a></li>
+    </script>
+    <script type="text/template" id="wl-righttop-template">
+    <li><a href="javascript:;" data-link = "{{#target}}">{{#link}}</a></li>
+    </script>
+    <script type="text/template" id="wl-rightip-template">
+      <td><a href="javascript:;" data-id="{{#id}}">{{#ip}}</a></td>
+    </script>
+  </body>
+</html>
