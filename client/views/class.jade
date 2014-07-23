@@ -61,7 +61,10 @@ block content
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
                                 - for (var i = 1; i <= Math.ceil(product.count/100); i ++ )
-                                    li: a(href='/#{product.current.name}/page/#{i}') #{i}
+                                    - if (url && i === (url.split('/page/')[1])*1)
+                                        li.active: a(href='/#{product.current.name}/page/#{i}') #{i}
+                                    - else
+                                        li: a(href='/#{product.current.name}/page/#{i}') #{i}
                                 li: a.wl-next-page(href='') &raquo;
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
             div.modal-dialog

@@ -4,7 +4,26 @@ var http = require('http');
 
 var target = require('../app').target;
 
+
+
+// TODO 
+// 1. search feature 
+// 2. pagination
+// 3. error handling
+// 4. sidebar list problem
+// 5. 
+
+
 /* GET home page. */
+
+router.get('*', function (req, res, next) {
+    if (req.url.substring(req.url.length-1) === '/') {
+        res.redirect(req.url.substring(0, req.url.length-1));
+    } else {
+        next();
+    }
+});
+
 router.get('/', function(req, res) {
 
     var request = http.request(target, function (response) {
@@ -27,7 +46,26 @@ router.get('/:class', function (req, res) {
                 responseClass.on('data', function (rawClass) {
                     var classes = JSON.parse(rawClass);
                     res.render('class', {classes: classes, product: product});
-                    // console.log([classes, product]);
+                });
+            });
+
+            requestClass.end();
+        });
+    });
+
+    requestProduct.end();
+});
+
+router.get('/:class/page/:num', function (req, res) {
+    var className = req.params.class;
+    var number = req.params.num - 1;
+    var requestProduct = http.request(target+'/'+className+'?offset='+number*100+'&limit=100', function (responseProduct) {
+        responseProduct.on('data', function (rawProduct) {
+            var product = JSON.parse(rawProduct);
+            var requestClass = http.request(target, function (responseClass) {
+                responseClass.on('data', function (rawClass) {
+                    var classes = JSON.parse(rawClass);
+                    res.render('class', {classes: classes, product: product, url: decodeURIComponent(req.url)});
                 });
             });
 
@@ -45,7 +83,7 @@ router.get('/:class/:product', function (req, res) {
         responseProduct.on('data', function (rawProduct) {
             var product = JSON.parse(rawProduct);
 
-            res.render('product', {product:product, url: req.url});
+            res.render('product', {product:product, url: decodeURIComponent(req.url)});
         });
     });
 
@@ -62,7 +100,7 @@ router.get('/:class/:product/:child', function (req, res) {
             var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
                 responseProduct.on('data', function (rawProduct) {
                     var product = JSON.parse(rawProduct);
-                    res.render('child', {child: child, product: product, url: req.url});
+                    res.render('child', {child: child, product: product, url: decodeURIComponent(req.url)});
                 });
             });
 
@@ -71,6 +109,9 @@ router.get('/:class/:product/:child', function (req, res) {
     }) ;  
     requestChild.end();
 });
+
+
+
 
 
 module.exports = router;
