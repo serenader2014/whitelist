@@ -6,27 +6,27 @@ block content
         div.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
             div.container-fluid
                 div.navbar-header
-                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                    button.navbar-toggle(type='button',data-toggle='collapse',data-target='.navbar-collapse')
                         span.sr-only Toggle navigation
-                        span.icon-bar
+                        span.icon-bar  
                     a.navbar-brand(href='/') 智度
                 div.navbar-collapse.collapse
                     ul.nav.navbar-nav.navbar-right
-                        li: a.wl-add-product(href='javascript:;', data-toggle='modal', data-target='#add') 添加产品
-                        li: a.wl-add-class(href='javascript:;', data-toggle='modal', data-target='#add') 添加分类
+                        li: a.wl-add-product(href='javascript:;',data-toggle='modal',data-target='#add') 添加产品
+                        li: a.wl-add-class(href='javascript:;',data-toggle='modal',data-target='#add') 添加分类
                     form.navbar-form.navbar-right
-                        input.form-control.wl-search(type='text', placeholder='Search..')
+                        input.form-control.wl-search(type='text',placeholder='Search...')
         div.container-fluid
             div.row
                 div.col-sm-3.col-md-3.sidebar
                     ul.nav.nav-sidebar.wl-list
                         li.wl-sidebar-header
-                            p 
-                                | 分类
+                            p
+                                | 产品
                                 span: button.btn.btn-default.wl-btn 编辑
-                        - classes.forEach(function (item,index) {
+                        - product.product.forEach(function (item,index){
                             li
-                                a(href='/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}') 
+                                a(href='javascript:;',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                     | #{item.name}
                                     span.badge.wl-weight #{item.weight}
                                     span.badge.wl-num #{item.amount}
@@ -41,37 +41,37 @@ block content
                         table.table.table-striped
                             thead
                                 tr
-                                    th 产品
-                                    th 产品
-                                    th 产品
-                                    th 产品
+                                    th IP
+                                    th IP
+                                    th IP
+                                    th IP
                             tbody.wl-product-body
-                            - product.product.forEach(function (item,index) {
+                                - product.ip.forEach(function (item,index) {
                                 td
-                                    a(href='#{product.current.name}/#{item.name}',data-product='#{item.name}',data-id='#{item.id}').wl-item 
-                                        | #{item.name}
-                                        span.wl-stat
-                                        span.wl-weight #{item.weight}
-                                        span.wl-num #{item.amount}
-                            - })
+                                    a(href='javascript:;',data-id='#{item.id}').wl-item 
+                                        | #{item.value}
+                                - })
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
                                 li: a.wl-next-page(href='') &raquo;
+    
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
             div.modal-dialog
                 div.modal-content
                     div.modal-header
                         button.close(type='button',data-dismiss='modal')
                             span(aria-hidden='true') &times;
-                            span.sr-only Close
+                            span.sr-only close
                         h4.modal-title#myModalLabel 添加产品
                     div.modal-body
-                        select.form-control.input-lg.wl-select
+                        select.from-control.input-lg.wl-select
                             option(value='') something
-                        select.form-control.input-lg.wl-select
-                            option(value='') another 
-                        input.form-control.wl-input(type='text',placeholder='子产品')
+                        select.from-control.input-lg.wl-select
+                            option(value='') another
+                        input.from-control.wl-input(type='text',placeholder='子产品')
                     div.modal-footer
                         button.btn.btn-default(type='button',data-dismiss='modal') Cancel
-                        button.btn.btn-primary(type='button') Save changes
+                        button.btn.btn-primary(type='button') Save changes 
+    
+                

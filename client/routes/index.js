@@ -40,12 +40,13 @@ router.get('/:class', function (req, res) {
 
 router.get('/:class/:product', function (req, res) {
     var className = req.params.class;
-    var productName = req.params.productName;
+    var productName = req.params.product;
     var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
         responseProduct.on('data', function (rawProduct) {
             var product = JSON.parse(rawProduct);
 
             res.render('product', {product:product});
+            console.log(product.current);
         });
     });
 
