@@ -1,95 +1,63 @@
 extends layout
-extends extra_css
-extends extra_script
 
 block content
-    .wl-class
-  .navbar.navbar-inverse.navbar-fixed-top(role="navigation")
-    .container-fluid
-      .navbar-header
-        button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand(href="index.html") &#26234;&#24230;
-      .navbar-collapse.collapse
-        ul.nav.navbar-nav.navbar-right
-          li
-            a.wl-add-product(href="#", data-toggle="modal", data-target="#add") &#28155;&#21152;&#20135;&#21697;
-          li
-            a.wl-add-class(href="#", data-toggle="modal", data-target="#add") &#28155;&#21152;&#20998;&#31867;
-        form.navbar-form.navbar-right
-          input.form-control.wl-search(type="text", placeholder="Search...")
-  .container-fluid
-    .row
-      .col-sm-3.col-md-3.sidebar
-        ul.nav.nav-sidebar.wl-list
-          li.wl-sidebar-header
-            p
-              | &#20998;&#31867;
-              span
-                button.btn.btn-default.wl-btn &#32534;&#36753;
-      .col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
-        h2.sub-header {{#current}}
-        ol.breadcrumb.wl-header-nav
-        hr
-        .table-responsive
-          button.btn.btn-default.wl-edit-btn(type="button") &#32534;&#36753;
-          table.table.table-striped
-            thead
-              tr
-                th &#20135;&#21697;
-                th &#20135;&#21697;
-                th &#20135;&#21697;
-                th &#20135;&#21697;
-            tbody.wl-product-body
-          .wl-pager
-            ul.pagination
-              li
-                a.wl-prev-page(href="#") &#171;
-              li
-                a.wl-next-page(href="#") &#187;
-  #add.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          button.close(type="button", data-dismiss="modal")
-            span(aria-hidden="true") &#215;
-            span.sr-only Close
-          h4#myModalLabel.modal-title &#28155;&#21152;&#20135;&#21697;
-        .modal-body
-          select.form-control.input-lg.wl-select(name="id")
-            option(value="none") &#26080;
-            option(value="") HTTP
-            option(value="") CDN
-            option(value="") &#28216;&#25103;
-          select.form-control.input-lg.wl-select(name="id")
-            option(value="none") &#26080;
-            option(value="") qq.com
-          input.form-control.wl-input(type="text", placeholder="子产品")
-        .modal-footer
-          button.btn.btn-default(type="button", data-dismiss="modal") Cancel
-          button.btn.btn-primary(type="button") Save changes
-  #add.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          button.close(type="button", data-dismiss="modal")
-            span(aria-hidden="true") &#215;
-            span.sr-only Close
-          h4#myModalLabel.modal-title &#28155;&#21152;&#20998;&#31867;
-        .modal-body
-          select.form-control.input-lg.wl-select(name="id")
-            option(value="") HTTP
-            option(value="") CDN
-            option(value="") &#28216;&#25103;
-          select.form-control.input-lg.wl-select(name="id")
-            option(value="") qq.com
-            option(value="") CDN
-            option(value="") &#28216;&#25103;
-          input.form-control.wl-input(type="text", placeholder="子产品")
-        .modal-footer
-          button.btn.btn-default(type="button", data-dismiss="modal") Cancel
-          button.btn.btn-primary(type="button") Save changes
 
+    div.wl-class
+        div.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+            div.container-fluid
+                div.navbar-header
+                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                    a.navbar-brand(href='/') 智度
+                div.navbar-collapse.collapse
+                    ul.nav.navbar-nav.navbar-right
+                        li: a.wl-add-product(href='javascript:;', data-toggle='modal', data-target='#add') 添加产品
+                        li: a.wl-add-class(href='javascript:;', data-toggle='modal', data-target='#add') 添加分类
+                    form.navbar-form.navbar-right
+                        input.form-control.wl-search(type='text', placeholder='Search..')
+        div.container-fluid
+            div.row
+                div.colsm3.col-md-3.sidebar
+                    ul.nav.nav-sidebar.wl-list
+                        li.wl-sidebar-header
+                            p 
+                                | 分类
+                                span: button.btn.btn-default.wl-btn 编辑
+                div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
+                    h2.sub-header #{current}//
+                    ol.breadcrumb.wl-header-nav
+
+                    hr
+                    div.table-responsive
+                        button.btn.btn-default.wl-edit-btn(type='button') 编辑
+                        table.table.table-striped
+                            thead
+                                tr
+                                    th 产品
+                                    th 产品
+                                    th 产品
+                                    th 产品
+                            tbody.wl-product-body
+
+                        div.wl-pager
+                            ul.pagination
+                                li: a.wl-prev-page(href='') &laquo;
+                                li: a.wl-next-page(href='') &raquo;
+        div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
+            div.modal-dialog
+                div.modal-content
+                    div.modal-header
+                        button.close(type='button',data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            span.sr-only Close
+                        h4.modal-title#myModalLabel 添加产品
+                    div.modal-body
+                        select.form-control.input-lg.wl-select
+                            option(value='') something
+                        select.form-control.input-lg.wl-select
+                            option(value='') another 
+                        input.form-control.wl-input(type='text',placeholder='子产品')
+                    div.modal-footer
+                        button.btn.btn-default(type='button',data-dismiss='modal') Cancel
+                        button.btn.btn-primary(type='button') Save changes
