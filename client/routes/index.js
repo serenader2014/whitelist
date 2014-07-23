@@ -45,8 +45,7 @@ router.get('/:class/:product', function (req, res) {
         responseProduct.on('data', function (rawProduct) {
             var product = JSON.parse(rawProduct);
 
-            res.render('product', {product:product});
-            console.log(product.current);
+            res.render('product', {product:product, url: req.url});
         });
     });
 
@@ -63,7 +62,7 @@ router.get('/:class/:product/:child', function (req, res) {
             var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
                 responseProduct.on('data', function (rawProduct) {
                     var product = JSON.parse(rawProduct);
-                    res.render('child', {child: child, product: product});
+                    res.render('child', {child: child, product: product, url: req.url});
                 });
             });
 

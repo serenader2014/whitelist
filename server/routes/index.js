@@ -88,7 +88,7 @@ router.get('/:class/:product', function (req, res, next) {
         ],
 
         class: className,
-        count: 200000
+        count: 1345
     };
 
     res.json(json);
@@ -114,7 +114,7 @@ router.get('/:class/:product/:child', function (req, res, next) {
 
         class: className,
         parent: product,
-        count: 20000
+        count: 2000
     };
 
     res.json(json);

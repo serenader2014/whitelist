@@ -26,7 +26,7 @@ block content
                                 span: button.btn.btn-default.wl-btn 编辑
                         - product.product.forEach(function (item,index){
                             li
-                                a(href='javascript:;',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                     | #{item.name}
                                     span.badge.wl-weight #{item.weight}
                                     span.badge.wl-num #{item.amount}
@@ -34,7 +34,12 @@ block content
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
-                        li: a(href='') #{product.current.name}
+                        - var tmp = '';
+                        - url.split('/').forEach(function (item, index) {
+                            - tmp = tmp + item +'/';
+                            - if (item)
+                                li: a(href='#{tmp}') #{item}
+                        - })
                     hr
                     div.table-responsive
                         button.btn.btn-default.wl-edit-btn(type='button') 编辑
@@ -54,6 +59,8 @@ block content
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
+                                - for(var i = 1; i <= product.count/100; i++)
+                                    li: a(href='#{url}/page/#{i}') #{i}
                                 li: a.wl-next-page(href='') &raquo;
     
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
@@ -74,4 +81,35 @@ block content
                         button.btn.btn-default(type='button',data-dismiss='modal') Cancel
                         button.btn.btn-primary(type='button') Save changes 
     
-                
+block extra_script
+    script.
+        $(".wl-list a").each(function (index, item) {
+            $(item).editable({
+                title: "Input the value",
+                type: "text",
+                pk: $(this).data("id"),
+                url: ""
+            });
+        });
+
+        $(".wl-list a").editable("toggleDisabled");
+
+        $(".table a").each(function (index, item) {
+            $(item).editable({
+                title: "Input the value",
+                type: "text",
+                pk: $(this).data("id"),
+                url: "/wl/ip"
+            });
+        });
+
+        $(".table a").editable("toggleDisabled");
+
+        $("body").on("click", ".wl-edit-btn", function(){
+            $(".table a").editable("toggleDisabled");
+            $(this).html($(this).html()==="编辑"? "取消" : "编辑");
+        });
+        $("body").on("click", ".wl-btn", function () {
+            $(".wl-list a:not(.wl-btn)").editable("toggleDisabled");
+            $(this).html($(this).html()==="编辑" ? "取消" : "编辑");
+        });
