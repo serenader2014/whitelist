@@ -238,3 +238,10 @@ body {
   background: #F7F7F7;
   text-transform: uppercase;
 }
+.wl-caret {
+  font-size: 20px;
+}
+
+.wl-show-sub{
+  display: none;
+}

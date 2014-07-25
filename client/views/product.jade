@@ -28,7 +28,10 @@ block content
                             li
                                 a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                     | #{item.name}
+                                    span.caret.wl-caret
                                     span.badge.wl-weight #{item.weight}
+                            div.wl-show-sub
+                                ul.nav.nav-sidebar.wl-list
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{product.current.name}
@@ -118,3 +121,37 @@ block extra_script
             $(".wl-list a:not(.wl-btn)").editable("toggleDisabled");
             $(this).html($(this).html()==="编辑" ? "取消" : "编辑");
         });
+        
+        $(".wl-caret").on("click",function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            var url = $(this).parent().attr("href"); 
+            console.log(url);
+            var reqUrl = "http://10.0.200.185:81/ls"+url;
+            $.ajax({
+                type: 'GET',
+                url: reqUrl,
+                crossDomain: true,
+                dataType: 'jsonp',
+                success: function (data) {
+                    var productData = data.product;
+                    var len = productData.length;
+                    console.log(productData);
+                    console.log(len);
+                    if(len > 0){
+                        console.log("xxxx");
+                        productData.forEach(function(item,index){
+                            console.log("xdddxxx");
+                            var subProduct = item.name;
+                            var weight = item.weight; 
+                            console.log(subProduct);
+                            console.log(item);
+                            $(".wl-show-sub ul").show();
+                            $(".wl-show-sub ul").append($("<li><a href='#'>"+subProduct+"<span class='badge wl-weight'>"+weight+"</a></li>"));
+                        })
+                    }else if(len === 0){
+                        $(this).hide();
+                    }
+                    }
+                })
+        })
