@@ -14,8 +14,8 @@ block content
                     ul.nav.navbar-nav.navbar-right
                         li: a.wl-add-product(href='javascript:;',data-toggle='modal',data-target='#add') 添加产品
                         li: a.wl-add-class(href='javascript:;',data-toggle='modal',data-target='#add') 添加分类
-                    form.navbar-form.navbar-right
-                        input.form-control.wl-search(type='text',placeholder='Search...')
+                    form.navbar-form.navbar-right(action='#{url}/search', method='get')
+                        input.form-control.wl-search(type='text',placeholder='Search...', name='s')
         div.container-fluid
             div.row
                 div.col-sm-3.col-md-3.sidebar
@@ -26,17 +26,16 @@ block content
                                 span: button.btn.btn-default.wl-btn 编辑
                         - product.product.forEach(function (item,index){
                             li
-                                - var l = url.split('/page/')[0]
+                                - var l = url.split('/page/')[0].split('/search?=')[0]
                                 a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                     | #{item.name}
                                     span.badge.wl-weight #{item.weight}
-                                    span.badge.wl-num #{item.amount}
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
                         - var tmp = '';
-                        - var l = url.split('/page/')[0]
+                        - var l = url.split('/page/')[0].split('/search?=')[0]
                         - l.split('/').forEach(function (item, index) {
                             - tmp = tmp + item +'/';
                             - if (item)
@@ -54,9 +53,12 @@ block content
                                     th IP
                             tbody.wl-product-body
                                 - product.ip.forEach(function (item,index) {
-                                td
-                                    a(href='javascript:;',data-id='#{item.id}')
-                                        | #{item.value}
+                                    - if (index%4 === 0) {
+                                        tr
+                                    - }
+                                            td
+                                                a(href='javascript:;',data-id='#{item.id}')
+                                                    | #{item.value}
                                 - })
                         div.wl-pager
                             ul.pagination

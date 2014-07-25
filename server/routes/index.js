@@ -24,10 +24,33 @@ router.get('/', function(req, res) {
     }
     ]);
 });
+router.get('/ip', function (req, res, next) {
+    var ip = req.query.ip;
+    res.json({
+        ip: ip,
+        isp: '电信',
+        parent: 'qq.com'
+    });
+}); 
 
 router.get('/:name', function (req, res, next) {
     var name = req.params.name;
     var query = req.query.page;
+    if (req.query.search) {
+        res.json({
+            ip: [
+            '123.44.13.55',
+            '23.12.45.158',
+            '110.120.140.140',
+            '80.20.120.122',
+            '69.10.34.10'
+            ],
+            product: [
+            'qq.com',
+            'qvod.com'
+            ]
+        });
+    }
     var json = {
         "current": {
             "name": name,
@@ -47,6 +70,7 @@ router.get('/:name', function (req, res, next) {
     };
     res.json(json);
 });
+
 
 
 

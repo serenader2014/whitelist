@@ -14,8 +14,8 @@ block content
                     ul.nav.navbar-nav.navbar-right
                         li: a.wl-add-product(href='javascript:;', data-toggle='modal', data-target='#add') 添加产品
                         li: a.wl-add-class(href='javascript:;', data-toggle='modal', data-target='#add') 添加分类
-                    form.navbar-form.navbar-right
-                        input.form-control.wl-search(type='text', placeholder='Search..')
+                    form.navbar-form.navbar-right(action='#{url}', method='get')
+                        input.form-control.wl-search(type='text', placeholder='Search..', name='s')
         div.container-fluid
             div.row
                 div.col-sm-3.col-md-3.sidebar
@@ -38,7 +38,7 @@ block content
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
-                        li: a(href='') #{product.current.name}
+                        li: a(href='#{product.current.name}') #{product.current.name}
                     hr
                     div.table-responsive
                         button.btn.btn-default.wl-edit-btn(type='button') 编辑
@@ -50,21 +50,27 @@ block content
                                     th 产品
                                     th 产品
                             tbody.wl-product-body
-                            - product.product.forEach(function (item,index) {
-                                td
-                                    a.wl-item(href='/#{product.current.name}/#{item.name}',data-product='#{item.name}',data-id='#{item.id}') #{item.name}
-                                    span.wl-stat
-                                    span.wl-weight #{item.weight}
-                                    span.wl-num #{item.amount}
-                            - })
+                                - product.product.forEach(function (item,index) {
+                                    - if (index%4 === 0) {
+                                        tr
+                                    - }
+                                            td
+                                                a.wl-item(href='/#{product.current.name}/#{item.name}',data-product='#{item.name}',data-id='#{item.id}') #{item.name}
+                                                span.wl-stat
+                                                span.wl-weight #{item.weight}
+                                                span.wl-num #{item.count}                                        
+                                - })
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
-                                - for (var i = 1; i <= Math.ceil(product.count/100); i ++ )
-                                    - if (url && i === (url.split('/page/')[1])*1)
-                                        li.active: a(href='/#{product.current.name}/page/#{i}') #{i}
-                                    - else
-                                        li: a(href='/#{product.current.name}/page/#{i}') #{i}
+                                - classes.forEach(function (item,index) {
+                                    - if (item.name === product.current.name)
+                                        - for (var i = 1; i <= Math.ceil(item.amount/100); i ++ )
+                                            - if (url && i === (url.split('/page/')[1])*1)
+                                                li.active: a(href='/#{product.current.name}/page/#{i}') #{i}
+                                            - else
+                                                li: a(href='/#{product.current.name}/page/#{i}') #{i}
+                                - })
                                 li: a.wl-next-page(href='') &raquo;
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
             div.modal-dialog
