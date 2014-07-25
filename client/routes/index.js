@@ -186,11 +186,6 @@ router.get('/:class/:product', function (req, res) {
 
             });
         });
-        responseProduct.on('end', function () {
-            var product = JSON.parse(d.toString('utf8'));
-            res.render('product', {product:product, url: decodeURIComponent(req.url)});
-
-        });
 
         requestProduct.end();
     }
