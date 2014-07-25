@@ -185,7 +185,7 @@ router.get('/:class/:product', function (req, res) {
                 res.render('product', {product:product, url: decodeURIComponent(baseUrl)});
 
             });
-
+        });
         responseProduct.on('end', function () {
             var product = JSON.parse(d.toString('utf8'));
             res.render('product', {product:product, url: decodeURIComponent(req.url)});
