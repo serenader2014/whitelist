@@ -230,3 +230,11 @@ body {
 .wl-btn{
   float: right;
 }
+
+.wl-sort {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px;
+  background: #F7F7F7;
+  text-transform: uppercase;
+}

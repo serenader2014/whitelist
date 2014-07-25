@@ -40,7 +40,6 @@ router.get('/', function(req, res) {
 
         response.on('end', function () {
             var data = JSON.parse(d);
-            // res.send(d);
             res.render('index', {classes: data});
         });
     });
@@ -79,39 +78,33 @@ router.get('/', function(req, res) {
 
 router.get('/:class', function (req, res) {
     var className = req.params.class;
+    var baseUrl = req.url.split('?')[0];
     var search = req.query.s;
+    var sort = req.query.sort;
     if (search) {
-        var requestSearch = http.request(target+'/'+className+'?search='+search, function (responseSearch) {
+
+    } else if (sort) {
+        var requestSort = http.request(target+'/'+className+'?search='+sort+'%', function (responseSort) {
             var d = '';
-            responseSearch.on('data', function (rawData) {
-                d = d + rawData;
+            responseSort.on('data', function (rawSort) {
+                d = d + rawSort;
             });
 
-            responseSearch.on('end', function () {
-                var data = JSON.parse(d);
-                var ips = data.ip;
-                var ipData = [];
-                var products = data.product;
-                ips.forEach(function (item, i) {
-                    var requestIp = http.request(target+'/ip'+'?ip='+item, function(responseIp) {
-                        responseIp.on('data', function (rawIp) {
-                            var ipInfo = JSON.parse(rawIp);
-                            ipData.push(ipInfo);
-                            console.log([i,ipData,ips.length-1]);
-                            if (i === ips.length-2) {
-                                // res.send(ipData);
-                                console.log(ipData);
-                                res.render('search', {ips: ipData, products: products});
-                            }
-                        });
+            responseSort.on('end', function () {
+                var sortData = JSON.parse(d);
+                var requestClass = http.request(target, function (responseClass) {
+                    var d = '';
+                    responseClass.on('data', function (rawClass) {
+                        d = d + rawClass;
                     });
-                    requestIp.end();
-                });
 
+                    responseClass.on('end', function () {
+                        var classes = JSON.parse(d);
+                        res.render('sort', {classes: classes, product: sortData, url: decodeURIComponent(baseUrl), sort: sort});
+                    });
+                });
             });
         });
-
-        requestSearch.end();
     } else {
         var requestProduct = http.request(target+'/'+className, function (responseProduct) {
             var d = '';
@@ -130,7 +123,7 @@ router.get('/:class', function (req, res) {
 
                     responseClass.on('end', function () {
                         var classes = JSON.parse(d);
-                        res.render('class', {classes: classes, product: product, url: decodeURIComponent(req.url)});
+                        res.render('class', {classes: classes, product: product, url: decodeURIComponent(baseUrl)});
 
                     });
                 });
@@ -149,6 +142,7 @@ router.get('/:class', function (req, res) {
 router.get('/:class/page/:num', function (req, res) {
     var className = req.params.class;
     var number = req.params.num - 1;
+    var baseUrl = req.url.split('/page/')[0].split('?')[0];
     var requestProduct = http.request(target+'/'+className+'?offset='+number*100+'&limit=100', function (responseProduct) {
         var d = '';
         responseProduct.on('data', function (rawProduct) {
@@ -164,7 +158,7 @@ router.get('/:class/page/:num', function (req, res) {
                 });
                 responseClass.on('end', function () {
                     var classes = JSON.parse(d1);
-                    res.render('class', {classes: classes, product: product, url: decodeURIComponent(req.url)});
+                    res.render('class', {classes: classes, product: product, url: decodeURIComponent(baseUrl), pageNum: req.params.num});
                 });
             });
             requestClass.end();
@@ -178,26 +172,30 @@ router.get('/:class/page/:num', function (req, res) {
 router.get('/:class/:product', function (req, res) {
     var className = req.params.class;
     var productName = req.params.product;
-    var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
-        var d = '';
-        responseProduct.on('data', function (rawProduct) {
-            d = d + rawProduct;
+    var baseUrl = req.url.split('?')[0];
+    if (productName !== 'page') {
+        var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
+            var d = '';
+            responseProduct.on('data', function (rawProduct) {
+                d = d + rawProduct;
+            });
+
+            responseProduct.on('end', function () {
+                var product = JSON.parse(d.toString('utf8'));
+                res.render('product', {product:product, url: decodeURIComponent(baseUrl)});
+
+            });
         });
 
-        responseProduct.on('end', function () {
-            var product = JSON.parse(d.toString('utf8'));
-            res.render('product', {product:product, url: decodeURIComponent(req.url)});
-
-        });
-    });
-
-    requestProduct.end();
+        requestProduct.end();
+    }
 });
 
 router.get('/:class/:product/page/:num', function (req, res) {
     var className = req.params.class;
     var productName = req.params.product;
     var num = req.params.num -1;
+    var baseUrl = req.url.split('/page/')[0].split('?')[0];
     var requestProduct = http.request(target+'/'+className+'/'+productName+'?offset='+num*100+'&limit=100', function (responseProduct) {
         var d = '';
         responseProduct.on('data', function (rawProduct) {
@@ -206,7 +204,7 @@ router.get('/:class/:product/page/:num', function (req, res) {
 
         responseProduct.on('end', function () {
             var product = JSON.parse(d);
-            res.render('product', {product: product, url: decodeURIComponent(req.url)});
+            res.render('product', {product: product, url: decodeURIComponent(baseUrl), pageNum: req.params.num});
         });
     });
 
@@ -217,8 +215,8 @@ router.get('/:class/:product/:child', function (req, res) {
     var className = req.params.class;
     var productName = req.params.product;
     var childName = req.params.child;
-    var sidebarLink = req.url.replace(childName,'');
-    console.log(sidebarLink);
+    var baseUrl = req.url.split('?')[0];
+    var sidebarLink = req.url.split('/'+childName+'/')[0];
     var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName, function (responseChild) {
         var d = '';
         responseChild.on('data', function (rawChild) {
@@ -235,7 +233,7 @@ router.get('/:class/:product/:child', function (req, res) {
 
                 responseProduct.on('end', function () {
                     var product = JSON.parse(d1);
-                    res.render('child', {child: child, product: product, url: decodeURIComponent(req.url), sidebarLink: decodeURIComponent(sidebarLink)});
+                    res.render('child', {child: child, product: product, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
                 });
             });
 
@@ -250,6 +248,7 @@ router.get('/:class/:product/:child/page/:num', function (req, res) {
     var className = req.params.class;
     var productName = req.params.product;
     var childName = req.params.child;
+    var baseUrl = req.url.split('?')[0];
     var sidebarLink = req.url.split(childName)[0];
     var num = req.params.num-1;
     var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName+'?offset='+num*100+'&limit=100', function (responseChild) {
@@ -268,7 +267,7 @@ router.get('/:class/:product/:child/page/:num', function (req, res) {
 
                 responseProduct.on('end', function () {
                     var product = JSON.parse(d1);
-                    res.render('child', {child: child, product: product, url: decodeURIComponent(req.url), sidebarLink: decodeURIComponent(sidebarLink)});
+                    res.render('child', {child: child, product: product, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink), pageNum: req.params.num});
                 });
             });
 

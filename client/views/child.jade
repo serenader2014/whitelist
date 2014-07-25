@@ -14,7 +14,7 @@ block content
                     ul.nav.navbar-nav.navbar-right
                         li: a.wl-add-product(href='javascript:;',data-toggle='modal',data-target='#add') 添加产品
                         li: a.wl-add-class(href='javascript:;',data-toggle='modal',data-target='#add') 添加分类
-                    form.navbar-form.navbar-right(action='#{url}/search', method='get')
+                    form.navbar-form.navbar-right(action='#{url}', method='get')
                         input.form-control.wl-search(type='text',placeholder='Search...', name='s')
         div.container-fluid
             div.row
@@ -24,16 +24,15 @@ block content
                             p
                                 | 产品
                                 span: button.btn.btn-default.wl-btn 编辑
-                        - var l = sidebarLink.split('/page/')[0].split('/search?s=')[0]
                         - product.product.forEach(function (item,index){
                             - if (item.name === child.current.name)
                                 li.active
-                                    a(href='#{l}#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                    a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                         | #{item.name}
                                         span.badge.wl-weight #{item.weight}
                             - else 
                                 li
-                                    a(href='#{l}#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                    a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                         | #{item.name}
                                         span.badge.wl-weight #{item.weight}
                         - })
@@ -41,8 +40,7 @@ block content
                     h2.sub-header #{child.current.name}
                     ol.breadcrumb.wl-header-nav
                         - var tmp = '';
-                        - var u = url.split('/page/')[0].split('/search?s=')[0];
-                        - u.split('/').forEach(function (item, index) {
+                        - url.split('/').forEach(function (item, index) {
                             - tmp = tmp + item +'/';
                             - if (item)
                                 li: a(href='#{tmp}') #{item}
@@ -70,11 +68,10 @@ block content
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
                                 - for(var i = 1; i <= product.count/100; i++)
-                                    - if ((url.split('/page/')[1])*1 && (url.split('/page/')[1])*1 === i)
-                                        li.active: a(href='#{l}/page/#{i}') #{i}
+                                    - if (pageNum && pageNum*1 === i)
+                                        li.active: a(href='#{url}/page/#{i}') #{i}
                                     - else 
-                                        - var u = url.split('/page/')[0]
-                                        li: a(href='#{u}/page/#{i}') #{i}
+                                        li: a(href='#{url}/page/#{i}') #{i}
                                 li: a.wl-next-page(href='') &raquo;
     
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
