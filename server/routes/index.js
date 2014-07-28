@@ -7,19 +7,19 @@ router.get('/', function(req, res) {
     {
         "name": "http",
         "id": "0",
-        "amount": "200456",
+        "amount": "2004",
         "weight" : "20"
     },
     {
         "name": "cdn",
         "id": "1",
-        "amount": "200456",
+        "amount": "2004",
         "weight" : "20"
     },
     {
         "name": "online game",
         "id": "2",
-        "amount": "200456",
+        "amount": "2004",
         "weight" : "20"
     }
     ]);
@@ -36,6 +36,17 @@ router.get('/ip', function (req, res, next) {
 router.get('/:name', function (req, res, next) {
     var name = req.params.name;
     var query = req.query.page;
+    if (req.query.sort) {
+        res.json({
+            "product": [
+            {
+                "name": "a.com",
+                "weight": "100",
+                "count": "10"
+            }
+            ]
+        });
+    }
     if (req.query.search) {
         res.json({
             ip: [
@@ -55,14 +66,14 @@ router.get('/:name', function (req, res, next) {
         "current": {
             "name": name,
             "id": "0",
-            "amount": "200456",
+            "amount": "2004",
         },
 
         "product": [
             {
                 "name": "qq.com",
                 "weight": "20",
-                "amount": "20000",
+                "amount": "200",
                 "id": "0"
             }
         ],
@@ -81,7 +92,7 @@ router.get('/:class/:product', function (req, res, next) {
         "current": {
             "name": productName,
             "id": 0,
-            "amount": "200000",
+            "amount": "200",
             "weight": "10"
         },
         ip: [
@@ -94,19 +105,19 @@ router.get('/:class/:product', function (req, res, next) {
             {
                 "name": "mail.qq.com",
                 "id": "0",
-                "amount": "200456",
+                "amount": "200",
                 "weight" : "20"
             },
             {
                 "name": "game.qq.com",
                 "id": "1",
-                "amount": "200456",
+                "amount": "200",
                 "weight" : "20"
             },
             {
                 "name": "weixin.qq.com",
                 "id": "2",
-                "amount": "200456",
+                "amount": "200",
                 "weight" : "20"
             }    
         ],
@@ -165,6 +176,8 @@ router.get('/:class/:product/:child', function (req, res, next) {
 
 });
 
+
+router
 
 
 

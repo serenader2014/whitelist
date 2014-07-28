@@ -103,8 +103,10 @@ router.get('/:class', function (req, res) {
                         res.render('sort', {classes: classes, product: sortData, url: decodeURIComponent(baseUrl), sort: sort});
                     });
                 });
+                requestClass.end();
             });
         });
+        requestSort.end();
     } else {
         var requestProduct = http.request(target+'/'+className, function (responseProduct) {
             var d = '';
