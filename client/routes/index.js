@@ -39,7 +39,13 @@ router.get('/', function(req, res) {
         });
 
         response.on('end', function () {
-            var data = JSON.parse(d);
+            var data;
+            try {
+                data = JSON.parse(d);
+            } catch (err) {
+                res.send(d);
+                return false;
+            }
             res.render('index', {classes: data});
         });
     });
@@ -91,7 +97,14 @@ router.get('/:class', function (req, res) {
             });
 
             responseSort.on('end', function () {
-                var sortData = JSON.parse(d);
+                var sortData;
+                try {
+                    sortData = JSON.parse(d);
+                }
+                catch (err) {
+                    res.send(d);
+                    return false;
+                }
                 var requestClass = http.request(target, function (responseClass) {
                     var d = '';
                     responseClass.on('data', function (rawClass) {
@@ -99,7 +112,14 @@ router.get('/:class', function (req, res) {
                     });
 
                     responseClass.on('end', function () {
-                        var classes = JSON.parse(d);
+                        var classes;
+                        try {
+                            classes = JSON.parse(d);
+                        }
+                        catch (err) {
+                            res.send(d);
+                            return false;
+                        }
                         res.render('sort', {classes: classes, product: sortData, url: decodeURIComponent(baseUrl), sort: sort});
                     });
                 });
@@ -116,7 +136,14 @@ router.get('/:class', function (req, res) {
             });
 
             responseProduct.on('end', function () {
-                var product = JSON.parse(d); 
+                var product;
+                try {
+                    product = JSON.parse(d);
+                }
+                catch (err) {
+                    res.send(d);
+                    return false;
+                }
                 var requestClass = http.request(target, function (responseClass) {
                     var d = '';
                     responseClass.on('data', function (rawClass) {
@@ -124,7 +151,14 @@ router.get('/:class', function (req, res) {
                     });
 
                     responseClass.on('end', function () {
-                        var classes = JSON.parse(d);
+                        var classes;
+                        try {
+                            classes = JSON.parse(d);
+                        }
+                        catch (err) {
+                            res.send(d);
+                            return false;
+                        }
                         res.render('class', {classes: classes, product: product, url: decodeURIComponent(baseUrl)});
 
                     });
@@ -152,14 +186,28 @@ router.get('/:class/page/:num', function (req, res) {
         });
 
         responseProduct.on('end', function () {
-            var product = JSON.parse(d);
+            var product;
+            try {
+                product = JSON.parse(d);
+            }
+            catch (err) {
+                res.send(d);
+                return false;
+            }
             var requestClass = http.request(target, function (responseClass) {
                 var d1 = '';
                 responseClass.on('data', function (rawClass) {
                     d1 = d1 + rawClass;
                 });
                 responseClass.on('end', function () {
-                    var classes = JSON.parse(d1);
+                    var classes;
+                    try {
+                        classes = JSON.parse(d1);
+                    }
+                    catch (err) {
+                        res.send(d1);
+                        return false;
+                    }
                     res.render('class', {classes: classes, product: product, url: decodeURIComponent(baseUrl), pageNum: req.params.num});
                 });
             });
@@ -183,7 +231,14 @@ router.get('/:class/:product', function (req, res) {
             });
 
             responseProduct.on('end', function () {
-                var product = JSON.parse(d.toString('utf8'));
+                var product;
+                try {
+                    product = JSON.parse(d);
+                }
+                catch (err) {
+                    res.send(d);
+                    return false;
+                }
                 res.render('product', {product:product, url: decodeURIComponent(baseUrl)});
 
             });
@@ -205,7 +260,14 @@ router.get('/:class/:product/page/:num', function (req, res) {
         });
 
         responseProduct.on('end', function () {
-            var product = JSON.parse(d);
+            var product;
+            try {
+                product = JSON.parse(d);
+            }
+            catch (err) {
+                res.send(d);
+                return false;
+            }
             res.render('product', {product: product, url: decodeURIComponent(baseUrl), pageNum: req.params.num});
         });
     });
@@ -226,7 +288,14 @@ router.get('/:class/:product/:child', function (req, res) {
         });
 
         responseChild.on('end', function () {
-            var child = JSON.parse(d);
+            var child;
+            try {
+                child = JSON.parse(d);
+            }
+            catch (err) {
+                res.send(d);
+                return false;
+            }
             var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
                 var d1 = '';
                 responseProduct.on('data', function (rawProduct) {
@@ -234,7 +303,14 @@ router.get('/:class/:product/:child', function (req, res) {
                 });
 
                 responseProduct.on('end', function () {
-                    var product = JSON.parse(d1);
+                    var product;
+                    try {
+                        classes = JSON.parse(d1);
+                    }
+                    catch (err) {
+                        res.send(d1);
+                        return false;
+                    }
                     res.render('child', {child: child, product: product, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
                 });
             });
@@ -260,7 +336,14 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
         });
 
         responseSubChild.on('end',function () {
-            var subChild = JSON.parse(d);
+            var subChild;
+            try {
+                subChild = JSON.parse(d);
+            }
+            catch (err) {
+                res.send(d);
+                return false;
+            }
             var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName,function (responseChild) {
                 var d1 = '';
                 responseChild.on('data',function (rawChild) {
@@ -268,7 +351,14 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
                 });
     
                 responseChild.on('end',function () {
-                    var child = JSON.parse(d1);
+                    var child;
+                    try {
+                        child = JSON.parse(d1);
+                    }
+                    catch (err) {
+                        res.send(d1);
+                        return false;
+                    }
                     res.render('subChild',{subChild: subChild, child: child, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
                 });
             });
@@ -292,7 +382,14 @@ router.get('/:class/:product/:child/page/:num', function (req, res) {
         });
 
         requestChild.on('end', function () {
-            var child = JSON.parse(d);
+            var child;
+            try {
+                child = JSON.parse(d);
+            }
+            catch (err) {
+                res.send(d);
+                return false;
+            }
             var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
                 var d1 = '';
                 responseProduct.on('data', function (rawProduct) {
@@ -300,7 +397,14 @@ router.get('/:class/:product/:child/page/:num', function (req, res) {
                 });
 
                 responseProduct.on('end', function () {
-                    var product = JSON.parse(d1);
+                    var product;
+                    try {
+                        product = JSON.parse(d1);
+                    }
+                    catch (err) {
+                        res.send(d1);
+                        return false;
+                    }
                     res.render('child', {child: child, product: product, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink), pageNum: req.params.num});
                 });
             });
