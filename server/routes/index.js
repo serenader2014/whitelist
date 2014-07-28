@@ -117,6 +117,7 @@ router.get('/:class/:product', function (req, res, next) {
 
     res.json(json);
 });
+//http://localhost/http/www.qq.com/mail.qq.com/login.mail.qq.com
 
 router.get('/:class/:product/:child', function (req, res, next) {
     var className = req.params.class,
@@ -135,7 +136,26 @@ router.get('/:class/:product/:child', function (req, res, next) {
         {value: "120.114.71.22",id:"2"},
         {value: "198.142.26.22",id:"3"}
         ],           
-
+        product: [
+            {
+                "name": "login.mail.qq.com",
+                "id": "0",
+                "amount": "200456",
+                "weight" : "20"
+            },
+            {
+                "name": "login.game.qq.com",
+                "id": "1",
+                "amount": "200456",
+                "weight" : "20"
+            },
+            {
+                "name": "login.weixin.qq.com",
+                "id": "2",
+                "amount": "200456",
+                "weight" : "20"
+            }    
+        ],
         class: className,
         parent: product,
         count: 2000

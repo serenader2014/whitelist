@@ -107,7 +107,7 @@ body {
   margin-top: 88px;
 }
 
-.wl-list a {
+.wl-sub-list,.wl-list a {
   cursor: pointer !important;
 }
 
@@ -239,9 +239,19 @@ body {
   text-transform: uppercase;
 }
 .wl-caret {
-  font-size: 20px;
+  margin-left: 20px;
+  float: right;
 }
 
 .wl-show-sub{
   display: none;
+  width:297px;
+}
+
+.wl-sub-list{
+  padding-left: 50px;
+}
+
+.wl-sub-weight{
+  float: right;
 }

@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 // var target = module.exports.target = 'http://10.0.200.185:9987/ls';
-// var target = module.exports.target = 'http://10.0.200.185:81/ls';
-var target = module.exports.target = 'http://localhost:9987';
+var target = module.exports.target = 'http://10.0.200.185:81/ls';
+// var target = module.exports.target = 'http://localhost:9987';
 
 
 

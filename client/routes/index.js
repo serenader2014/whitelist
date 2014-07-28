@@ -244,6 +244,14 @@ router.get('/:class/:product/:child', function (req, res) {
     requestChild.end();
 });
 
+router.get('/:class/:product/:child/:subChild',function (req,res) {
+    var className = req.params.class;
+    var productName req.params.proudct;
+    var childName = req.params.child;
+    var subChildName = req.params.subChild;
+    var baseUrl = 
+})
+
 router.get('/:class/:product/:child/page/:num', function (req, res) {
     var className = req.params.class;
     var productName = req.params.product;
