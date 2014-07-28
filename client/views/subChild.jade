@@ -24,18 +24,21 @@ block content
                             p
                                 | 产品
                                 span: button.btn.btn-default.wl-btn 编辑
-                        - product.product.forEach(function (item,index){
-                            li
-                                a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
-                                    | #{item.name}
-                                    span.label.label-info.wl-caret more
-                                    //- span.wl-caret-hide.wl-caret hide..
-                                    span.badge.wl-weight #{item.weight}
-                                div.wl-show-sub
-                                    ul.nav.nav-sidebar.wl-sub-list
+                        - child.product.forEach(function (item,index){
+                            - var l = url.substring(0, url.lastIndexOf('/'))
+                            - if (item.name === subChild.current.name)
+                                li.active
+                                    a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                        | #{item.name}
+                                        span.badge.wl-weight #{item.weight}
+                            - else 
+                                li
+                                    a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                        | #{item.name}
+                                        span.badge.wl-weight #{item.weight}
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
-                    h2.sub-header #{product.current.name}
+                    h2.sub-header #{subChild.current.name}
                     ol.breadcrumb.wl-header-nav
                         - var tmp = '';
                         - url.split('/').forEach(function (item, index) {
@@ -54,7 +57,7 @@ block content
                                     th IP
                                     th IP
                             tbody.wl-product-body
-                                - product.ip.forEach(function (item,index) {
+                                - subChild.ip.forEach(function (item,index) {
                                     - if (index%4 === 0) {
                                         tr
                                     - }
@@ -65,10 +68,10 @@ block content
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;
-                                - for(var i = 1; i <= product.count/100; i++)
+                                - for(var i = 1; i <= child.count/100; i++)
                                     - if (pageNum && pageNum*1 === i)
                                         li.active: a(href='#{url}/page/#{i}') #{i}
-                                    - else
+                                    - else 
                                         li: a(href='#{url}/page/#{i}') #{i}
                                 li: a.wl-next-page(href='') &raquo;
     
@@ -92,55 +95,6 @@ block content
     
 block extra_script
     script.
-        $(".wl-caret").on("click",function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            var self = this;
-            if ($(self).parents("li").find(".wl-show-sub").is(":visible")) {
-                $(self).parents("li").find(".wl-show-sub").hide();
-                $(self).html("more");
-            } else {
-                var url = $(this).parent().attr("href"); 
-                var reqUrl = "http://10.0.200.185:81/ls"+url;
-                $.ajax({
-                    type: "GET",
-                    url: reqUrl,
-                    crossDomain: true,
-                    dataType: "jsonp",
-                    success: function (data) {
-                        var productData = data.product;
-                        var len = productData.length;
-                        $(self).parents("li").find(".wl-show-sub ul li").remove();
-                        if(len > 0){
-                            productData.forEach(function(item,index){
-                                var subProduct = item.name;
-                                var weight = item.weight; 
-                                $(self)
-                                    .parents("li")
-                                    .find(".wl-show-sub")
-                                    .show()
-                                    .find("ul")
-                                    .append(
-                                    $("<li><a href='"+url+"/"+subProduct+"'>"+
-                                        subProduct+"<span class='badge wl-sub-weight'>"+
-                                        weight+"</a></li>"))
-                            })
-                        }else {
-                            $(self)
-                                .parents("li")
-                                .find(".wl-show-sub")
-                                .show()
-                                .find("ul")
-                                .find("li")
-                                .remove()
-                                .end()
-                                .append($("<li class='no-child'>暂无子分类</li>"));
-                        }
-                        $(self).html("hide");
-                    }
-                })
-            }
-        })
         $(".wl-list a").each(function (index, item) {
             $(item).editable({
                 title: "Input the value",
@@ -149,7 +103,7 @@ block extra_script
                 url: ""
             });
         });
- 
+
         $(".wl-list a").editable("toggleDisabled");
 
         $(".table a").each(function (index, item) {
@@ -171,4 +125,3 @@ block extra_script
             $(".wl-list a:not(.wl-btn)").editable("toggleDisabled");
             $(this).html($(this).html()==="编辑" ? "取消" : "编辑");
         });
-        

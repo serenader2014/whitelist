@@ -248,11 +248,35 @@ router.get('/:class/:product/:child', function (req, res) {
 
 router.get('/:class/:product/:child/:subChild',function (req,res) {
     var className = req.params.class;
-    var productName req.params.proudct;
+    var productName = req.params.product;
     var childName = req.params.child;
     var subChildName = req.params.subChild;
-    var baseUrl = 
-})
+    var baseUrl = req.url.split('?');
+    var sidebarLink = req.url.split('/'+subChildName+'/');
+    var requestSubChild = http.request(target+'/'+className+'/'+productName+'/'+childName+'/'+subChildName,function (responseSubChild) {
+        var d = '';
+        responseSubChild.on('data',function (rawSubChild) {
+            d = d + rawSubChild;
+        });
+
+        responseSubChild.on('end',function () {
+            var subChild = JSON.parse(d);
+            var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName,function (responseChild) {
+                var d1 = '';
+                responseChild.on('data',function (rawChild) {
+                    d1 = d1 + rawChild;
+                });
+    
+                responseChild.on('end',function () {
+                    var child = JSON.parse(d1);
+                    res.render('subChild',{subChild: subChild, child: child, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
+                });
+            });
+            requestChild.end();
+        });
+    });
+    requestSubChild.end();
+});
 
 router.get('/:class/:product/:child/page/:num', function (req, res) {
     var className = req.params.class;
