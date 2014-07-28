@@ -114,14 +114,31 @@ block extra_script
                             productData.forEach(function(item,index){
                                 var subProduct = item.name;
                                 var weight = item.weight; 
-                                console.log(subProduct);
-                                console.log(weight);
-                                $(self).parents("li").find(".wl-show-sub").show().find("ul").append($("<li><a href='"+url+"/"+subProduct+"'>"+subProduct+"<span class='badge wl-sub-weight'>"+weight+"</a></li>"))
-                                $(self).html("hide");
+                                $(self)
+                                    .parents("li")
+                                    .find(".wl-show-sub")
+                                    .show()
+                                    .find("ul")
+                                    .find("li")
+                                    .remove()
+                                    .end()
+                                    .append(
+                                    $("<li><a href='"+url+"/"+subProduct+"'>"+
+                                        subProduct+"<span class='badge wl-sub-weight'>"+
+                                        weight+"</a></li>"))
                             })
-                        }else if(len === 0){
-                            $(self).hide();
+                        }else {
+                            $(self)
+                                .parents("li")
+                                .find(".wl-show-sub")
+                                .show()
+                                .find("ul")
+                                .find("li")
+                                .remove()
+                                .end()
+                                .append($("<li class='no-child'>暂无子分类</li>"));
                         }
+                        $(self).html("hide");
                     }
                 })
             }
@@ -136,17 +153,6 @@ block extra_script
         });
  
         $(".wl-list a").editable("toggleDisabled");
-
-        //- $(".wl-sub-list a").each(function (index, item) {
-            //- $(item).editable({
-                //- title: "Input the value",
-                //- type: "text",
-                //- pk: $(this).data("id"),
-                //- url: ""
-            //- });
-        //- });
- 
-        //- $(".wl-sub-list a").editable("toggleDisabled");
 
         $(".table a").each(function (index, item) {
             $(item).editable({
@@ -165,7 +171,6 @@ block extra_script
         });
         $("body").on("click", ".wl-btn", function () {
             $(".wl-list a:not(.wl-btn)").editable("toggleDisabled");
-            //- $(".wl-sub-list a:not(.wl-btn)").editable("toggleDisabled");
             $(this).html($(this).html()==="编辑" ? "取消" : "编辑");
         });
         

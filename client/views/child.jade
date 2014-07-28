@@ -25,14 +25,15 @@ block content
                                 | 产品
                                 span: button.btn.btn-default.wl-btn 编辑
                         - product.product.forEach(function (item,index){
+                            - var l = url.substring(0, url.lastIndexOf('/'))
                             - if (item.name === child.current.name)
                                 li.active
-                                    a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                    a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                         | #{item.name}
                                         span.badge.wl-weight #{item.weight}
                             - else 
                                 li
-                                    a(href='#{url}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                    a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
                                         | #{item.name}
                                         span.badge.wl-weight #{item.weight}
                         - })

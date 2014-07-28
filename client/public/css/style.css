@@ -245,13 +245,17 @@ body {
 
 .wl-show-sub{
   display: none;
-  width:297px;
 }
 
-.wl-sub-list{
-  padding-left: 50px;
+.wl-sub-list a{
+  padding: 10px 40px 10px 60px !important;
 }
 
 .wl-sub-weight{
   float: right;
+}
+
+.no-child {
+  text-align: center;
+  padding: 10px;
 }
