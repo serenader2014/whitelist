@@ -44,7 +44,12 @@ block content
                                         ul.nav.nav-sidebar.wl-sub-list
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
-                    h2.sub-header #{child.current.name}
+                    - if (sort)
+                        h2.sub-header #{sort}开头的产品
+                    - else if (search)
+                        h2.sub-header 搜索 #{search} 结果
+                    - else 
+                        h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
                         - var tmp = '';
                         - url.split('/').forEach(function (item, index) {
@@ -53,6 +58,13 @@ block content
                                 li: a(href='#{tmp}') #{item}
                         - })
                     hr
+                    div
+                        - each val, index in product.first_letter
+                            - if (val >0)
+                                - if (index === sort)
+                                    span: a.wl-sort.active(href='#{url}?sort=#{index}') #{index} 
+                                - else 
+                                    span: a.wl-sort(href='#{url}?sort=#{index}') #{index} 
                     div.table-responsive
                         button.btn.btn-default.wl-edit-btn(type='button') 编辑
                         table.table.table-striped
@@ -63,14 +75,26 @@ block content
                                     th IP
                                     th IP
                             tbody.wl-product-body
-                                - child.ip.forEach(function (item,index) {
-                                    - if (index%4 === 0) {
-                                        tr
-                                    - }
-                                            td
-                                                a(href='javascript:;',data-id='#{item.id}')
-                                                    | #{item.value}
-                                - })
+                              - if (search || sort)
+                                    - child.product.forEach(function (item,index) {
+                                        - if (index%4 === 0) {
+                                            tr
+                                        - }
+                                                td
+                                                    a.wl-item(href='#{url}/#{item.name}',data-product='#{item.name}',data-id='#{item.id}') #{item.name}
+                                                    span.wl-stat
+                                                        span.wl-weight W:#{item.weight}
+                                                        span.wl-num N:#{item.count}                                        
+                                    - })
+                                - else 
+                                    - child.ip.forEach(function (item,index) {
+                                        - if (index%4 === 0) {
+                                            tr
+                                        - }
+                                                td
+                                                    a(href='javascript:;',data-id='#{item.id}')
+                                                        | #{item.value}
+                                    - })
                         div.wl-pager
                             ul.pagination
                                 li: a.wl-prev-page(href='') &laquo;

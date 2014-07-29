@@ -36,13 +36,22 @@ block content
                             - }
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
-                    h2.sub-header #{product.current.name}
+                    - if (sort)
+                        h2.sub-header #{sort}开头的产品
+                    - else if (search)
+                        h2.sub-header 搜索 #{search} 结果
+                    - else 
+                        h2.sub-header #{product.current.name}
                     ol.breadcrumb.wl-header-nav
                         li: a(href='#{url}') #{product.current.name}
                     hr
                     div
-                        - each val in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','p','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
-                            span: a.wl-sort(href='#{url}?sort=#{val}') #{val}
+                        - each val, index in product.first_letter
+                            - if (val >0)
+                                - if (index === sort)
+                                    span: a.wl-sort.active(href='#{url}?sort=#{index}') #{index} 
+                                - else 
+                                    span: a.wl-sort(href='#{url}?sort=#{index}') #{index} 
                     div.table-responsive
                         button.btn.btn-default.wl-edit-btn(type='button') 编辑
                         table.table.table-striped
@@ -63,18 +72,19 @@ block content
                                                     span.wl-weight W:#{item.weight}
                                                     span.wl-num N:#{item.count}                                        
                                 - })
-                        div.wl-pager
-                            ul.pagination
-                                li: a.wl-prev-page(href='') &laquo;
-                                - classes.forEach(function (item,index) {
-                                    - if (item.name === product.current.name)
-                                        - for (var i = 1; i <= Math.ceil(item.amount/100); i ++ )
-                                            - if (pageNum && i === pageNum*1)
-                                                li.active: a(href='/#{product.current.name}/page/#{i}') #{i}
-                                            - else
-                                                li: a(href='/#{product.current.name}/page/#{i}') #{i}
-                                - })
-                                li: a.wl-next-page(href='') &raquo;
+                        - if (! sort)
+                            div.wl-pager
+                                ul.pagination
+                                    li: a.wl-prev-page(href='') &laquo;
+                                    - classes.forEach(function (item,index) {
+                                        - if (item.name === product.current.name)
+                                            - for (var i = 1; i <= Math.ceil(item.amount/100); i ++ )
+                                                - if (pageNum && i === pageNum*1)
+                                                    li.active: a(href='/#{product.current.name}?page=#{i}') #{i}
+                                                - else
+                                                    li: a(href='/#{product.current.name}?page=#{i}') #{i}
+                                    - })
+                                    li: a.wl-next-page(href='') &raquo;
         div.modal.fade#add(tabindex='-1',role='dialog',aria-labelledby='myModalLabel',aria-hidden='true')
             div.modal-dialog
                 div.modal-content

@@ -41,11 +41,19 @@ block content
                         li: a(href='#{url}') #{product.current.name}
                     hr
                     div
-                        - each val in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','p','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
-                            - if (val === sort)
-                                span: a.wl-sort.active(href='#{url}?sort=#{val}') #{val}
-                            - else 
-                                span: a.wl-sort(href='#{url}?sort=#{val}') #{val}
+                        - each val, index in product.first_letter
+                            - if (val >0)
+                                - if (index === sort)
+                                    span: a.wl-sort.active(href='#{url}?sort=#{index}') #{index} 
+                                - else 
+                                    span: a.wl-sort(href='#{url}?sort=#{index}') #{index} 
+                    div
+                        - each val, index in product.first_letter
+                            - if (val >0)
+                                - if (index === sort)
+                                    span: a.wl-sort.active(href='#{url}?sort=#{index}') #{index} (#{val})
+                                - else 
+                                    span: a.wl-sort(href='#{url}?sort=#{index}') #{index} (#{val})
                     div.table-responsive
                         button.btn.btn-default.wl-edit-btn(type='button') 编辑
                         table.table.table-striped

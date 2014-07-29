@@ -53,86 +53,27 @@ router.get('/', function(req, res) {
     request.end();
 });
 
-
-// function searchRequest (target, req, res, next) {
-//     var requestSearch = http.request(target, function (responseSearch) {
-//         responseSearch.on('data', function (rawData) {
-//             var data = JSON.parse(rawData);
-//             var ips = data.ip;
-//             var ipData = [];
-//             var products = data.product;
-//             ips.forEach(function (item, i) {
-//                 var requestIp = http.request(target+'/ip'+'?ip='+item, function(responseIp) {
-    //                 responseIp.on('data', function (rawIp) {
-    //                     var ipInfo = JSON.parse(rawIp);
-    //                     ipData.push(ipInfo);
-    //                     // console.log([i,ipData,ips.length-1]);
-    //                     if (i === ips.length-2) {
-    //                         // res.send(ipData);
-    //                         // console.log(ipData);
-    //                         res.render('search', {ips: ipData, products: products});
-    //                     }
-    //                 });
-    //             });
-    //             requestIp.end();
-    //         });
-    //     });
-    // });
-
-    // requestSearch.end();    
-// }
-
 router.get('/:class', function (req, res) {
     var className = req.params.class;
     var baseUrl = req.url.split('?')[0];
     var search = req.query.s;
     var sort = req.query.sort;
+    var page = req.query.page;
     if (search) {
-
+        handle(target+'/'+className+'?search='+search);
+    } else if (page) {
+        handle(target+'/'+className+'?offset='+(page-1)*100+'&limit=100');
     } else if (sort) {
-        var requestSort = http.request(target+'/'+className+'?search='+sort+'%', function (responseSort) {
-            var d = '';
-            responseSort.on('data', function (rawSort) {
-                d = d + rawSort;
-            });
-
-            responseSort.on('end', function () {
-                var sortData;
-                try {
-                    sortData = JSON.parse(d);
-                }
-                catch (err) {
-                    res.send(d);
-                    return false;
-                }
-                var requestClass = http.request(target, function (responseClass) {
-                    var d = '';
-                    responseClass.on('data', function (rawClass) {
-                        d = d + rawClass;
-                    });
-
-                    responseClass.on('end', function () {
-                        var classes;
-                        try {
-                            classes = JSON.parse(d);
-                        }
-                        catch (err) {
-                            res.send(d);
-                            return false;
-                        }
-                        res.render('sort', {classes: classes, product: sortData, url: decodeURIComponent(baseUrl), sort: sort});
-                    });
-                });
-                requestClass.end();
-            });
-        });
-        requestSort.end();
+        handle(target+'/'+className+'?search='+sort+'%');
     } else {
-        var requestProduct = http.request(target+'/'+className, function (responseProduct) {
+        handle(target+'/'+className);
+    }
+
+    function handle (url) {
+        var requestProduct = http.request(url, function (responseProduct) {
             var d = '';
             responseProduct.on('data', function (rawProduct) {
                 d = d + rawProduct;
-
             });
 
             responseProduct.on('end', function () {
@@ -159,7 +100,14 @@ router.get('/:class', function (req, res) {
                             res.send(d);
                             return false;
                         }
-                        res.render('class', {classes: classes, product: product, url: decodeURIComponent(baseUrl)});
+                        res.render('class', {
+                            classes: classes, 
+                            product: product, 
+                            url: decodeURIComponent(baseUrl), 
+                            sort: sort, 
+                            pageNum: page,
+                            search: search
+                        });
 
                     });
                 });
@@ -170,61 +118,25 @@ router.get('/:class', function (req, res) {
 
         requestProduct.end();
     }
-
-
-});
-
-
-router.get('/:class/page/:num', function (req, res) {
-    var className = req.params.class;
-    var number = req.params.num - 1;
-    var baseUrl = req.url.split('/page/')[0].split('?')[0];
-    var requestProduct = http.request(target+'/'+className+'?offset='+number*100+'&limit=100', function (responseProduct) {
-        var d = '';
-        responseProduct.on('data', function (rawProduct) {
-            d = d + rawProduct;
-        });
-
-        responseProduct.on('end', function () {
-            var product;
-            try {
-                product = JSON.parse(d);
-            }
-            catch (err) {
-                res.send(d);
-                return false;
-            }
-            var requestClass = http.request(target, function (responseClass) {
-                var d1 = '';
-                responseClass.on('data', function (rawClass) {
-                    d1 = d1 + rawClass;
-                });
-                responseClass.on('end', function () {
-                    var classes;
-                    try {
-                        classes = JSON.parse(d1);
-                    }
-                    catch (err) {
-                        res.send(d1);
-                        return false;
-                    }
-                    res.render('class', {classes: classes, product: product, url: decodeURIComponent(baseUrl), pageNum: req.params.num});
-                });
-            });
-            requestClass.end();
-            
-        });
-    });
-
-    requestProduct.end();
 });
 
 router.get('/:class/:product', function (req, res) {
     var className = req.params.class;
     var productName = req.params.product;
     var baseUrl = req.url.split('?')[0];
-    if (productName !== 'page') {
-        var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
+    var search = req.query.s;
+    var sort = req.query.sort;
+
+    if (sort) {
+        handle(target+'/'+className+'/'+productName+'?search='+sort+'%');
+    } else if (search) {
+        handle(target+'/'+className+'/'+productName+'?search='+search);
+    } else {
+        handle(target+'/'+className+'/'+productName);
+    }
+
+    function handle (url) {
+        var requestProduct = http.request(url, function (responseProduct) {
             var d = '';
             responseProduct.on('data', function (rawProduct) {
                 d = d + rawProduct;
@@ -239,40 +151,18 @@ router.get('/:class/:product', function (req, res) {
                     res.send(d);
                     return false;
                 }
-                res.render('product', {product:product, url: decodeURIComponent(baseUrl)});
+                res.render('product', {
+                    product:product, 
+                    url: decodeURIComponent(baseUrl),
+                    sort: sort,
+                    search: search
+                });
 
             });
         });
 
         requestProduct.end();
     }
-});
-
-router.get('/:class/:product/page/:num', function (req, res) {
-    var className = req.params.class;
-    var productName = req.params.product;
-    var num = req.params.num -1;
-    var baseUrl = req.url.split('/page/')[0].split('?')[0];
-    var requestProduct = http.request(target+'/'+className+'/'+productName+'?offset='+num*100+'&limit=100', function (responseProduct) {
-        var d = '';
-        responseProduct.on('data', function (rawProduct) {
-            d = d + rawProduct;
-        });
-
-        responseProduct.on('end', function () {
-            var product;
-            try {
-                product = JSON.parse(d);
-            }
-            catch (err) {
-                res.send(d);
-                return false;
-            }
-            res.render('product', {product: product, url: decodeURIComponent(baseUrl), pageNum: req.params.num});
-        });
-    });
-
-    requestProduct.end();
 });
 
 router.get('/:class/:product/:child', function (req, res) {
@@ -281,45 +171,65 @@ router.get('/:class/:product/:child', function (req, res) {
     var childName = req.params.child;
     var baseUrl = req.url.split('?')[0];
     var sidebarLink = req.url.split('/'+childName+'/')[0];
-    var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName, function (responseChild) {
-        var d = '';
-        responseChild.on('data', function (rawChild) {
-            d = d + rawChild;
-        });
+    var sort = req.query.sort;
+    var search = req.query.s;
 
-        responseChild.on('end', function () {
-            var child;
-            try {
-                child = JSON.parse(d);
-            }
-            catch (err) {
-                res.send(d);
-                return false;
-            }
-            var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
-                var d1 = '';
-                responseProduct.on('data', function (rawProduct) {
-                    d1 = d1 + rawProduct;
-                });
 
-                responseProduct.on('end', function () {
-                    var product;
-                    try {
-                        classes = JSON.parse(d1);
-                    }
-                    catch (err) {
-                        res.send(d1);
-                        return false;
-                    }
-                    res.render('child', {child: child, product: product, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
-                });
+    if (sort) {
+        handle(target+'/'+className+'/'+productName+'?search='+sort+'%');
+    } else if (search) {
+        handle(target+'/'+className+'/'+productName+'?search='+search);
+    } else {
+        handle(target+'/'+className+'/'+productName);
+    }
+
+    function handle (url) {
+        var requestChild = http.request(url, function (responseChild) {
+            var d = '';
+            responseChild.on('data', function (rawChild) {
+                d = d + rawChild;
             });
 
-            requestProduct.end();
+            responseChild.on('end', function () {
+                var child;
+                try {
+                    child = JSON.parse(d);
+                }
+                catch (err) {
+                    res.send(d);
+                    return false;
+                }
+                var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
+                    var d1 = '';
+                    responseProduct.on('data', function (rawProduct) {
+                        d1 = d1 + rawProduct;
+                    });
 
-        });
-    }) ;  
-    requestChild.end();
+                    responseProduct.on('end', function () {
+                        var product;
+                        try {
+                            product = JSON.parse(d1);
+                        }
+                        catch (err) {
+                            res.send(d1);
+                            return false;
+                        }
+                        res.render('child', {
+                            child: child, 
+                            product: product, 
+                            url: decodeURIComponent(baseUrl), 
+                            sidebarLink: decodeURIComponent(sidebarLink),
+                            sort: sort,
+                            search: search
+                        });
+                    });
+                });
+                requestProduct.end();
+            });
+        }) ;  
+        requestChild.end();
+
+    }
 });
 
 router.get('/:class/:product/:child/:subChild',function (req,res) {
@@ -359,7 +269,12 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
                         res.send(d1);
                         return false;
                     }
-                    res.render('subChild',{subChild: subChild, child: child, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
+                    res.render('subChild',{
+                        subChild: subChild, 
+                        child: child, 
+                        url: decodeURIComponent(baseUrl), 
+                        sidebarLink: decodeURIComponent(sidebarLink)
+                    });
                 });
             });
             requestChild.end();
@@ -367,55 +282,5 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
     });
     requestSubChild.end();
 });
-
-router.get('/:class/:product/:child/page/:num', function (req, res) {
-    var className = req.params.class;
-    var productName = req.params.product;
-    var childName = req.params.child;
-    var baseUrl = req.url.split('?')[0];
-    var sidebarLink = req.url.split(childName)[0];
-    var num = req.params.num-1;
-    var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName+'?offset='+num*100+'&limit=100', function (responseChild) {
-        var d = '';
-        responseChild.on('data', function (rawChild) {
-            d = d + rawChild;
-        });
-
-        requestChild.on('end', function () {
-            var child;
-            try {
-                child = JSON.parse(d);
-            }
-            catch (err) {
-                res.send(d);
-                return false;
-            }
-            var requestProduct = http.request(target+'/'+className+'/'+productName, function (responseProduct) {
-                var d1 = '';
-                responseProduct.on('data', function (rawProduct) {
-                    d1 = d1 + rawProduct;
-                });
-
-                responseProduct.on('end', function () {
-                    var product;
-                    try {
-                        product = JSON.parse(d1);
-                    }
-                    catch (err) {
-                        res.send(d1);
-                        return false;
-                    }
-                    res.render('child', {child: child, product: product, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink), pageNum: req.params.num});
-                });
-            });
-
-            requestProduct.end();
-
-        });
-    }) ;  
-    requestChild.end();    
-});
-
-
 
 module.exports = router;
