@@ -24,18 +24,45 @@ block content
                             p
                                 | 产品
                                 span: button.btn.btn-default.wl-btn 编辑
-                        - child.product.forEach(function (item,index){
+                        - product.product.forEach(function (item,index){
                             - var l = url.substring(0, url.lastIndexOf('/'))
-                            - if (item.name === subChild.current.name)
+                            - var lArray = l.split('/');
+                            - var l1 = '/'+lArray[1]+'/'+lArray[2];
+                            - var name = item.name.split('.')[0];
+                            - if (item.name === child.current.name)
                                 li.active
-                                    a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
-                                        | #{item.name}
+                                    a(href='#{l}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                        | #{name}
+                                        span.label.label-info.wl-caret #{item.pcount}
                                         span.badge.wl-weight #{item.weight}
+                                    div.wl-show-sub
+                                        ul.nav.nav-sidebar.wl-sub-list
+                                            - child.product.forEach(function (subItem, subIndex){
+                                                - var l = url.substring(0,url.lastIndexOf('/'))
+                                                - var subName = subItem.name.split('.')[0];
+                                                - if (subItem.name == subChild.current.name)
+                                                    li.active
+                                                        a(href='#{l}/#{subItem.name}',data-class='#{subItem.name}',data-id='#{subItem.id}',class='#{subItem.name}')
+                                                            | #{subName}
+                                                            span.label.label-info.wl-caret #{subItem.pcount}
+                                                            span.badge.wl-weight #{subItem.weight}
+                                                        div.wl-show-sub
+                                                            ul.nav.nav-sidebar.wl-sub-list
+                                                - else 
+                                                    li
+                                                        a(href='#{l}/#{subItem.name}',data-class='#{subItem.name}',data-id='#{subItem.id}',class='#{subItem.name}')
+                                                            | #{subName}
+                                                            span.label.label-info.wl-caret #{subItem.pcount}
+                                                            span.badge.wl-weight #{subItem.weight}
+                                            - })
                             - else 
                                 li
-                                    a(href='#{l}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
-                                        | #{item.name}
+                                    a(href='#{l1}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                                        | #{name}
+                                        span.label.label-info.wl-caret #{item.pcount}
                                         span.badge.wl-weight #{item.weight}
+                                    div.wl-show-sub
+                                        ul.nav.nav-sidebar.wl-sub-list
                         - })
                 div.col-sm-9.col-sm-offset-3.col-md-9.col-md-offset-3.main
                     h2.sub-header #{subChild.current.name}
@@ -102,6 +129,59 @@ block content
     
 block extra_script
     script.
+        $("body").on("click", ".wl-caret",function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            console.log($(this).parents("li"));
+            var self = this;
+            if ($($(self).parents("li")[0]).find(".wl-show-sub").is(":visible")) {
+                $($(self).parents("li")[0]).find(".wl-show-sub").hide();
+                //- $(self).html("more");
+            } else {
+                var url = $(this).parent().attr("href");
+                console.log(url);
+                var reqUrl = "http://10.0.200.185:81/ls"+url;
+                $.ajax({
+                    type: "GET",
+                    url: reqUrl,
+                    crossDomain: true,
+                    dataType: "jsonp",
+                    success: function (data) {
+                        var productData = data.product;
+                        var len = productData.length;
+                        $($(self).parents("li")[0]).find(".wl-show-sub ul li").remove();
+                        if(len > 0){
+                            productData.forEach(function(item,index){
+                                var subProduct = item.name;
+                                var weight = item.weight;
+                                var count = item.pcount;
+                                var name = subProduct.split(".")[0];
+                                $($(self)
+                                    .parents("li")[0])
+                                    .find(".wl-show-sub")
+                                    .show()
+                                    .find("ul")
+                                    .append(
+                                    $("<li><a href='"+url+"/"+subProduct+"'>"+
+                                        name+"<span class='label label-info wl-caret'>"+count+"</span><span class='badge wl-sub-weight'>"+
+                                        weight+"</a></li>"))
+                            })
+                        }else {
+                            $($(self)
+                                .parents("li")[0])
+                                .find(".wl-show-sub")
+                                .show()
+                                .find("ul")
+                                .find("li")
+                                .remove()
+                                .end()
+                                .append($("<li class='no-child'>暂无子分类</li>"));
+                        }
+                        //- $(self).html("hide");
+                    }
+                })
+            }
+        })
         $(".wl-list a").each(function (index, item) {
             $(item).editable({
                 title: "Input the value",

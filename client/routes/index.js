@@ -269,12 +269,40 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
                         res.send(d1);
                         return false;
                     }
-                    res.render('subChild',{
-                        subChild: subChild, 
-                        child: child, 
-                        url: decodeURIComponent(baseUrl), 
-                        sidebarLink: decodeURIComponent(sidebarLink)
+                    // res.render('subChild',{
+                    //     subChild: subChild, 
+                    //     child: child, 
+                    //     url: decodeURIComponent(baseUrl), 
+                    //     sidebarLink: decodeURIComponent(sidebarLink)
+                    // });
+                    // var child = JSON.parse(d1);
+                    // res.render('subChild',{subChild: subChild, child: child, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
+                    var requestProduct = http.request(target+'/'+className+'/'+productName,function (responseProduct) {
+                        var d2 = '';
+                        responseProduct.on('data',function (rawProduct) {
+                            d2 = d2 + rawProduct;
+                        });
+
+                        responseProduct.on('end', function () {
+                            // var product = JSON.parse(d2);
+                            var product;
+                            try {
+                                product = JSON.parse(d2);
+                            }
+                            catch (err) {
+                                res.send(d2);
+                                return false;
+                            }
+                            res.render('subChild',{
+                                subChild: subChild, 
+                                child: child, 
+                                product: product, 
+                                url: decodeURIComponent(baseUrl),
+                                sidebarLink: decodeURIComponent(sidebarLink)
+                            });
+                        });
                     });
+                    requestProduct.end();
                 });
             });
             requestChild.end();

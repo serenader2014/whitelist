@@ -72,7 +72,7 @@ block content
                                                     span.wl-weight W:#{item.weight}
                                                     span.wl-num N:#{item.count}                                        
                                 - })
-                        - if (! sort)
+                        - if (! sort && ! search)
                             div.wl-pager
                                 ul.pagination
                                     li: a.wl-prev-page(href='') &laquo;
