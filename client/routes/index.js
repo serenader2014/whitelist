@@ -54,7 +54,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:class', function (req, res) {
-    var className = req.params.class;
+    var className =decodeURIComponent(req.params.class);
     var baseUrl = req.url.split('?')[0];
     var search = req.query.s;
     var sort = req.query.sort;
@@ -155,7 +155,11 @@ router.get('/:class/:product', function (req, res) {
                     product:product, 
                     url: decodeURIComponent(baseUrl),
                     sort: sort,
-                    search: search
+                    search: search,
+                    ip: product.ip,
+                    current: product.current.name,
+                    p: product.product,
+                    letter: product.first_letter
                 });
 
             });
@@ -176,11 +180,11 @@ router.get('/:class/:product/:child', function (req, res) {
 
 
     if (sort) {
-        handle(target+'/'+className+'/'+productName+'?search='+sort+'%');
+        handle(target+'/'+className+'/'+productName+'/'+childName+'?search='+sort+'%');
     } else if (search) {
-        handle(target+'/'+className+'/'+productName+'?search='+search);
+        handle(target+'/'+className+'/'+productName+'/'+childName+'?search='+search);
     } else {
-        handle(target+'/'+className+'/'+productName);
+        handle(target+'/'+className+'/'+productName+'/'+childName);
     }
 
     function handle (url) {
@@ -220,7 +224,11 @@ router.get('/:class/:product/:child', function (req, res) {
                             url: decodeURIComponent(baseUrl), 
                             sidebarLink: decodeURIComponent(sidebarLink),
                             sort: sort,
-                            search: search
+                            search: search,
+                            ip: child.ip,
+                            current: child.current.name,
+                            p: child.product,
+                            letter: child.first_letter
                         });
                     });
                 });
@@ -269,14 +277,6 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
                         res.send(d1);
                         return false;
                     }
-                    // res.render('subChild',{
-                    //     subChild: subChild, 
-                    //     child: child, 
-                    //     url: decodeURIComponent(baseUrl), 
-                    //     sidebarLink: decodeURIComponent(sidebarLink)
-                    // });
-                    // var child = JSON.parse(d1);
-                    // res.render('subChild',{subChild: subChild, child: child, url: decodeURIComponent(baseUrl), sidebarLink: decodeURIComponent(sidebarLink)});
                     var requestProduct = http.request(target+'/'+className+'/'+productName,function (responseProduct) {
                         var d2 = '';
                         responseProduct.on('data',function (rawProduct) {
@@ -284,7 +284,6 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
                         });
 
                         responseProduct.on('end', function () {
-                            // var product = JSON.parse(d2);
                             var product;
                             try {
                                 product = JSON.parse(d2);
@@ -293,12 +292,16 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
                                 res.send(d2);
                                 return false;
                             }
-                            res.render('subChild',{
+                            res.render('product1',{
                                 subChild: subChild, 
                                 child: child, 
                                 product: product, 
                                 url: decodeURIComponent(baseUrl),
-                                sidebarLink: decodeURIComponent(sidebarLink)
+                                sidebarLink: decodeURIComponent(sidebarLink),
+                                ip: subChild.ip,
+                                current: subChild.current.name,
+                                p: subChild.product,
+                                letter: subChild.first_letter
                             });
                         });
                     });

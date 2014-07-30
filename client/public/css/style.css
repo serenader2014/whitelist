@@ -127,8 +127,8 @@ body {
 .wl-sidebar-header {
     position: fixed !important;
     top: 50px;
-    padding: 30px 20px;
-    width: 25%;
+    padding: 28px 20px;
+    width: 33%;
     font-size: 20px;
     z-index: 999;
     background: #EEEEEE;
@@ -255,11 +255,25 @@ body {
   float: right;
 }
 
-.no-child {
-  text-align: center;
-  padding: 10px;
+.child1 > ul {
+  margin: 0;
+  padding: 0 20px 0 40px;
+  list-style: none;
+  background: #E0E0E0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5) inset;
 }
 
-.wl-show-sub2 {
+.child1 ul li a{
   display: block;
+  padding: 5px 0;
+} 
+
+.child1 .active a {
+  color: #303E4A;
+}
+
+.child2 > ul {
+  list-style: none;
+  padding-left: 20px;
+  background: #CFCFCF;
 }
