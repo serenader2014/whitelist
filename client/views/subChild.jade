@@ -54,6 +54,8 @@ block content
                                                             | #{subName}
                                                             span.label.label-info.wl-caret #{subItem.pcount}
                                                             span.badge.wl-weight #{subItem.weight}
+                                                        div.wl-show-sub
+                                                            ul.nav.nav-sidebar.wl-sub-list
                                             - })
                             - else 
                                 li
@@ -132,7 +134,7 @@ block extra_script
         $("body").on("click", ".wl-caret",function(event){
             event.preventDefault();
             event.stopPropagation();
-            console.log($(this).parents("li"));
+            console.log($($(this).parents("li")[0]));
             var self = this;
             if ($($(self).parents("li")[0]).find(".wl-show-sub").is(":visible")) {
                 $($(self).parents("li")[0]).find(".wl-show-sub").hide();
@@ -147,7 +149,9 @@ block extra_script
                     crossDomain: true,
                     dataType: "jsonp",
                     success: function (data) {
+                        //- console.log(data);
                         var productData = data.product;
+                        console.log(productData);
                         var len = productData.length;
                         $($(self).parents("li")[0]).find(".wl-show-sub ul li").remove();
                         if(len > 0){
@@ -156,6 +160,7 @@ block extra_script
                                 var weight = item.weight;
                                 var count = item.pcount;
                                 var name = subProduct.split(".")[0];
+                                console.log(subProduct);
                                 $($(self)
                                     .parents("li")[0])
                                     .find(".wl-show-sub")

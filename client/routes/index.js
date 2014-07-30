@@ -151,7 +151,7 @@ router.get('/:class/:product', function (req, res) {
                     res.send(d);
                     return false;
                 }
-                res.render('product', {
+                res.render('product1', {
                     product:product, 
                     url: decodeURIComponent(baseUrl),
                     sort: sort,
@@ -214,7 +214,7 @@ router.get('/:class/:product/:child', function (req, res) {
                             res.send(d1);
                             return false;
                         }
-                        res.render('child', {
+                        res.render('product1', {
                             child: child, 
                             product: product, 
                             url: decodeURIComponent(baseUrl), 

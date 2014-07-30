@@ -1,0 +1,48 @@
+div.col-sm-3.col-md-3.sidebar
+    ul.nav.nav-sidebar.wl-list
+        li.wl-sidebar-header
+            p
+                | 产品
+                span: button.btn.btn-default.wl-btn 编辑
+        - product.product.forEach(function (item,index){
+            - var l = url.substring(0, url.lastIndexOf('/'))
+            - var lArray = l.split('/');
+            - var l1 = '/'+lArray[1]+'/'+lArray[2];
+            - var name = item.name.split('.')[0];
+            - if (item.name === child.current.name)
+                li.active
+                    a(href='#{l}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                        | #{name}
+                        span.label.label-info.wl-caret #{item.pcount}
+                        span.badge.wl-weight #{item.weight}
+                    div.wl-show-sub
+                        ul.nav.nav-sidebar.wl-sub-list
+                            - child.product.forEach(function (subItem, subIndex){
+                                - var l = url.substring(0,url.lastIndexOf('/'))
+                                - var subName = subItem.name.split('.')[0];
+                                - if (subItem.name == subChild.current.name)
+                                    li.active
+                                        a(href='#{l}/#{subItem.name}',data-class='#{subItem.name}',data-id='#{subItem.id}',class='#{subItem.name}')
+                                            | #{subName}
+                                            span.label.label-info.wl-caret #{subItem.pcount}
+                                            span.badge.wl-weight #{subItem.weight}
+                                        div.wl-show-sub
+                                            ul.nav.nav-sidebar.wl-sub-list
+                                - else 
+                                    li
+                                        a(href='#{l}/#{subItem.name}',data-class='#{subItem.name}',data-id='#{subItem.id}',class='#{subItem.name}')
+                                            | #{subName}
+                                            span.label.label-info.wl-caret #{subItem.pcount}
+                                            span.badge.wl-weight #{subItem.weight}
+                                        div.wl-show-sub
+                                            ul.nav.nav-sidebar.wl-sub-list
+                            - })
+            - else 
+                li
+                    a(href='#{l1}/#{item.name}',data-class='#{item.name}',data-id='#{item.id}',class='#{item.name}')
+                        | #{name}
+                        span.label.label-info.wl-caret #{item.pcount}
+                        span.badge.wl-weight #{item.weight}
+                    div.wl-show-sub
+                        ul.nav.nav-sidebar.wl-sub-list
+        - })
