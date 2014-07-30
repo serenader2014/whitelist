@@ -42,8 +42,12 @@ div.col-sm-4.col-md-4.sidebar
             - each item, index in product.product
                 - var name = item.name.split('.')[0]
                 - var arr = url.split('/');
-                - arr.splice(-2, 2);
-                - pUrl = arr.join('/');
+                - if ( length === 5)
+                    - arr.splice(-2, 2);
+                    - pUrl = arr.join('/');
+                - else if ( length === 6)
+                    - arr.splice(-3,3);
+                    - pUrl = arr.join('/');
                 - if (item.name === child.current.name)
                     li.active
                         a(href='#{pUrl}/#{item.name}', class='1')
@@ -55,8 +59,12 @@ div.col-sm-4.col-md-4.sidebar
                                 - each itm, idx in child.product
                                     - var cName = itm.name.split('.')[0]
                                     - var arr1 = url.split('/')
-                                    - arr1.splice(-1, 1);
-                                    - cUrl = arr1.join('/');
+                                    - if (length === 5)
+                                        - arr1.splice(-1, 1);
+                                        - cUrl = arr1.join('/');
+                                    - else if (length === 6)
+                                        - arr1.splice(-2, 2);
+                                        - cUrl = arr1.join('/');
                                     - if (itm.name === subChild.current.name)
                                         li.active
                                             a(href='#{cUrl}/#{itm.name}', class='2')
