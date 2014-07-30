@@ -38,7 +38,7 @@ div.col-sm-4.col-md-4.sidebar
                         | #{item.name}
                         span.label.label-info.wl-caret #{item.pcount}
                         span.badge.wl-weight #{item.weight}
-        - else if (length === 5)
+        - else if (length >= 5)
             - each item, index in product.product
                 - var name = item.name.split('.')[0]
                 - var arr = url.split('/');

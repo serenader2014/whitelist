@@ -257,10 +257,9 @@ body {
 
 .child1 > ul {
   margin: 0;
-  padding: 0 20px 0 40px;
+  padding: 0 20px 20px 40px;
   list-style: none;
   background: #E0E0E0;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5) inset;
 }
 
 .child1 ul li a{

@@ -314,4 +314,99 @@ router.get('/:class/:product/:child/:subChild',function (req,res) {
     requestSubChild.end();
 });
 
+router.get('/:class/:product/:child/:subChild/:last',function (req,res) {
+    var className = req.params.class;
+    var productName = req.params.product;
+    var childName = req.params.child;
+    var subChildName = req.params.subChild;
+    var lastName = req.params.last;
+    var baseUrl = req.url.split('?');
+    var sidebarLink = req.url.split('/'+subChildName+'/');
+    var requestLast = http.request(target+'/'+className+'/'+productName+'/'+childName+'/'+subChildName+'/'+lastName, function (responseLast) {
+        var l = '';
+        responseLast.on('data', function (rawLast) {
+            l = l + rawLast;
+        });
+
+        responseLast.on('end', function () {
+            var lastData;
+            try {
+                lastData = JSON.parse(l);
+            }
+            catch (err) {
+                res.send(l);
+                return false;
+            }
+            var requestSubChild = http.request(target+'/'+className+'/'+productName+'/'+childName+'/'+subChildName,function (responseSubChild) {
+                var d = '';
+                responseSubChild.on('data',function (rawSubChild) {
+                    d = d + rawSubChild;
+                });
+
+                responseSubChild.on('end',function () {
+                    var subChild;
+                    try {
+                        subChild = JSON.parse(d);
+                    }
+                    catch (err) {
+                        res.send(d);
+                        return false;
+                    }
+                    var requestChild = http.request(target+'/'+className+'/'+productName+'/'+childName,function (responseChild) {
+                        var d1 = '';
+                        responseChild.on('data',function (rawChild) {
+                            d1 = d1 + rawChild;
+                        });
+            
+                        responseChild.on('end',function () {
+                            var child;
+                            try {
+                                child = JSON.parse(d1);
+                            }
+                            catch (err) {
+                                res.send(d1);
+                                return false;
+                            }
+                            var requestProduct = http.request(target+'/'+className+'/'+productName,function (responseProduct) {
+                                var d2 = '';
+                                responseProduct.on('data',function (rawProduct) {
+                                    d2 = d2 + rawProduct;
+                                });
+
+                                responseProduct.on('end', function () {
+                                    var product;
+                                    try {
+                                        product = JSON.parse(d2);
+                                    }
+                                    catch (err) {
+                                        res.send(d2);
+                                        return false;
+                                    }
+                                    res.render('product1',{
+                                        last: lastData,
+                                        subChild: subChild, 
+                                        child: child, 
+                                        product: product, 
+                                        url: decodeURIComponent(baseUrl),
+                                        sidebarLink: decodeURIComponent(sidebarLink),
+                                        ip: lastData.ip,
+                                        current: lastData.current.name,
+                                        p: lastData.product,
+                                        letter: lastData.first_letter
+                                    });
+                                });
+                            });
+                            requestProduct.end();
+                        });
+                    });
+                    requestChild.end();
+                });
+            });
+            requestSubChild.end();
+
+        });
+    });
+    requestLast.end();
+});
+
 module.exports = router;
