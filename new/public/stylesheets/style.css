@@ -21,7 +21,7 @@ ul, ol {
 
 .wl-sidebar-wrapper {
     position: absolute;
-    top: 0;
+    top: 110px;
     bottom: 0;
     left: 0;
 }
