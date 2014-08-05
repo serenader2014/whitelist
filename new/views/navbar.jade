@@ -1,0 +1,23 @@
+div.wl-nav
+    div.wl-nav-left
+        h1.wl-head 智度
+    div.wl-nav-right
+        div.wl-nav-rup
+            form.wl-search
+                input(type="text",placeholder="Search").wl-input
+                button(type="submit").wl-btn 搜索
+            ol.wl-breadcurmb
+                - var url = urlArr.reverse();
+                - var tmp = '';
+                - url.forEach(function(item, index) {
+                    - tmp = tmp + item + '/';
+                    - if (item)
+                        li:a(href='#{tmp}') #{item}
+            - })
+        div.wl-nav-rdown
+            ul.wl-nav-tab
+                li.wl-list 列表
+                li.wl-statistics 统计
+                li.wl-message 备注
+                li.wl-addClass 添加分类
+                li.wl-addProduct 添加产品

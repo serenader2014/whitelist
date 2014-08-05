@@ -9,7 +9,8 @@ body {
 }
 
 a {
-    color: #00B7FF;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
 }
 
 ul, ol {
@@ -82,4 +83,125 @@ ul, ol {
 
 .wl-product-amount {
     margin-right: 10px;
+
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+ol {
+    margin: 0;
+    padding: 0;
+}
+
+.wl-nav {
+    height: 110px;
+    background: rgb(0,0,0);
+}
+
+.wl-nav-left {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 110px;
+    width: 200px;
+    line-height: 110px;
+    text-align: center;
+}
+
+
+.wl-nav-right {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 200px;
+}
+
+.wl-head {
+    text-decoration: none;
+    font-size: 30px;
+    font-family: Times, TimesNR, 'New Century Schoolbook',Georgia, 'New York', serif;
+    color: rgba(255,255,255,0.8);
+}
+
+.wl-nav-rup {
+    height: 65px;
+    line-height: 65px;
+    width: 100%;
+}
+
+.wl-search {
+    float: right;
+    padding-right: 50px;
+}
+
+.wl-breadcrumb {
+    list-style: none;
+    margin-right: 30px;
+    margin-top: 0px;
+}
+
+.wl-breadcrumb li {
+    display: inline-block;
+    color:rgba(255,255,255,0.7);
+}
+
+.wl-breadcrumb li+li:before {
+    content:'> ';
+}
+
+.wl-nav-rdown {
+    height: 35px;
+    line-height: 35px;
+}
+
+.wl-nav-tab {
+    list-style: none;
+}
+
+.wl-nav-tab li {
+    display: inline-block;
+    color:rgba(255,255,255,0.7);
+    padding: 5px;
+    width:100px;
+    background-color: #34343e;
+    text-align: center;
+    font-size: 18px;
+    /*color: rgba(255,255,255,0.5);*/
+}
+
+.wl-breadcrumb a:hover,
+.wl-nav-tab li a:hover {
+    color: #90ef7f !important;
+};
+
+.wl-nav-tab.active {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+.wl-input {
+    width: 200px;
+    height: 25px;
+    border-radius: 10px;
+    outline:none;
+    border-style: none;
+}
+
+.wl-input:focus {
+    box-shadow:2px 2px 5px #10e0e9;
+    box-shadow:-2px -2px 5px #10e0e9;
+    border-radius: 10px;
+}
+
+.wl-btn {
+    border-style: none;
+    background-color: #05B9FF;
+    border-radius: 5px;
+    width:70px;
+    height: 25px;
+    color: #ffffff;
+    text-align: center;
 }

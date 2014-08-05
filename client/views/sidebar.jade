@@ -58,11 +58,12 @@ div.col-sm-4.col-md-4.sidebar
                             ul
                                 - each itm, idx in child.product
                                     - var cName = itm.name.split('.')[0]
-                                    - var arr1 = url.split('/')
                                     - if (length === 5)
+                                        - var arr1 = url.split('/')
                                         - arr1.splice(-1, 1);
                                         - cUrl = arr1.join('/');
                                     - else if (length === 6)
+                                        - var arr1 = url.split('/')
                                         - arr1.splice(-2, 2);
                                         - cUrl = arr1.join('/');
                                     - if (itm.name === subChild.current.name)
@@ -82,7 +83,7 @@ div.col-sm-4.col-md-4.sidebar
                                                                 span.badge.wl-weight #{t.weight}
                                     - else
                                         li
-                                            a(href='#{url}/#{itm.name}', class='#{itm.name}')
+                                            a(href='#{cUrl}/#{itm.name}', class='#{itm.name}')
                                                 | #{itm.name}
                                                 span.label.label-info.wl-caret #{itm.pcount}
                                                 span.badge.wl-weight #{itm.weight}
