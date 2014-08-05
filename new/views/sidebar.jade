@@ -19,3 +19,9 @@
                     a(href='#{product.name}') #{product.name} 
                     span.wl-product-weight #{product.weight}
                     span.wl-product-amount #{product.pcount}
+    script.
+        $('.slide-btn a').on('click', function () {
+            $(this).parents('.wl-parents-hidden').find('.content').animate({
+                width: '350px'
+            }, 500);
+        })
