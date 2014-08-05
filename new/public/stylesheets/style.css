@@ -21,7 +21,7 @@ ul, ol {
 
 .wl-sidebar-wrapper {
     position: absolute;
-    top: 110px;
+    top: 120px;
     bottom: 0;
     left: 0;
 }
@@ -98,7 +98,7 @@ ol {
 
 .wl-nav {
     height: 110px;
-    background: rgb(0,0,0);
+    background: #252530;
 }
 
 .wl-nav-left {
@@ -106,8 +106,9 @@ ol {
     top: 0px;
     left: 0px;
     height: 110px;
-    width: 200px;
+    width: 350px;
     line-height: 110px;
+    margin: 0px;
     text-align: center;
 }
 
@@ -116,11 +117,12 @@ ol {
     position: absolute;
     top: 0px;
     right: 0px;
-    left: 200px;
+    left: 350px;
 }
 
 .wl-head {
     text-decoration: none;
+    margin:0;
     font-size: 30px;
     font-family: Times, TimesNR, 'New Century Schoolbook',Georgia, 'New York', serif;
     color: rgba(255,255,255,0.8);
@@ -149,7 +151,7 @@ ol {
 }
 
 .wl-breadcrumb li+li:before {
-    content:'> ';
+    content:' > ';
 }
 
 .wl-nav-rdown {
@@ -166,6 +168,7 @@ ol {
     color:rgba(255,255,255,0.7);
     padding: 5px;
     width:100px;
+    margin-left: 5px;
     background-color: #34343e;
     text-align: center;
     font-size: 18px;
@@ -175,10 +178,13 @@ ol {
 .wl-breadcrumb a:hover,
 .wl-nav-tab li a:hover {
     color: #90ef7f !important;
-};
+}
 
-.wl-nav-tab.active {
+.active {
     background-color: #ffffff !important;
+}
+
+.active a {
     color: #000000 !important;
 }
 
@@ -188,12 +194,13 @@ ol {
     border-radius: 10px;
     outline:none;
     border-style: none;
+    margin-right: 10px;
 }
 
 .wl-input:focus {
-    box-shadow:2px 2px 5px #10e0e9;
-    box-shadow:-2px -2px 5px #10e0e9;
-    border-radius: 10px;
+     outline:none;
+     border:#87C6F9 1px solid;
+     box-shadow: 0 0 8px rgba(103, 166, 217, 1);
 }
 
 .wl-btn {

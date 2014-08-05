@@ -1,23 +1,22 @@
 div.wl-nav
     div.wl-nav-left
-        h1.wl-head 智度
+        h1.wl-head: a(href="/") 智度
     div.wl-nav-right
         div.wl-nav-rup
             form.wl-search
                 input(type="text",placeholder="Search").wl-input
                 button(type="submit").wl-btn 搜索
-            ol.wl-breadcurmb
+            ol.wl-breadcrumb
                 - var url = urlArr.reverse();
-                - var tmp = '';
                 - url.forEach(function(item, index) {
-                    - tmp = tmp + item + '/';
-                    - if (item)
-                        li:a(href='#{tmp}') #{item}
-            - })
+                    - var tmp = item.substring(item.lastIndexOf('/')+1);
+                        li: a(href='#{item}') #{tmp}
+                - })
         div.wl-nav-rdown
             ul.wl-nav-tab
-                li.wl-list 列表
-                li.wl-statistics 统计
-                li.wl-message 备注
-                li.wl-addClass 添加分类
-                li.wl-addProduct 添加产品
+                li.wl-list.active: a(href="javascript:") 列表
+                li.wl-statistics: a(href="javascript:") 统计
+                li.wl-message: a(href="javascript:") 备注
+                li.wl-addClass: a(href="javascript:") 添加分类
+                li.wl-addProduct: a(href="javascript:") 添加产品
+
