@@ -1,0 +1,21 @@
+.wl-sidebar-wrapper
+    - each parent,index in parents
+        .wl-parents-hidden(class='wl-parents-#{index}')
+            .content
+                ul
+                    - each product in parent.product
+                        - var c = '';
+                        - if (product.name === current.current.name || (parents[index+1] && product.name === parents[index+1].current.name))
+                            - c = 'active'
+                        li(class='#{c}')
+                            a(href='#{product.name}') #{product.name}
+                            span.wl-product-weight #{product.weight}
+                            span.wl-product-amount #{product.pcount}
+            .slide-btn: a(href='javascript:;') 
+    .wl-current-product
+        ul
+            - each product in current.product
+                li
+                    a(href='#{product.name}') #{product.name} 
+                    span.wl-product-weight #{product.weight}
+                    span.wl-product-amount #{product.pcount}

@@ -11,10 +11,32 @@ router.get('/*', function (req, res, next) {
     var page = req.query.page;
     var search = req.query.search;
     var arr;
-    if (url.split('/').length ===2) {
+    if (url === '/') {
+        handleIndex();
+    } else if (url.substring(url.length-1) === '/') {
+        handleRedirect();
+    }
+
+    function handleRedirect () {
+        res.redirect(url.substring(0, url.length-1));
+    }
+
+    function handleIndex () {
+
+    }
+
+    function handleClass () {
         arr = [url.substring(1), ''];
-    } else {
+    }
+
+    function handleProduct () {
         arr = handleUrl(url);
+    }
+
+    if (url.split('/').length ===2) {
+        handleClass();
+    } else {
+        handleProduct();
     }
     var arrLength = arr.length;
     var j = 0;
@@ -37,7 +59,7 @@ router.get('/*', function (req, res, next) {
                     res.send([d, target+'/'+t]);
                     return false;
                 }
-                if (j < arr.length) {
+                if (j < arr.length-1) {
                     request(arr[j]);
                 } else {
                     if (req.url.split('/').length === 2) {
@@ -50,7 +72,14 @@ router.get('/*', function (req, res, next) {
                             search: search                            
                         });
                     } else {
-                        res.send([result,arr]);
+                        var current = result[0];
+                        var parents = [];
+                        for (var i = 1; i < result.length; i++) {
+                            parents[i-1] = result[i];
+                        }
+                        parents.reverse();
+                        res.render('index', {urlArr: arr, current: current, parents: parents});
+                        // res.send([result,arr]);
                     }
                 }
             });
