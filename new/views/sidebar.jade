@@ -8,18 +8,20 @@
                         - if (product.name === current.current.name || (parents[index+1] && product.name === parents[index+1].current.name))
                             - c = 'active'
                         li(class='#{c}')
-                            a(href='#{product.name}') #{product.name}
-                            span.wl-product-weight #{product.weight}
-                            span.wl-product-amount #{product.pcount}
+                            .wl-product-info
+                                span.wl-product-weight #{product.weight}
+                                span.wl-product-amount #{product.pcount}
+                            a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
             .slide-btn: a(href='javascript:;')
     .wl-current-product.wl-sidebar-product
         .content.expanded
             ul
                 - each product in current.product
                     li
-                        a(href='#{product.name}') #{product.name} 
-                        span.wl-product-weight #{product.weight}
-                        span.wl-product-amount #{product.pcount}
+                        .wl-product-info
+                            span.wl-product-weight #{product.weight}
+                            span.wl-product-amount #{product.pcount}
+                        a(href='/#{urlArr[urlArr.length-1]}/#{product.name}') #{product.name} 
         .slide-btn: a.fold(href='javascript:;') 
 
     script.
