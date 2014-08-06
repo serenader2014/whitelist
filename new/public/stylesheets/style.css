@@ -160,6 +160,10 @@ ol {
     color: rgba(255,255,255,0.8);
 }
 
+.wl-head a:hover {
+    color: #ffffff;
+}
+
 .wl-nav-rup {
     height: 65px;
     line-height: 65px;
@@ -180,10 +184,11 @@ ol {
 .wl-breadcrumb li {
     display: inline-block;
     color:rgba(255,255,255,0.7);
+    /*padding:0 3px;*/
 }
 
 .wl-breadcrumb li+li:before {
-    content:' > ';
+    content:'>';
 }
 
 .wl-nav-rdown {
@@ -193,6 +198,8 @@ ol {
 
 .wl-nav-tab {
     list-style: none;
+    float: right;
+    margin-right: 47px;
 }
 
 .wl-nav-tab li {
@@ -212,6 +219,14 @@ ol {
     color: #90ef7f !important;
 }
 
+.wl-nav .active {
+    background-color: #ffffff;
+}
+
+.wl-nav .active a {
+    color: #000000;
+}
+
 .wl-input {
     width: 200px;
     height: 25px;
@@ -219,6 +234,7 @@ ol {
     outline:none;
     border-style: none;
     margin-right: 10px;
+    padding:3px 6px;
 }
 
 .wl-input:focus {
@@ -235,4 +251,5 @@ ol {
     height: 25px;
     color: #ffffff;
     text-align: center;
+    cursor: pointer;
 }
