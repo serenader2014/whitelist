@@ -21,7 +21,7 @@ ul, ol {
 
 .wl-sidebar-wrapper {
     position: absolute;
-    top: 120px;
+    top: 110px;
     bottom: 0;
     left: 0;
     background: #34343E;
@@ -38,7 +38,16 @@ ul, ol {
 
 .content {
     margin-left: 15px;
+}
+
+.content {
     width: 0;
+    transition: width 0.3s;
+}
+
+
+.wl-parents-hidden .expanded, .wl-current-product .expanded {
+    width: 350px;
 }
 
 .slide-btn {
@@ -66,6 +75,10 @@ ul, ol {
     position: absolute;
     top: 50%;
     left: 4px;
+}
+
+.slide-btn .fold:after {
+    content: '<';
 }
 
 .wl-parents-hidden li, .wl-current-product li {
@@ -110,6 +123,14 @@ ol {
 .wl-nav {
     height: 110px;
     background: #252530;
+}
+
+.wl-nav .active {
+    background: #FFFFFF;
+}
+
+.wl-nav .active a {
+    color: #000000;
 }
 
 .wl-nav-left {
@@ -189,14 +210,6 @@ ol {
 .wl-breadcrumb a:hover,
 .wl-nav-tab li a:hover {
     color: #90ef7f !important;
-}
-
-.active {
-    background-color: #ffffff !important;
-}
-
-.active a {
-    color: #000000 !important;
 }
 
 .wl-input {

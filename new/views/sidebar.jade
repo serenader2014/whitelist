@@ -1,6 +1,6 @@
 .wl-sidebar-wrapper
     - each parent,index in parents
-        .wl-parents-hidden(class='wl-parents-#{index}')
+        .wl-parents-hidden.wl-sidebar-product(class='wl-parents-#{index}')
             .content
                 ul
                     - each product in parent.product
@@ -11,17 +11,30 @@
                             a(href='#{product.name}') #{product.name}
                             span.wl-product-weight #{product.weight}
                             span.wl-product-amount #{product.pcount}
-            .slide-btn: a(href='javascript:;') 
-    .wl-current-product
-        ul
-            - each product in current.product
-                li
-                    a(href='#{product.name}') #{product.name} 
-                    span.wl-product-weight #{product.weight}
-                    span.wl-product-amount #{product.pcount}
+            .slide-btn: a(href='javascript:;')
+    .wl-current-product.wl-sidebar-product
+        .content.expanded
+            ul
+                - each product in current.product
+                    li
+                        a(href='#{product.name}') #{product.name} 
+                        span.wl-product-weight #{product.weight}
+                        span.wl-product-amount #{product.pcount}
+        .slide-btn: a.fold(href='javascript:;') 
+
     script.
-        $('.slide-btn a').on('click', function () {
-            $(this).parents('.wl-parents-hidden').find('.content').animate({
-                width: '350px'
-            }, 500);
-        })
+        $('.slide-btn a').on('click', function (event) {
+            var self = this;
+            var p = $(self).parents('.wl-sidebar-product');
+            var content = p.find('.content');
+
+            if (content.hasClass('expanded')) {
+                content.removeClass('expanded');
+                $(self).removeClass('fold');
+            } else {
+                content.addClass('expanded');
+                $(self).addClass('fold');
+                p.siblings().find('.content').removeClass('expanded');
+                p.siblings().find('.slide-btn a').removeClass('fold');
+            }
+        });

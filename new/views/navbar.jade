@@ -10,7 +10,7 @@ div.wl-nav
                 - var url = urlArr.reverse();
                 - url.forEach(function(item, index) {
                     - var tmp = item.substring(item.lastIndexOf('/')+1);
-                        li: a(href='#{item}') #{tmp}
+                        li: a(href='/#{item}') #{tmp}
                 - })
         div.wl-nav-rdown
             ul.wl-nav-tab
