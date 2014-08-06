@@ -1,18 +1,17 @@
-div.wl-nav
-    div.wl-nav-left
+.wl-nav
+    .wl-nav-left
         h1.wl-head: a(href="/") 智度
-    div.wl-nav-right
-        div.wl-nav-rup
+    .wl-nav-right
+        .wl-nav-rup
             form.wl-search
                 input(type="text",placeholder="Search").wl-input
                 button(type="submit").wl-btn 搜索
             ol.wl-breadcrumb
                 - var url = urlArr.reverse();
-                - url.forEach(function(item, index) {
-                    - var tmp = item.substring(item.lastIndexOf('/')+1);
+                - each item in url
+                    - var tmp = item.substring(item.lastIndexOf('/') + 1)
                         li: a(href='/#{item}') #{tmp}
-                - })
-        div.wl-nav-rdown
+        .wl-nav-rdown
             ul.wl-nav-tab
                 li.wl-list.active: a(href="javascript:") 列表
                 li.wl-statistics: a(href="javascript:") 统计
