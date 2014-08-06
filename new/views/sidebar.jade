@@ -1,39 +1,56 @@
 .wl-sidebar-wrapper
-    - each parent,index in parents
-        .wl-parents-hidden.wl-sidebar-product(class='wl-parents-#{index}')
-            .content
+    .wl-sidebar
+        - each parent,index in parents
+            .wl-parents-hidden.wl-sidebar-product(class='wl-parents-#{index}')
+                .content
+                    ul
+                        - each product in parent.product
+                            - var c = '';
+                            - if (product.name === current.current.name || (parents[index+1] && product.name === parents[index+1].current.name))
+                                - c = 'active'
+                            li(class='#{c}')
+                                .wl-product-info
+                                    span.wl-product-weight #{product.weight}
+                                    span.wl-product-amount #{product.pcount}
+                                a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
+                .slide-btn: a(href='javascript:;')
+        .wl-current-product.wl-sidebar-product
+            .content.expanded
                 ul
-                    - each product in parent.product
-                        - var c = '';
-                        - if (product.name === current.current.name || (parents[index+1] && product.name === parents[index+1].current.name))
-                            - c = 'active'
-                        li(class='#{c}')
+                    - each product in current.product
+                        li
                             .wl-product-info
                                 span.wl-product-weight #{product.weight}
                                 span.wl-product-amount #{product.pcount}
-                            a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
-            .slide-btn: a(href='javascript:;')
-    .wl-current-product.wl-sidebar-product
-        .content.expanded
-            ul
-                - each product in current.product
-                    li
-                        .wl-product-info
-                            span.wl-product-weight #{product.weight}
-                            span.wl-product-amount #{product.pcount}
-                        a(href='/#{urlArr[urlArr.length-1]}/#{product.name}') #{product.name} 
-        .slide-btn: a.fold(href='javascript:;') 
+                            a(href='/#{urlArr[urlArr.length-1]}/#{product.name}') #{product.name} 
+            .slide-btn: a.fold(href='javascript:;') 
 
+
+    .wl-main
+        .ip-wrapper
+            - each ip in ips
+                span.ip #{ip}
     script.
+        $('.wl-main').width($('body').width()-$('.wl-sidebar').width());
         $('.slide-btn a').on('click', function (event) {
             var self = this;
             var p = $(self).parents('.wl-sidebar-product');
             var content = p.find('.content');
+            var sidebarWidth = $('.wl-sidebar').width();
+            var bodyWidth = $(document).width();
 
             if (content.hasClass('expanded')) {
                 content.removeClass('expanded');
                 $(self).removeClass('fold');
+                $('.wl-main').animate({
+                    width: bodyWidth - sidebarWidth + 350 + 'px'
+                }, 300);
             } else {
+                if (sidebarWidth<350) {
+                    $('.wl-main').width(bodyWidth - sidebarWidth - 350);
+                } else {
+                    $('.wl-main').width(bodyWidth - sidebarWidth);
+                }
                 content.addClass('expanded');
                 $(self).addClass('fold');
                 p.siblings().find('.content').removeClass('expanded');

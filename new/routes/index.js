@@ -78,7 +78,48 @@ router.get('/*', function (req, res, next) {
                             parents[i-1] = result[i];
                         }
                         parents.reverse();
-                        res.render('index', {urlArr: arr, current: current, parents: parents});
+                        var a = [];
+                        current.ip.forEach(function (item) {
+                            a.push(item.value);
+                        });
+                        a.sort(function (str1, str2) {
+                            var arr1 = str1.split('.');
+                            var arr2 = str2.split('.');
+                            var num1 = arr1[0];
+                            var num2 = arr2[0];
+                            if (num1 < num2) {
+                                return -1;
+                            } else if (num1 > num2) {
+                                return 1;
+                            } else {
+                                num1 = arr1[1];
+                                num2 = arr2[1];
+                                if (num1 < num2) {
+                                    return -1;
+                                } else if (num1 > num2) {
+                                    return 1;
+                                } else {
+                                    num1 = arr1[2];
+                                    num2 = arr2[2];
+                                    if (num1 < num2) {
+                                        return -1;
+                                    } else if (num1 > num2) {
+                                        return 1;
+                                    } else {
+                                        num1 = arr1[3];
+                                        num2 = arr2[3];
+                                        if (num1 < num2) {
+                                            return -1;
+                                        } else if (num1 > num2) {
+                                            return 1;
+                                        } else {
+                                            return 0;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        res.render('index', {urlArr: arr, current: current, parents: parents, ips: a});
                         // res.send([result,arr]);
                     }
                 }

@@ -39,9 +39,33 @@ ul, ol {
     top: 110px;
     bottom: 0;
     left: 0;
+}
+
+.wl-sidebar {
+    display: inline-block;
+    height: 100%;
     background: #34343E;
 }
 
+.wl-main {
+    display: inline-block;
+    height: 100%;
+    overflow: auto;
+    background: #3D3D4F;
+}
+
+.ip-wrapper {
+    padding: 40px;
+}
+
+.ip {
+    display: inline-block;
+    width: 150px;
+    padding: 5px;
+    margin: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    color: #CCCCCC;
+}
 .wl-parents-hidden, .wl-current-product {
     display: inline-block;
     top: 110px;
