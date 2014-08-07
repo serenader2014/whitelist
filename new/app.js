@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var target = module.exports.target = 'http://10.0.100.185:81/ls';
+var target = module.exports.target = 'http://10.0.100.185:81';
 var routes = require('./routes/index');
 
 var app = express();

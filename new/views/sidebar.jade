@@ -10,8 +10,10 @@
                                 - c = 'active'
                             li(class='#{c}')
                                 .wl-product-info
-                                    span.wl-product-weight #{product.weight}
-                                    span.wl-product-amount #{product.pcount}
+                                    - var weight = product.weight*1 > 1000000 ? Math.floor(product.weight/1000000) + ' M' : (product.weight*1 > 1000 ? Math.floor(product.weight/1000) + ' K' : product.weight)
+                                    - var num = product.pcount*1 > 1000000 ? Math.floor(product.pcount/1000000) + ' M' : (product.pcount*1 > 1000 ? Math.floor(product.pcount/1000) + ' K' : product.pcount)
+                                    span.wl-product-weight #{weight}
+                                    span.wl-product-amount #{num}
                                 a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
                 .slide-btn: a(href='javascript:;')
         .wl-current-product.wl-sidebar-product
@@ -20,8 +22,10 @@
                     - each product in current.product
                         li
                             .wl-product-info
-                                span.wl-product-weight #{product.weight}
-                                span.wl-product-amount #{product.pcount}
+                                - var num = product.pcount*1 > 1000000 ? Math.floor(product.pcount/1000000) + ' M' : (product.pcount*1 > 1000 ? Math.floor(product.pcount/1000) + ' K' : product.pcount)
+                                - var weight = product.weight*1 > 1000000 ? Math.floor(product.weight/1000000) + ' M' : (product.weight*1 > 1000 ? Math.floor(product.weight/1000) + ' K' : product.weight)
+                                span.wl-product-weight #{weight}
+                                span.wl-product-amount #{num}
                             a(href='/#{urlArr[urlArr.length-1]}/#{product.name}') #{product.name} 
             .slide-btn: a.fold(href='javascript:;') 
 
@@ -29,7 +33,16 @@
     .wl-main
         .ip-wrapper
             - each ip in ips
-                span.ip #{ip}
+                - var c = ip.safe === 1 ? 'safe' : 'danger' 
+                .ip(data-id='#{ip.id}', class='#{c}')
+                    span.message-btn.icon-pencil
+                    span.mark-unsafe.icon-pushpin
+                    span.ip-value #{ip.value}
+                    span.ip-weight #{ip.weight}
+                    .message-popup
+                        .popup-wrapper
+                            textarea #{ip.remark}
+                            button(type='submit') Submit
     script.
         $('.wl-main').width($('body').width()-$('.wl-sidebar').width());
         $('.slide-btn a').on('click', function (event) {
@@ -55,5 +68,67 @@
                 $(self).addClass('fold');
                 p.siblings().find('.content').removeClass('expanded');
                 p.siblings().find('.slide-btn a').removeClass('fold');
+            }
+        });
+        $('.message-btn').on('click', function () {
+            $(this).siblings('.message-popup').fadeIn(300);
+        });
+        $(document).on('click', function (event) {
+            if (! $(event.target).hasClass('message-btn') && $(event.target).parents('.message-popup').length === 0) {
+                if ($('.message-popup').is(':visible')) {
+                    $('.message-popup').fadeOut(300);
+                }
+            }
+        });
+        $('.message-popup button').on('click', function () {
+            var type,id,targetUrl;
+            var self = this;
+            if ($(this).parents('.ip').length > 0) {
+                type = 'ip';
+                id = $(this).parents('.ip').data('id');
+
+                targetUrl = '/set';
+                $.ajax({
+                    type: 'POST',
+                    url: targetUrl,
+                    data: {
+                        description: $(self).siblings('textarea').val(),
+                        id: id,
+                        type: type
+                    },
+                    success: function (data) {
+                        data = $.parseJSON(data);
+                        $(self).siblings('textarea').html(data.data.remark).val(data.data.remark);
+                    }
+                });
+            }
+        });
+
+        $('.mark-unsafe').on('click', function () {
+            var type,id,targetUrl;
+            var self = this;
+            if ($(this).parents('.ip').length > 0) {
+                type = 'ip';
+                id = $(this).parents('.ip').data('id');
+
+                targetUrl = '/set';
+                $.ajax({
+                    type: 'POST',
+                    url: targetUrl,
+                    data: {
+                        safe: $(self).parents('.ip').hasClass('safe') ? 0 : 1,
+                        id: id,
+                        type: type
+                    },
+                    success: function (data) {
+                        data = $.parseJSON(data);
+                        if (data.data.safe == 1) {
+                            $(self).parents('.ip').addClass('safe').removeClass('danger');
+                        } else {
+                            $(self).parents('.ip').addClass('danger').removeClass('safe');
+                        }
+                    }
+
+                })
             }
         });

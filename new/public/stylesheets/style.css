@@ -60,12 +60,98 @@ ul, ol {
 
 .ip {
     display: inline-block;
-    width: 150px;
+    position: relative;
+    width: 225px;
     padding: 5px;
     margin: 10px;
     border-bottom: 1px solid rgba(0,0,0,0.2);
     color: #CCCCCC;
 }
+
+.danger {
+    background: #80474D;
+}
+
+.ip-value {
+    display: inline-block;
+    width: 120px;
+}
+
+.ip-weight {
+    display: inline-block;
+    padding: 2px 5px;
+    width: 45px;
+    text-align: center;
+    border-radius: 5px;
+    color: #FFFFFF;
+    background: #757496;
+}
+
+.message-btn, .mark-unsafe {
+    margin-right: 10px;
+    font-size: 13px;
+    color: #AAAAAA;
+    cursor: pointer;
+}
+
+.message-btn:hover, .mark-unsafe:hover {
+    color: #EEEEEE;
+}
+
+.message-popup {
+    display: none;
+    position: absolute;
+    top: 37px;
+    left: 0;
+    width: 225px;
+    border: 1px solid #565670;
+    border-radius: 8px;
+    z-index: 999;
+    background: #2F2F3D;
+}
+
+.message-popup textarea {
+    display: block;
+    width: 100%;
+    height: 100px;
+    padding: 5px;
+    outline: none;
+    border: 1px solid #47475C;
+    color: #FFFFFF;
+    background: #646482;
+}
+
+.message-popup button {
+    display: block;
+    width: 100%;
+    outline: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    font-size: 16px;
+    background: #FFFFFF;
+}
+
+.popup-wrapper {
+    position: relative;
+    padding: 10px;
+}
+
+.popup-wrapper:after {
+    position: absolute;
+    top: -20px;
+    left: 50px;
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 10px solid rgba(0,0,0,0);
+    border-left: 10px solid rgba(0,0,0,0);
+    border-right: 10px solid rgba(0,0,0,0);
+    border-bottom: 10px solid #2F2F3D;
+}
+
 .wl-parents-hidden, .wl-current-product {
     display: inline-block;
     top: 110px;
@@ -104,7 +190,7 @@ ul, ol {
 .wl-sidebar-product li a {
     float: left;
     display: inline-block;
-    width: 215px;
+    width: 180px;
     word-break: break-all;
 }
 
@@ -166,6 +252,8 @@ ul, ol {
     padding: 3px 10px;
     border-radius: 3px;
     color: #EEEEEE;
+    width: 60px;
+    text-align: center;
     background: #C75858;
 }
 
