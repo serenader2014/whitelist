@@ -26,7 +26,7 @@ router.get('/*', function (req, res, next) {
     }
 
     function handleClass () {
-        arr = [url.substring(1), ''];
+        arr = [url.substring(1), '', ''];
     }
 
     function handleProduct () {
@@ -59,7 +59,7 @@ router.get('/*', function (req, res, next) {
                     res.send([d, target+'/'+t]);
                     return false;
                 }
-                if (j <= arr.length-1) {
+                if (j < arr.length-1) {
                     request(arr[j]);
                 } else {
                     if (req.url.split('/').length === 2) {

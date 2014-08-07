@@ -72,8 +72,9 @@ block content
                 .wl-pager
                     ol.wl-pagination
                         li.wl-prev-page: a(href='') &laquo;
-                        //- li.wl-ldot ...
+                        li.wl-ldot: a(href='javascript:;') ...
                         - var pnum;
+                        - pageNum = pageNum ? pageNum : 1;
                         - classes.forEach(function(item,index) {
                             - if(item.name === product.current.name) {
                                 - pnum =  Math.ceil(item.amount/100);
@@ -81,10 +82,10 @@ block content
                                 - if(t>20)
                                     - t = 20
                                 - for(var i=1; i<=t; i++)
-                                    - if(pageNum && i == pageNum*1)
-                                        li.wl-page-active: a(href="/#{product.current.name}?page=#{i}") #{i}
+                                    - if(i == pageNum*1)
+                                        li.wl-page-active.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
                                     - else
-                                        li: a(href="/#{product.current.name}?page=#{i}") #{i}
+                                        li.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
 
                             - }
                         - })
@@ -116,4 +117,23 @@ block content
                     $(self).addClass('fold');
                 }
             });
-            var num = #{pnum}
+            var num = #{pnum};
+            var #{product.current.name};
+            var currentName = $('.wl-common a').attr('href')
+            var l = currentName.split('?')[0];
+
+            $('.wl-rdot a').on('click',function(){
+                $('.wl-ldot a').show();
+                var pageCurrent = $('.wl-common').eq(0).find('a').html()*1;
+                var newPage = pageCurrent + 20;
+                var liArrA = $('.wl-common a');
+                
+                liArrA.each(function (index, item) {
+                    $(this).html(newPage+index);
+                    $(this).attr('href',l+'?page='+newPage+index);
+                });
+                if(pageCurrent >= num-20){
+                    $('.wl-rdot').hide();
+                }
+                console.log($('.wl-common a').length);
+            })
