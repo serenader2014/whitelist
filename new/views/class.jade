@@ -1,0 +1,119 @@
+extends layout
+
+block content
+    //- include navbar
+    //- include sidebar
+    .wl-nav
+        .wl-nav-left
+            h1.wl-head: a(href="/") 智度
+        .wl-nav-right
+            .wl-nav-rup
+                form.wl-search
+                    input(type="text",placeholder="Search").wl-input
+                    button(type="submit").wl-btn 搜索
+                ol.wl-breadcrumb
+                    - var l = url.split('/')[1];
+                        li: a(href='/#{l}') #{l}
+    
+            .wl-nav-rdown
+                ul.wl-nav-tab
+                    li.wl-list.active: a(href="javascript:") 列表
+                    li.wl-statistics: a(href="javascript:") 统计
+                    li.wl-message: a(href="javascript:") 备注
+                    li.wl-addClass: a(href="javascript:") 添加分类
+                    li.wl-addProduct: a(href="javascript:") 添加产品
+
+    .wl-sidebar-wrapper
+        .wl-sidebar
+            .wl-parents-hidden.wl-sidebar-product(class='wl-parents-#{index}')
+                .content.expanded
+                    ul
+                        - classes.forEach(function (item,index){
+                            - var current = url.split('/')[1];
+                            - var c = '';
+                            - if (current === item.name)
+                                - c = 'active';
+                                li(class='#{c}')
+                                    .wl-product-info
+                                        //- span.wl-product-weight #{item.weight}
+                                        span.wl-product-amount #{item.amount}
+                                    a(href='#{item.name}') #{item.name} 
+                            - else
+                                li
+                                    .wl-product-info
+                                        //- span.wl-product-weight #{item.weight}
+                                        span.wl-product-amount #{item.amount}
+                                    a(href='#{item.name}') #{item.name} 
+                        - })
+                .slide-btn: a(href="javascript:;").fold
+        .wl-main
+            .product-wrapper
+                table.wl-table
+                    thead
+                        tr.wl-tr
+                            th product 
+                            th weight
+                            th num
+                            th.th-remark remark
+                            th product 
+                            th weight
+                            th num
+                            th.th-remark remark
+                    tbody.wl-tbody
+                        - product.product.forEach(function (item,index) {
+                            - if(index%2 === 0) {
+                                tr
+                            - }
+                                    td: a(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                    td #{item.weight}
+                                    td #{item.count}
+                                    td.td-remark #{item.remark}
+                        - })
+                .wl-pager
+                    ol.wl-pagination
+                        li.wl-prev-page: a(href='') &laquo;
+                        //- li.wl-ldot ...
+                        - var pnum;
+                        - classes.forEach(function(item,index) {
+                            - if(item.name === product.current.name) {
+                                - pnum =  Math.ceil(item.amount/100);
+                                - var t = pnum;
+                                - if(t>20)
+                                    - t = 20
+                                - for(var i=1; i<=t; i++)
+                                    - if(pageNum && i == pageNum*1)
+                                        li.wl-page-active: a(href="/#{product.current.name}?page=#{i}") #{i}
+                                    - else
+                                        li: a(href="/#{product.current.name}?page=#{i}") #{i}
+
+                            - }
+                        - })
+                        - if(pnum > 20)
+                            li.wl-rdot: a(href='javascript:;') ...
+                        li.wl-next-page: a(href='') &raquo;
+        script.
+            $('.wl-main').width($('body').width() - $('.wl-sidebar').width());
+            $('.slide-btn a').on('click',function(event){
+                var self = this;
+                var p = $(self).parents('.wl-sidebar-product');
+                var content = p.find('.content');
+                var sidebarWidth = $('.wl-sidebar').width();
+                var bodyWidth = $('body').width();
+
+                if(content.hasClass('expanded')){
+                    content.removeClass('expanded');
+                    $(self).removeClass('fold');
+                    $('.wl-main').animate({
+                        width:bodyWidth - sidebarWidth + 350 + 'px'
+                        },300)
+                }else{
+                    if (sidebarWidth<350) {
+                        $('.wl-main').width(bodyWidth - sidebarWidth - 350);
+                    } else {
+                        $('.wl-main').width(bodyWidth - sidebarWidth);
+                    }
+                    content.addClass('expanded');
+                    $(self).addClass('fold');
+                }
+            });
+            var num = #{pnum}

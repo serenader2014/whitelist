@@ -187,6 +187,13 @@ ol {
 .wl-nav {
     height: 110px;
     background: #252530;
+    border-bottom:solid 2px #A3161B;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 .wl-nav .active {
@@ -202,10 +209,11 @@ ol {
     top: 0px;
     left: 0px;
     height: 110px;
-    width: 350px;
+    width: 150px;
     line-height: 110px;
     margin: 0px;
     text-align: center;
+    box-shadow: 2px -2px 0 #34343E;
 }
 
 
@@ -213,7 +221,7 @@ ol {
     position: absolute;
     top: 0px;
     right: 0px;
-    left: 350px;
+    left: 150px;
 }
 
 .wl-head {
@@ -229,8 +237,8 @@ ol {
 }
 
 .wl-nav-rup {
-    height: 65px;
-    line-height: 65px;
+    height: 55px;
+    line-height: 55px;
     width: 100%;
 }
 
@@ -241,7 +249,7 @@ ol {
 
 .wl-breadcrumb {
     list-style: none;
-    margin-right: 30px;
+    margin-left: 30px;
     margin-top: 0px;
 }
 
@@ -256,8 +264,8 @@ ol {
 }
 
 .wl-nav-rdown {
-    height: 35px;
-    line-height: 35px;
+    height: 53px;
+    line-height: 53px;
 }
 
 .wl-nav-tab {
@@ -269,7 +277,8 @@ ol {
 .wl-nav-tab li {
     display: inline-block;
     color:rgba(255,255,255,0.7);
-    padding: 5px;
+    /*padding: 5px;*/
+    /*margin: 5px;*/
     width:100px;
     margin-left: 5px;
     background-color: #34343e;
@@ -278,17 +287,23 @@ ol {
     /*color: rgba(255,255,255,0.5);*/
 }
 
+.wl-nav-tab a {
+    display: inline-block;
+    line-height: 10px;
+    padding: 13px;
+}
+
 .wl-breadcrumb a:hover,
 .wl-nav-tab li a:hover {
     color: #90ef7f !important;
 }
 
 .wl-nav .active {
-    background-color: #ffffff;
+    background-color: #A3161B
 }
 
 .wl-nav .active a {
-    color: #000000;
+    color: #ffffff;
 }
 
 .wl-input {
@@ -316,4 +331,53 @@ ol {
     color: #ffffff;
     text-align: center;
     cursor: pointer;
+}
+
+.wl-class-content {
+    margin-left: 0px;
+}
+
+.wl-table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+.wl-tr th {
+    color: #ffffff;
+    text-align: center;
+    padding: 14px;
+    font-size: 18px;
+    border-bottom: 1px solid #303030;
+    text-transform: uppercase;
+    border-top: 1px solid #303030;
+}
+
+.wl-tbody tr td {
+    color: #AD9A9A;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #303030;
+}
+
+.th-remark,.td-remark {
+    border-right: 1px solid #303030;
+}
+
+.product-wrapper{
+    padding-top: 5px;
+}
+
+.wl-tbody tr:nth-child(4n+2) {
+    background-color: #333342;
+}
+
+ol.wl-pagination li {
+    display: inline-block;
+    padding: 12px;
+    text-overflow: ellipsis;
+}
+
+.wl-ldot,.wl-rdot {
+    display: none;
 }

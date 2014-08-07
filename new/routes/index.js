@@ -59,7 +59,7 @@ router.get('/*', function (req, res, next) {
                     res.send([d, target+'/'+t]);
                     return false;
                 }
-                if (j < arr.length-1) {
+                if (j <= arr.length-1) {
                     request(arr[j]);
                 } else {
                     if (req.url.split('/').length === 2) {
@@ -71,6 +71,7 @@ router.get('/*', function (req, res, next) {
                             pageNum: page,
                             search: search                            
                         });
+                        // res.send(result);
                     } else {
                         var current = result[0];
                         var parents = [];
