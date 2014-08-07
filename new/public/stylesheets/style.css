@@ -466,6 +466,6 @@ ol.wl-pagination li {
     text-overflow: ellipsis;
 }
 
-.wl-ldot,.wl-rdot {
+.wl-ldot a {
     display: none;
 }
