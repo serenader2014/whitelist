@@ -4,11 +4,12 @@
     .wl-nav-right
         .wl-nav-rup
             form.wl-search
-                input(type="text",placeholder="Search").wl-input
+                input.wl-input(type="text",placeholder="Search",name='search')
                 button(type="submit").wl-btn 搜索
             ol.wl-breadcrumb
                 - var url = urlArr.reverse();
                 - each item in url
+                    - item = decodeURIComponent(item)
                     - var tmp = item.substring(item.lastIndexOf('/') + 1)
                         li: a(href='/#{item}') #{tmp}
         .wl-nav-rdown

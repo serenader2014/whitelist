@@ -38,13 +38,20 @@ router.post('/set', function (req, res, next) {
 
 router.get('/*', function (req, res, next) {
     //  取出非query部分的URL
-    var url = req.url.split('?')[0];
+    var noQueryUrl = req.url.split('?')[0];
+
+    // 取出整个URL，包括query部分
+    var url = req.url;
 
     // 缓存query名称
     var sort = req.query.sort;
     var page = req.query.page;
     var search = req.query.search;
+
+    // 存放需要请求的地址
     var arr;
+    var noQueryArr;
+
     // 如果请求根目录，则处理根目录页面
     if (url === '/') {
         handleIndex();
@@ -63,15 +70,19 @@ router.get('/*', function (req, res, next) {
 
     function handleClass () {
         arr = [url.substring(1), '', ''];
+        noQueryArr = [noQueryUrl, '', ''];
     }
 
     function handleProduct () {
         arr = handleUrl(url);
+        noQueryArr = handleUrl(noQueryUrl);
     }
 
     if (url.split('/').length ===2) {
+        // 处理class页面，单独拿出来处理。
         handleClass();
     } else {
+        // 处理Product页面。
         handleProduct();
     }
     var arrLength = arr.length;
@@ -79,25 +90,34 @@ router.get('/*', function (req, res, next) {
     var result = [];
 
     function request (t) {
+        var tUrl = encodeURIComponent(target + '/' + t);
         var r = http.request(target + '/' + t, function (response) {
             var d = '';
             response.on('data', function (chunk) {
+                // 此时获得的只是数据片段，而不是完整数据。
                 d = d + chunk;
             });
 
             response.on('end', function () {
                 try {
+                    // 尝试解析后端返回的数据。
                     d = JSON.parse(d);
+                    // 结果存在数组中
                     result.push(d);
+                    // j 用来判断是否需要进一步请求数据
                     j = j + 1;
                 }
                 catch (err) {
+                    // 当无法解析后端返回的数据时抛错
                     res.send([d, target+'/'+t]);
                     return false;
                 }
+                // product 页面只需要请求 www.qq.com 这一级的数据以及以下的数据。不需要请求 class 这一级的数据
                 if (j < arr.length-1) {
+                    // 继续请求数据
                     request(arr[j]);
                 } else {
+                    // 如果是请求 class 页面 则单独渲染 class 页面
                     if (req.url.split('/').length === 2) {
                         res.render('class', {
                             classes: result[1], 
@@ -107,14 +127,17 @@ router.get('/*', function (req, res, next) {
                             pageNum: page,
                             search: search                            
                         });
-                        // res.send(result);
                     } else {
+                        // 将最后一级的请求结果单独拿出来存放，
+                        // 其余的存在一个数组。目的是方便侧边栏的展示
                         var current = result[0];
                         var parents = [];
                         for (var i = 1; i < result.length; i++) {
                             parents[i-1] = result[i];
                         }
                         parents.reverse();
+
+                        // 默认将ip列表按权重排序
                         var a = [];
                         current.ip.forEach(function (item) {
                             a.push(item);
@@ -130,8 +153,15 @@ router.get('/*', function (req, res, next) {
                                 return 0;
                             }
                         });
-                        res.render('index', {urlArr: arr, current: current, parents: parents, ips: a});
-                        // res.send([parents,arr]);
+
+                        res.render('index', {
+                            urlArr: noQueryArr, 
+                            current: current, 
+                            parents: parents, 
+                            ips: a, 
+                            search: search,
+                            sort: sort
+                        });
                     }
                 }
             });
@@ -144,6 +174,7 @@ router.get('/*', function (req, res, next) {
         });
     }
 
+    // 一开始请求最后一级数据
     request(arr[j]);
 
 

@@ -55,6 +55,11 @@ ul, ol {
     overflow-x: hidden;
 }
 
+.wl-query-header {
+    padding: 10px 50px;
+    color: #CCCCCC;
+}
+
 .ip-wrapper {
     padding: 40px;
 }
@@ -196,7 +201,7 @@ ul, ol {
 }
 
 .wl-parents-hidden .expanded, .wl-current-product .expanded {
-    width: 350px;
+    width: 375px;
 }
 
 .slide-btn {
@@ -235,7 +240,7 @@ ul, ol {
     background: #34343E;
     padding: 10px 20px 10px 15px;
     border-top: 1px solid #252530;
-    width: 350px;
+    width: 375px;
 }
 
 .wl-parents-hidden li.active {
@@ -303,6 +308,11 @@ ol {
     margin: 0px;
     text-align: center;
     box-shadow: 2px -2px 0 #34343E;
+    background: #A3161B;
+}
+
+.wl-nav-left:after {
+    content: '';
 }
 
 
@@ -318,7 +328,10 @@ ol {
     margin:0;
     font-size: 30px;
     font-family: Times, TimesNR, 'New Century Schoolbook',Georgia, 'New York', serif;
-    color: rgba(255,255,255,0.8);
+}
+
+.wl-head a {
+    color: #E3E3E3;
 }
 
 .wl-head a:hover {
@@ -448,6 +461,10 @@ ol {
     position: relative;
     padding: 10px;
     border-bottom: 1px solid #303030;
+}
+
+.wl-tbody tr td + td {
+    /*text-align: center;*/
 }
 
 .th-remark,.td-remark {

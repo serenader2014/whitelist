@@ -8,7 +8,7 @@
                             - var c = '';
                             - if (product.name === current.current.name || (parents[index+1] && product.name === parents[index+1].current.name))
                                 - c = 'active'
-                            li(class='#{c}')
+                            li(class='#{c}', data-id='#{product.id}')
                                 .wl-product-info
                                     - var weight = product.weight*1 > 1000000 ? Math.floor(product.weight/1000000) + ' M' : (product.weight*1 > 1000 ? Math.floor(product.weight/1000) + ' K' : product.weight)
                                     - var num = product.pcount*1 > 1000000 ? Math.floor(product.pcount/1000000) + ' M' : (product.pcount*1 > 1000 ? Math.floor(product.pcount/1000) + ' K' : product.pcount)
@@ -16,21 +16,60 @@
                                     span.wl-product-amount #{num}
                                 a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
                 .slide-btn: a(href='javascript:;')
-        .wl-current-product.wl-sidebar-product
-            .content.expanded
-                ul
-                    - each product in current.product
-                        li
-                            .wl-product-info
-                                - var num = product.pcount*1 > 1000000 ? Math.floor(product.pcount/1000000) + ' M' : (product.pcount*1 > 1000 ? Math.floor(product.pcount/1000) + ' K' : product.pcount)
-                                - var weight = product.weight*1 > 1000000 ? Math.floor(product.weight/1000000) + ' M' : (product.weight*1 > 1000 ? Math.floor(product.weight/1000) + ' K' : product.weight)
-                                span.wl-product-weight #{weight}
-                                span.wl-product-amount #{num}
-                            a(href='/#{urlArr[urlArr.length-1]}/#{product.name}') #{product.name} 
-            .slide-btn: a.fold(href='javascript:;') 
+        - if (!search && !sort)
+            .wl-current-product.wl-sidebar-product
+                .content.expanded
+                    ul
+                        - each product in current.product
+                            li(data-id='#{product.id}')
+                                .wl-product-info
+                                    - var num = product.pcount*1 > 1000000 ? Math.floor(product.pcount/1000000) + ' M' : (product.pcount*1 > 1000 ? Math.floor(product.pcount/1000) + ' K' : product.pcount)
+                                    - var weight = product.weight*1 > 1000000 ? Math.floor(product.weight/1000000) + ' M' : (product.weight*1 > 1000 ? Math.floor(product.weight/1000) + ' K' : product.weight)
+                                    span.wl-product-weight #{weight}
+                                    span.wl-product-amount #{num}
+                                span.message-btn.icon-pencil
+                                a(href='/#{urlArr[urlArr.length-1]}/#{product.name}') #{product.name} 
+                                .message-popup
+                                    .popup-wrapper
+                                        textarea #{product.remark}
+                                        button(type='submit') Submit                            
+                .slide-btn: a.fold(href='javascript:;') 
+
 
 
     .wl-main
+        - if (search || sort)
+            - var header = search ? '搜索 '+ search +' 的结果' : '按 '+sort+' 排序'
+            h2.wl-query-header #{header}
+            .product-wrapper
+                table.wl-table
+                    thead
+                        tr.wl-tr
+                            th product 
+                            th weight
+                            th num
+                            th.th-remark remark
+                            th product 
+                            th weight
+                            th num
+                            th.th-remark remark
+                    tbody.wl-tbody
+                        - current.product.forEach(function (item,index) {
+                            - if(index%2 === 0) {
+                                tr
+                            - }
+                                    td  
+                                        span.message-btn.icon-pencil
+                                        a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                        .message-popup
+                                            .popup-wrapper
+                                                textarea #{item.remark}
+                                                button(type='submit') Submit 
+                                    td #{item.weight}
+                                    td #{item.count}
+                                    td.td-remark #{item.remark}
+                        - })            
+
         .ip-wrapper
             - each ip in ips
                 - var c = ip.safe === 1 ? 'safe' : 'danger' 
@@ -56,11 +95,11 @@
                 content.removeClass('expanded');
                 $(self).removeClass('fold');
                 $('.wl-main').animate({
-                    width: bodyWidth - sidebarWidth + 350 + 'px'
+                    width: bodyWidth - sidebarWidth + 375 + 'px'
                 }, 300);
             } else {
-                if (sidebarWidth<350) {
-                    $('.wl-main').width(bodyWidth - sidebarWidth - 350);
+                if (sidebarWidth<375) {
+                    $('.wl-main').width(bodyWidth - sidebarWidth - 375);
                 } else {
                     $('.wl-main').width(bodyWidth - sidebarWidth);
                 }
