@@ -6,6 +6,27 @@ var base = require('../app').target;
 var target = base + '/ls';
 
 
+router.get('/single/*', function (req, res, next) {
+    var targetUrl = target + '/' + req.url.split('/single/')[1];
+    var requestSingle = http.request(targetUrl, function (response) {
+        var data = '';
+        response.on('data', function (chunk) {
+            data = data + chunk;
+        });
+
+        response.on('end', function () {
+            res.send(data);
+        });
+    });
+    requestSingle.on('error', function (e) {
+        res.send(e.message);
+        return false;
+    });
+
+    requestSingle.end();
+
+});
+
 router.post('/set', function (req, res, next) {
     var type = req.body.type;
     var id = req.body.id;
@@ -20,7 +41,6 @@ router.post('/set', function (req, res, next) {
         var data = '';
         responseUpdate.on('data', function (chunk) {
             data = data + chunk;
-            console.log(chunk);
         });
 
         responseUpdate.on('end', function () {
@@ -44,7 +64,8 @@ router.get('/*', function (req, res, next) {
     var url = req.url;
 
     // 缓存query名称
-    var sort = req.query.sort;
+    var sort = req.query.search && req.query.search.split('%').length === 2 ? 
+        req.query.search.split('%')[0] : '';
     var page = req.query.page;
     var search = req.query.search;
 

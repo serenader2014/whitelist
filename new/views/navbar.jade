@@ -13,10 +13,11 @@
                     - var tmp = item.substring(item.lastIndexOf('/') + 1)
                         li: a(href='/#{item}') #{tmp}
         .wl-nav-rdown
+            - var title = current ? current.current.name : product.current.name
+            span.wl-current-title #{title}
             ul.wl-nav-tab
                 li.wl-list.active: a(href="/#{url[url.length-1]}?type=list") 列表
                 li.wl-statistics: a(href="/#{url[url.length-1]}?type=") 统计
-                li.wl-message: a(href="/#{url[url.length-1]}?type=message") 备注
                 li.wl-addClass: a(href="/#{url[url.length-1]}?type=addsort") 添加分类
                 li.wl-addProduct: a(href="/#{url[url.length-1]}?type=addproduct") 添加产品
 

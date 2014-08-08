@@ -3,6 +3,7 @@
         - each parent,index in parents
             .wl-parents-hidden.wl-sidebar-product(class='wl-parents-#{index}')
                 .content
+                    .wl-product-count 总计 #{parent.current.pcount} 个子产品
                     ul
                         - each product in parent.product
                             - var c = '';
@@ -15,10 +16,16 @@
                                     span.wl-product-weight #{weight}
                                     span.wl-product-amount #{num}
                                 a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
+                    - if (parent.current.pcount > 100)
+                        - var str = urlArr[index+1]
+                        .wl-more-product(data-current='#{str}')
+                            span.progress
+                            span More
                 .slide-btn: a(href='javascript:;')
         - if (!search && !sort)
             .wl-current-product.wl-sidebar-product
                 .content.expanded
+                    .wl-product-count 总计 #{current.current.pcount} 个子产品
                     ul
                         - each product in current.product
                             li(data-id='#{product.id}')
@@ -33,13 +40,25 @@
                                     .popup-wrapper
                                         textarea #{product.remark}
                                         button(type='submit') Submit                            
+                    - if (current.current.pcount > 100)
+                        - var str = urlArr[urlArr.length-1]
+                        .wl-more-product(data-current='#{str}') 
+                            span.progress
+                            span More
                 .slide-btn: a.fold(href='javascript:;') 
 
 
 
     .wl-main
+        .wl-sort
+            .wl-sort-container
+                p 按首字母排序
+                .wl-sort-letter
+                    - each num,letter in current.first_letter
+                        - if (num*1 > 0)
+                            span: a(href='/#{urlArr[urlArr.length-1]}?search=#{letter}%') #{letter} (#{num})
         - if (search || sort)
-            - var header = search ? '搜索 '+ search +' 的结果' : '按 '+sort+' 排序'
+            - var header = sort ? '按首字母 '+sort+' 排序' : '搜索 '+ search +' 的结果'
             h2.wl-query-header #{header}
             .product-wrapper
                 table.wl-table
@@ -60,7 +79,7 @@
                             - }
                                     td  
                                         span.message-btn.icon-pencil
-                                        a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                        a.product(href='/#{urlArr[urlArr.length-1]}/#{item.name}',data-id='#{item.id}') #{item.name}
                                         .message-popup
                                             .popup-wrapper
                                                 textarea #{item.remark}
@@ -69,19 +88,19 @@
                                     td #{item.count}
                                     td.td-remark #{item.remark}
                         - })            
-
-        .ip-wrapper
-            - each ip in ips
-                - var c = ip.safe === 1 ? 'safe' : 'danger' 
-                .ip(data-id='#{ip.id}', class='#{c}')
-                    span.message-btn.icon-pencil
-                    span.mark-unsafe.icon-pushpin
-                    span.ip-value #{ip.value}
-                    span.ip-weight #{ip.weight}
-                    .message-popup
-                        .popup-wrapper
-                            textarea #{ip.remark}
-                            button(type='submit') Submit
+        - else
+            .ip-wrapper
+                - each ip in ips
+                    - var c = ip.safe === 1 ? 'safe' : 'danger' 
+                    .ip(data-id='#{ip.id}', class='#{c}')
+                        span.message-btn.icon-pencil
+                        span.mark-unsafe.icon-pushpin
+                        span.ip-value #{ip.value}
+                        span.ip-weight #{ip.weight}
+                        .message-popup
+                            .popup-wrapper
+                                textarea #{ip.remark}
+                                button(type='submit') Submit
     script.
         $('.wl-main').width($('body').width()-$('.wl-sidebar').width());
         $('.slide-btn a').on('click', function (event) {
@@ -170,4 +189,23 @@
 
                 })
             }
+        });
+
+        $('.wl-more-product').on('click', function () {
+            var currentLength = $(this).siblings('ul').find('li').length;
+            var total = $(this).siblings('.wl-product-count').html().split(' ')[1]*1;
+            var targetUrl = '/single/' + $(this).data('current') + '?limit=100&offset=' + currentLength;
+            
+            $(this).find('.progress').addClass('icon-spinner2');
+            var self = this;
+
+            $.ajax({
+                type: 'GET',
+                url: targetUrl,
+                success: function (data) {
+                    data = $.parseJSON(data);
+                    console.log(data);
+                    $(self).find('.progress').removeClass('icon-spinner2');
+                }
+            });
         });
