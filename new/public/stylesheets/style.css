@@ -52,6 +52,7 @@ ul, ol {
     height: 100%;
     overflow: auto;
     background: #3D3D4F;
+    overflow-x: hidden;
 }
 
 .ip-wrapper {
@@ -433,7 +434,7 @@ ol {
 
 .wl-tr th {
     color: #ffffff;
-    text-align: center;
+    /*text-align: center;*/
     padding: 14px;
     font-size: 18px;
     border-bottom: 1px solid #303030;
@@ -443,7 +444,8 @@ ol {
 
 .wl-tbody tr td {
     color: #AD9A9A;
-    text-align: center;
+    /*text-align: center;*/
+    position: relative;
     padding: 10px;
     border-bottom: 1px solid #303030;
 }
@@ -463,9 +465,41 @@ ol {
 ol.wl-pagination li {
     display: inline-block;
     padding: 12px;
-    text-overflow: ellipsis;
 }
 
-.wl-ldot a {
-    display: none;
+/*.wl-pager {
+    width:100%;
+    height: 40px;
+}*/
+
+.wl-prev-page,.wl-next-page {
+    height: 40px;
+    width: 4%;
+    float: left;
+    text-align: center;
+    line-height: 40px;
+    display: inline;
 }
+
+
+
+.wl-pagination-container {
+    width:90%;
+    height: 40px;
+    overflow: hidden;
+    float:left;
+}
+
+.wl-pagination {
+    width: 1000000px;
+    /*float: left;*/
+    position: relative;
+    right: 0;
+    /*overflow: hidden;*/
+    
+}
+
+.wl-pagination li {
+    display: inline-block;
+}
+

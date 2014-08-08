@@ -64,34 +64,35 @@ block content
                             - if(index%2 === 0) {
                                 tr
                             - }
-                                    td: a(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                    td  
+                                        span.message-btn.icon-pencil
+                                        a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                        .message-popup
+                                            .popup-wrapper
+                                                textarea #{item.remark}
+                                                button(type='submit') Submit 
                                     td #{item.weight}
                                     td #{item.count}
                                     td.td-remark #{item.remark}
                         - })
                 .wl-pager
-                    ol.wl-pagination
-                        li.wl-prev-page: a(href='') &laquo;
-                        li.wl-ldot: a(href='javascript:;') ...
-                        - var pnum;
-                        - pageNum = pageNum ? pageNum : 1;
-                        - classes.forEach(function(item,index) {
-                            - if(item.name === product.current.name) {
-                                - pnum =  Math.ceil(item.amount/100);
-                                - var t = pnum;
-                                - if(t>20)
-                                    - t = 20
-                                - for(var i=1; i<=t; i++)
-                                    - if(i == pageNum*1)
-                                        li.wl-page-active.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
-                                    - else
-                                        li.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
+                    .wl-prev-page: a(href='') &laquo;
+                    .wl-pagination-container
+                        ol.wl-pagination
+                            - var pnum;
+                            - classes.forEach(function(item,index) {
+                                - if(item.name === product.current.name) {
+                                    - pnum =  Math.ceil(item.amount/100);
+                                    - var t = pnum;
+                                    - for(var i=1; i<=t; i++)
+                                        - if(i == pageNum*1)
+                                            li.wl-page-active.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
+                                        - else
+                                            li.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
 
-                            - }
-                        - })
-                        - if(pnum > 20)
-                            li.wl-rdot: a(href='javascript:;') ...
-                        li.wl-next-page: a(href='') &raquo;
+                                - }
+                            - })
+                    .wl-next-page: a(href='') &raquo;
         script.
             $('.wl-main').width($('body').width() - $('.wl-sidebar').width());
             $('.slide-btn a').on('click',function(event){
@@ -117,23 +118,64 @@ block content
                     $(self).addClass('fold');
                 }
             });
-            var num = #{pnum};
-            var #{product.current.name};
-            var currentName = $('.wl-common a').attr('href')
-            var l = currentName.split('?')[0];
 
-            $('.wl-rdot a').on('click',function(){
-                $('.wl-ldot a').show();
-                var pageCurrent = $('.wl-common').eq(0).find('a').html()*1;
-                var newPage = pageCurrent + 20;
-                var liArrA = $('.wl-common a');
-                
-                liArrA.each(function (index, item) {
-                    $(this).html(newPage+index);
-                    $(this).attr('href',l+'?page='+newPage+index);
-                });
-                if(pageCurrent >= num-20){
-                    $('.wl-rdot').hide();
+            var cwidth = $('.wl-pagination-container').width()+10;
+            console.log(cwidth);
+            var totalwidth = 0;
+            totalwidth = totalwidth + cwidth;
+            $('.wl-next-page').on('click',function(event){
+                event.preventDefault();
+                console.log(totalwidth);
+                var rwidth = parseInt($('.wl-pagination').css('right'));
+                console.log(rwidth);
+                if(rwidth <= totalwidth){
+                    $('.wl-pagination').css('right',cwidth+rwidth+'px');
+                }else{
+                    $('.wl-next-page').off('click');
                 }
-                console.log($('.wl-common a').length);
             })
+
+
+            $('.wl-prev-page').on('click',function(event){
+                event.preventDefault();
+                var rwidth = parseInt($('.wl-pagination').css('right'));
+                if(rwidth){
+                    $('.wl-pagination').css('right',rwidth-cwidth+'px');
+                }else{
+                    $('.wl-prev-page').off('click');
+                }
+            })
+
+
+
+            $('.message-btn').on('click', function () {
+                console.log('click')
+                $(this).siblings('.message-popup').fadeIn(300);
+            });
+            $(document).on('click', function (event) {
+                if (! $(event.target).hasClass('message-btn') && $(event.target).parents('.message-popup').length === 0) {
+                    if ($('.message-popup').is(':visible')) {
+                        $('.message-popup').fadeOut(300);
+                    }
+                }
+            });
+            $('.message-popup button').on('click', function () {
+                var id = $(this).parents('.product').data('id');
+                var self = this;
+                var type = 'product';
+                var targetUrl = '/set'
+                $.ajax({
+                    type:'POST',
+                    url:targetUrl,
+                    data:{
+                        description:$(self).siblings('textarea').val(),
+                        id: id,
+                        type: product
+                    },
+                    success: function(data){
+                        var data = data.parseJSON(data);
+                        $(self).siblings('textarea').html(data.data.remark).val(data.data.remark);
+                        $(self).parents('td').find('.td-remark').html(data.data.remark);
+                    }
+                })
+            });
