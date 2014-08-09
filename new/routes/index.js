@@ -6,6 +6,9 @@ var base = require('../app').target;
 var target = base + '/ls';
 
 
+
+router.get('/');
+
 router.get('/single/*', function (req, res, next) {
     var targetUrl = target + '/' + req.url.split('/single/')[1];
     var requestSingle = http.request(targetUrl, function (response) {
@@ -25,6 +28,27 @@ router.get('/single/*', function (req, res, next) {
 
     requestSingle.end();
 
+});
+
+//请求每页的数据
+router.get('/page/*',function (req,res,next) {
+    var targetUrl = target + '/' + req.url.split('/page/')[1];
+    var requestPage = http.request(targetUrl, function (response) {
+        var data = '';
+        response.on('data', function (chunk) {
+            data = data + chunk;
+        });
+
+        response.on('end', function (){
+            res.send(data);
+        });
+    });
+    requestPage.on('error', function (e) {
+        res.send(e.message);
+        return false;
+    });
+
+    requestPage.end();
 });
 
 router.post('/set', function (req, res, next) {
@@ -146,7 +170,7 @@ router.get('/*', function (req, res, next) {
                             url: decodeURIComponent(req.url.split('?')[0]), 
                             sort: sort, 
                             pageNum: page,
-                            search: search                            
+                            search: search,
                         });
                     } else {
                         // 将最后一级的请求结果单独拿出来存放，

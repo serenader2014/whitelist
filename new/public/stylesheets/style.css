@@ -424,7 +424,6 @@ ol {
 .wl-breadcrumb li {
     display: inline-block;
     color:rgba(255,255,255,0.7);
-    /*padding:0 3px;*/
 }
 
 .wl-breadcrumb li+li:before {
@@ -445,14 +444,11 @@ ol {
 .wl-nav-tab li {
     display: inline-block;
     color:rgba(255,255,255,0.7);
-    /*padding: 5px;*/
-    /*margin: 5px;*/
     width:100px;
     margin-left: 5px;
     background-color: #34343e;
     text-align: center;
     font-size: 18px;
-    /*color: rgba(255,255,255,0.5);*/
 }
 
 .wl-nav-tab a {
@@ -524,14 +520,9 @@ ol {
 
 .wl-tbody tr td {
     color: #AD9A9A;
-    /*text-align: center;*/
     position: relative;
     padding: 10px;
     border-bottom: 1px solid #555555;
-}
-
-.wl-tbody tr td + td {
-    /*text-align: center;*/
 }
 
 .th-remark,.td-remark {
@@ -551,21 +542,22 @@ ol.wl-pagination li {
     padding: 12px;
 }
 
-/*.wl-pager {
-    width:100%;
-    height: 40px;
-}*/
+.wl-pager {
+    padding: 10px;
+}
 
 .wl-prev-page,.wl-next-page {
     height: 40px;
     width: 4%;
-    float: left;
+    /*float: left;*/
     text-align: center;
     line-height: 40px;
     display: inline;
 }
 
-
+.wl-prev-page a {
+    display: none;
+}
 
 .wl-pagination-container {
     width:90%;
@@ -575,15 +567,15 @@ ol.wl-pagination li {
 }
 
 .wl-pagination {
-    width: 1000000px;
-    /*float: left;*/
-    position: relative;
-    right: 0;
-    /*overflow: hidden;*/
-    
+    /*width: 1000000px;*/
+    position: relative;    
 }
 
 .wl-pagination li {
     display: inline-block;
 }
 
+.wl-page-active {
+    background-color: #303030;
+    border-radius: 20px;
+}

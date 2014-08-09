@@ -5,11 +5,11 @@ block content
     //- include sidebar
     .wl-nav
         .wl-nav-left
-            h1.wl-head: a(href="/") 智度
+            h1.wl-head: a(href='/') 智度
         .wl-nav-right
             .wl-nav-rup
                 form.wl-search
-                    input(type="text",placeholder="Search").wl-input
+                    input(type='text',placeholder='Search',name='search').wl-input
                     button(type="submit").wl-btn 搜索
                 ol.wl-breadcrumb
                     - var l = url.split('/')[1];
@@ -18,10 +18,10 @@ block content
             .wl-nav-rdown
                 span.wl-current-title #{product.current.name}
                 ul.wl-nav-tab
-                    li.wl-list.active: a(href="javascript:") 列表
-                    li.wl-statistics: a(href="javascript:") 统计
-                    li.wl-addClass: a(href="javascript:") 添加分类
-                    li.wl-addProduct: a(href="javascript:") 添加产品
+                    li.wl-list.active: a(href='javascript:') 列表
+                    li.wl-statistics: a(href='javascript:') 统计
+                    li.wl-addClass: a(href='javascript:') 添加分类
+                    li.wl-addProduct: a(href='javascript:') 添加产品
 
     .wl-sidebar-wrapper
         .wl-sidebar
@@ -35,64 +35,98 @@ block content
                                 - c = 'active';
                                 li(class='#{c}')
                                     .wl-product-info
-                                        //- span.wl-product-weight #{item.weight}
-                                        span.wl-product-amount #{item.amount}
+                                        - var number = item.amount*1 > 1000000 ? Math.ceil(item.amount*1/1000000) + ' M' : (item.amount*1 > 1000 ? Math.ceil(item.amount*1/1000) + ' k' : item.amount)
+                                        span.wl-product-amount #{number}
                                     a(href='#{item.name}') #{item.name} 
                             - else
                                 li
                                     .wl-product-info
-                                        //- span.wl-product-weight #{item.weight}
-                                        span.wl-product-amount #{item.amount}
+                                         - var number = item.amount*1 > 1000000 ? Math.ceil(item.amount*1/1000000) + ' M' : (item.amount*1 > 1000 ? Math.ceil(item.amount*1/1000) + ' k' : item.amount)
+                                        span.wl-product-amount #{number}
                                     a(href='#{item.name}') #{item.name} 
                         - })
                 .slide-btn: a(href="javascript:;").fold
         .wl-main
-            .product-wrapper
-                table.wl-table
-                    thead
-                        tr.wl-tr
-                            th product 
-                            th weight
-                            th num
-                            th.th-remark remark
-                            th product 
-                            th weight
-                            th num
-                            th.th-remark remark
-                    tbody.wl-tbody
-                        - product.product.forEach(function (item,index) {
-                            - if(index%2 === 0) {
-                                tr
-                            - }
-                                    td  
-                                        span.message-btn.icon-pencil
-                                        a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
-                                        .message-popup
-                                            .popup-wrapper
-                                                textarea #{item.remark}
-                                                button(type='submit') Submit 
-                                    td #{item.weight}
-                                    td #{item.count}
-                                    td.td-remark #{item.remark}
-                        - })
-                .wl-pager
-                    .wl-prev-page: a(href='') &laquo;
-                    .wl-pagination-container
-                        ol.wl-pagination
-                            - var pnum;
-                            - classes.forEach(function(item,index) {
-                                - if(item.name === product.current.name) {
-                                    - pnum =  Math.ceil(item.amount/100);
-                                    - var t = pnum;
-                                    - for(var i=1; i<=t; i++)
-                                        - if(i == pageNum*1)
-                                            li.wl-page-active.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
-                                        - else
-                                            li.wl-common: a(href="/#{product.current.name}?page=#{i}") #{i}
-
+            .wl-sort
+                .wl-sort-container
+                    p 按首字母排序
+                    .wl-sort-letter
+                        - each num,letter in product.first_letter
+                            - if (num*1 > 0)
+                                span: a(href='#{url}?search=#{letter}%') #{letter} (#{num})            
+            - if (search || sort)
+                - var header = sort ? '按首字母 '+sort+' 排序' : '搜索 '+ search +' 的结果'
+                h2.wl-query-header #{header}
+                .product-wrapper
+                    table.wl-table
+                        thead
+                            tr.wl-tr
+                                th product 
+                                th weight
+                                th num
+                                th.th-remark remark
+                                th product 
+                                th weight
+                                th num
+                                th.th-remark remark
+                        tbody.wl-tbody
+                            - product.product.forEach(function (item,index) {
+                                - if(index%2 === 0) {
+                                    tr
                                 - }
-                            - })
-                    .wl-next-page: a(href='') &raquo;
+                                        td  
+                                            span.message-btn.icon-pencil
+                                            a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                            .message-popup
+                                                .popup-wrapper
+                                                    textarea #{item.remark}
+                                                    button(type='submit') Submit 
+                                        td #{item.weight}
+                                        td #{item.count}
+                                        td.td-remark #{item.remark}
+                            - })   
+            - else
+                .product-wrapper
+                    table.wl-table
+                        thead
+                            tr.wl-tr
+                                th product 
+                                th weight
+                                th num
+                                th.th-remark remark
+                                th product 
+                                th weight
+                                th num
+                                th.th-remark remark
+                        tbody.wl-tbody
+                            - each item, index in product.product
+                                - if(index%2 === 0) {
+                                    tr
+                                - }
+                                        td  
+                                            span.message-btn.icon-pencil
+                                            a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                            .message-popup
+                                                .popup-wrapper
+                                                    textarea #{item.remark}
+                                                    button(type='submit') Submit 
+                                        td #{item.weight}
+                                        td #{item.count}
+                                        td.td-remark #{item.remark}
+            .wl-pager
+                ol.wl-pagination
+                    li.wl-prev-page: a(href='') &laquo;
+                    - var pnum;
+                    - classes.forEach(function(item,index) {
+                        - if(item.name === product.current.name) {
+                            - pnum =  Math.ceil(item.amount/100);
+                            - var t = pnum < 20 ? pnum : 20; 
+                            - pageNum = pageNum ? pageNum : 1;
+                            - for(var i=1; i<=t; i++)
+                                li.wl-common: a(href="javascript:;") #{i}
+                        - }
+                    - })
+                    li.wl-next-page: a(href='') &raquo;
         script.
             $('.wl-main').width($('body').width() - $('.wl-sidebar').width());
             $('.slide-btn a').on('click',function(event){
@@ -119,39 +153,92 @@ block content
                 }
             });
 
-            var cwidth = $('.wl-pagination-container').width()+10;
-            console.log(cwidth);
-            var totalwidth = 0;
-            totalwidth = totalwidth + cwidth;
-            $('.wl-next-page').on('click',function(event){
+            var total = 1;
+            var num = #{pnum};
+            $('.wl-next-page a').on('click',function(){
                 event.preventDefault();
-                console.log(totalwidth);
-                var rwidth = parseInt($('.wl-pagination').css('right'));
-                console.log(rwidth);
-                if(rwidth <= totalwidth){
-                    $('.wl-pagination').css('right',cwidth+rwidth+'px');
-                }else{
-                    $('.wl-next-page').off('click');
+                if($('.wl-prev-page a').is(':hidden')) {
+                    $('.wl-prev-page a').show();
+                }
+                var fisrtPage = $('.wl-common').eq(0).find('a').html()*1;
+                var newPage = fisrtPage + 20;
+                var liArrA = $('.wl-common a');
+                var sum = 0;
+                liArrA.each(function(index,item){
+                    sum = newPage+index;
+                    $(this).html(sum);
+                });
+                total = total + 20;
+                console.log(total);
+                if(total >= num){
+                    $('.wl-next-page a').hide();
                 }
             })
 
-
-            $('.wl-prev-page').on('click',function(event){
+            $('.wl-prev-page a').on('click',function(event){
                 event.preventDefault();
-                var rwidth = parseInt($('.wl-pagination').css('right'));
-                if(rwidth){
-                    $('.wl-pagination').css('right',rwidth-cwidth+'px');
-                }else{
-                    $('.wl-prev-page').off('click');
+                if($('.wl-next-page a').is(':hidden')) {
+                    $('.wl-next-page a').show();
+                }
+                var fisrtPage = $('.wl-common').eq(0).find('a').html()*1;
+                var newPage = fisrtPage - 20;
+                var liArrA = $('.wl-common a');
+                liArrA.each(function(index,item){
+                    $(this).html(newPage+index);
+                });
+                if(newPage === 1){
+                    $('.wl-prev-page a').hide();
                 }
             })
 
+            $('.wl-common a').on('click',function(event){
+                event.preventDefault();
+                $('.wl-common').removeClass('wl-page-active');
+                $(this).parent().addClass('wl-page-active');
+                var href = $('.wl-breadcrumb li a').attr('href');
+                var className = href.split('/')[1];
+                page = $(this).html()*1;
+                var n = 100;
+                var offset = (page-1)*100;
+                var targetUrl = '/page/'+className+'?offset='+offset+'&limit='+n;
+                var self = this;
+                $('.wl-tbody tr').remove();
+                $('.wl-tbody').append('<h2 style="color:white; text-align:center;">loading...</h2>');
+                $.ajax({
+                    type: 'GET',
+                    url: targetUrl,
+                    success: function(data) {
+                        $('.wl-tbody h2').remove();
+                        var cdata = $.parseJSON(data);
+                        console.log(cdata);
+                        var i = 1;
+                        cdata.product.forEach(function (item,index) {
+                            var num = item.count*1 > 1000000 ? Math.ceil(item.count*1/1000000) + ' M' : (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count)
+                            var weight = item.weight*1 > 1000000 ? Math.ceil(item.weight*1/1000000) + ' M' : (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight)
+                            var t1 = '<td><span class="message-btn icon-pencil"></span><a class="product" href="'+href+'/'+item.name+'" data-id="'
+                                    + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
+                                    '</textarea><button type="submit">Submit</button></div></td>';
+                            var t2 = '<td>'+weight+'</td>';
+                            var t3 = '<td>'+num+'</td>';
+                            var t4 = '<td class="td-remark">'+item.remark+'</td>';
+                            var t = t1 + t2 + t3 + t4;
 
-
-            $('.message-btn').on('click', function () {
+                            if(index%2 === 0){
+                                $('.wl-tbody').append('<tr>'+t+'</tr>');
+                            }else{
+                                $('.wl-tbody tr').eq(index-i).append(t);
+                            }
+                            i++;
+                        })
+                    }
+                })
+            })
+                             
+            $('body').on('click','.message-btn', function () {
                 console.log('click')
                 $(this).siblings('.message-popup').fadeIn(300);
             });
+
             $(document).on('click', function (event) {
                 if (! $(event.target).hasClass('message-btn') && $(event.target).parents('.message-popup').length === 0) {
                     if ($('.message-popup').is(':visible')) {
@@ -159,7 +246,7 @@ block content
                     }
                 }
             });
-            $('.message-popup button').on('click', function () {
+            $('body').on('click','.message-popup button', function () {
                 var id = $(this).parents('.product').data('id');
                 var self = this;
                 var type = 'product';
@@ -173,9 +260,14 @@ block content
                         type: product
                     },
                     success: function(data){
-                        var data = data.parseJSON(data);
+                        var data = $.parseJSON(data);
                         $(self).siblings('textarea').html(data.data.remark).val(data.data.remark);
                         $(self).parents('td').find('.td-remark').html(data.data.remark);
                     }
                 })
             });
+
+
+
+                                        
+                                        
