@@ -68,18 +68,22 @@ block content
                             tr.wl-tr
                                 th
                                     a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down 
+                                    span.icon-arrow-down
+                                    span.icon-arrow-up
                                 th
                                     a(href='javascript:;').wl-weight weight
                                     span.icon-arrow-down
+                                    span.icon-arrow-up
                                 th num
                                 th.th-remark remark
                                 th
                                     a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down 
+                                    span.icon-arrow-down
+                                    span.icon-arrow-up 
                                 th
                                     a(href='javascript:;').wl-weight weight
                                     span.icon-arrow-down
+                                    span.icon-arrow-up
                                 th num
                                 th.th-remark remark
                         tbody.wl-tbody
@@ -105,18 +109,22 @@ block content
                             tr.wl-tr
                                 th
                                     a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down 
+                                    span.icon-arrow-down
+                                    span.icon-arrow-up
                                 th
                                     a(href='javascript:;').wl-weight weight
                                     span.icon-arrow-down
+                                    span.icon-arrow-up
                                 th num
                                 th.th-remark remark
                                 th
                                     a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down 
+                                    span.icon-arrow-down
+                                    span.icon-arrow-up 
                                 th
                                     a(href='javascript:;').wl-weight weight
                                     span.icon-arrow-down
+                                    span.icon-arrow-up
                                 th num
                                 th.th-remark remark
                         tbody.wl-tbody
@@ -174,6 +182,9 @@ block content
                 }
             });
 
+
+
+
             var total = 1;
             var num = #{pnum};
             $('.wl-next-page a').on('click',function(){
@@ -227,7 +238,6 @@ block content
                 if(header){
                     var sortUrl = location.href.split('?')[1];
                     targetUrl = '/page/'+className+'?'+sortUrl+'&offset='+offset+'&limit='+n;
-                    console.log(targetUrl);
                 }else{
                     targetUrl = '/page/'+className+'?offset='+offset+'&limit='+n;
                 }
@@ -286,6 +296,32 @@ block content
                     }
                 })
             })
+
+
+
+            //- $('.wl-product').on('click',function(event) {
+            //-     event.preventDefault();
+            //-     var weight;
+            //-     if($('.icon-arrow-up').is(':visible'){
+            //-         $('.icon-arrow-up').hide();
+            //-         $('.icon-arrow-down').show();
+            //-         weight = -weight;
+            //-     }
+            //-     if($('.icon-arrow-down').is(':visible'){
+            //-     $('.icon-arrow-down').hide();
+            //-     $('.icon-arrow-up').show();
+            //-     weight = weight;
+            //-     }
+            //-     var href = $('.wl-breadcrumb li a').attr('href');
+            //-     var className = href.split('/')[1];
+            //-     $('.wl-tbody tr').remove();
+            //-     var targetUrl = 
+
+            //- })
+
+
+
+
                              
             $('body').on('click','.message-btn', function () {
                 console.log('click')

@@ -610,6 +610,17 @@ ol.wl-pagination li a {
   color: #ffffff;
   cursor: pointer;
 }
+
+.icon-arrow-up,.icon-arrow-down {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  padding: 10px;
+}
+
+.icon-arrow-down {
+  display: none;
+}
+
 /*loading css start*/
 
 /* ANIMATION */
