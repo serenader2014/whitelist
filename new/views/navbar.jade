@@ -16,8 +16,9 @@
             - var title = current ? current.current.name : product.current.name
             span.wl-current-title #{title}
             ul.wl-nav-tab
-                li.wl-list.active: a(href="/#{url[url.length-1]}?type=list") 列表
-                li.wl-statistics: a(href="/#{url[url.length-1]}?type=") 统计
-                li.wl-addClass: a(href="/#{url[url.length-1]}?type=addsort") 添加分类
-                li.wl-addProduct: a(href="/#{url[url.length-1]}?type=addproduct") 添加产品
+                li.wl-child-list.active(data-type='child-list'): a(href="javascript:;") 子产品
+                li.wl-ip-list(data-type='ip-list'): a(href="javascript:;") IP列表
+                li.wl-statistics(data-type='statistics'): a(href="/#{url[url.length-1]}?type=") 统计
+                li.wl-addClass(data-type='add-class'): a(href="/#{url[url.length-1]}?type=addsort") 添加分类
+                li.wl-addProduct(data-type='add-product'): a(href="/#{url[url.length-1]}?type=addproduct") 添加产品
 

@@ -189,8 +189,8 @@ block content
             var num = #{pnum};
             $('.wl-next-page a').on('click',function(){
                 event.preventDefault();
-                if($('.wl-prev-page a').is(':hidden')) {
-                    $('.wl-prev-page a').show();
+                if($('.wl-prev-page').is(':hidden')) {
+                    $('.wl-prev-page').show();
                 }
                 var fisrtPage = $('.wl-common').eq(0).find('a').html()*1;
                 var newPage = fisrtPage + 20;
@@ -202,15 +202,15 @@ block content
                 });
                 total = total + 20;
                 if(total >= num){
-                    $('.wl-next-page a').hide();
+                    $('.wl-next-page').hide();
                 }
                 $('.wl-common').removeClass('wl-page-active');
             })
 
             $('.wl-prev-page a').on('click',function(event){
                 event.preventDefault();
-                if($('.wl-next-page a').is(':hidden')) {
-                    $('.wl-next-page a').show();
+                if($('.wl-next-page').is(':hidden')) {
+                    $('.wl-next-page').show();
                 }
                 var fisrtPage = $('.wl-common').eq(0).find('a').html()*1;
                 var newPage = fisrtPage - 20;
@@ -219,7 +219,7 @@ block content
                     $(this).html(newPage+index);
                 });
                 if(newPage === 1){
-                    $('.wl-prev-page a').hide();
+                    $('.wl-prev-page').hide();
                 }
                 $('.wl-common').removeClass('wl-page-active');
             })

@@ -40,6 +40,32 @@ ul, ol {
     list-style: none;
 }
 
+
+.wl-home {
+    height: 100%;
+    width: 100%;
+    display: table;
+    text-align: center;
+}
+
+.wl-home-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+
+}
+
+.wl-tile {
+    display: inline-block;
+}
+
+.wl-title {
+    display: block;
+}
+
+.wl-tile img {
+    width: 150px;
+}
+
 .wl-current-title {
     display: inline-block;
     float: left;
@@ -49,7 +75,7 @@ ul, ol {
 }
 
 .wl-product-count {
-    padding: 30px 20px;
+    padding: 10px 20px 20px;
     font-size: 18px;
     color: #CCCCCC;
 }
@@ -91,6 +117,7 @@ ul, ol {
 }
 
 .ip-wrapper {
+    display: none;
     padding: 40px;
 }
 
@@ -551,7 +578,7 @@ ol.wl-pagination li {
 
 
 ol.wl-pagination li a {
-    /*display: inline-block;*/
+    display: inline-block;
     width: 100%;
     padding: 5px 0;
 }
@@ -561,15 +588,12 @@ ol.wl-pagination li a {
 }
 
 .wl-prev-page,.wl-next-page {
-    height: 40px;
     width: 4%;
-    /*float: left;*/
     text-align: center;
-    line-height: 40px;
     display: inline;
 }
 
-.wl-prev-page a {
+ol.wl-pagination .wl-prev-page {
     display: none;
 }
 
@@ -583,6 +607,7 @@ ol.wl-pagination li a {
 .wl-pagination {
     position: relative;
     margin: 10px 0 30px;
+    text-align: center;
 }
 
 .wl-pagination li {
