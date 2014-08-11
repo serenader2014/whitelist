@@ -3,6 +3,11 @@ extends layout
 block content
     //- include navbar
     //- include sidebar
+    .wl-loading-container
+        .container
+            .ring.blue
+            #content
+                span LOADING
     .wl-nav
         .wl-nav-left
             h1.wl-head: a(href='/') 智度
@@ -61,12 +66,20 @@ block content
                     table.wl-table
                         thead
                             tr.wl-tr
-                                th product 
-                                th weight
+                                th
+                                    a(href='javascript:;').wl-product product
+                                    span.icon-arrow-down 
+                                th
+                                    a(href='javascript:;').wl-weight weight
+                                    span.icon-arrow-down
                                 th num
                                 th.th-remark remark
-                                th product 
-                                th weight
+                                th
+                                    a(href='javascript:;').wl-product product
+                                    span.icon-arrow-down 
+                                th
+                                    a(href='javascript:;').wl-weight weight
+                                    span.icon-arrow-down
                                 th num
                                 th.th-remark remark
                         tbody.wl-tbody
@@ -90,12 +103,20 @@ block content
                     table.wl-table
                         thead
                             tr.wl-tr
-                                th product 
-                                th weight
+                                th
+                                    a(href='javascript:;').wl-product product
+                                    span.icon-arrow-down 
+                                th
+                                    a(href='javascript:;').wl-weight weight
+                                    span.icon-arrow-down
                                 th num
                                 th.th-remark remark
-                                th product 
-                                th weight
+                                th
+                                    a(href='javascript:;').wl-product product
+                                    span.icon-arrow-down 
+                                th
+                                    a(href='javascript:;').wl-weight weight
+                                    span.icon-arrow-down
                                 th num
                                 th.th-remark remark
                         tbody.wl-tbody
@@ -201,15 +222,24 @@ block content
                 page = $(this).html()*1;
                 var n = 100;
                 var offset = (page-1)*100;
-                var targetUrl = '/page/'+className+'?offset='+offset+'&limit='+n;
+                var header = $('.wl-query-header');
+                var targetUrl;
+                if(header){
+                    var sortUrl = location.href.split('?')[1];
+                    targetUrl = '/page/'+className+'?'+sortUrl+'&offset='+offset+'&limit='+n;
+                    console.log(targetUrl);
+                }else{
+                    targetUrl = '/page/'+className+'?offset='+offset+'&limit='+n;
+                }
                 var self = this;
                 $('.wl-tbody tr').remove();
-                $('.wl-tbody').append('<h2 style="color:white; text-align:center;">loading...</h2>');
+                $('.wl-loading-container').fadeIn(200);
+
                 $.ajax({
                     type: 'GET',
                     url: targetUrl,
                     success: function(data) {
-                        $('.wl-tbody h2').remove();
+                        $('.wl-loading-container').fadeOut(200);
                         var cdata = $.parseJSON(data);
                         var i = 1;
                         cdata.product.forEach(function (item,index) {
@@ -226,10 +256,6 @@ block content
                                     + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
                                     '</textarea><button type="submit">Submit</button></div></td>';
 
-
-
-
-
                             var td = $('<td>')
                                         .append($('<span class="message-btn icon-pencil">'))
                                         .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
@@ -238,18 +264,7 @@ block content
                                                 .append(
                                                     $('<div class="popup-wrapper">')
                                                         .append($('<textarea>').html(item.remark))
-                                                        .append($('<button type="submit">').html('Submit'))))
-
-
-
-
-
-
-
-
-
-
-                            
+                                                        .append($('<button type="submit">').html('Submit'))))                           
 
                             if(index%2 === 0){
                                 $('.wl-tbody')
