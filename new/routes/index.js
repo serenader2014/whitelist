@@ -100,6 +100,7 @@ router.get('/*', function (req, res, next) {
     // 如果请求根目录，则处理根目录页面
     if (url === '/') {
         handleIndex();
+        return false;
     } else if (url.substring(url.length-1) === '/') {
         // 跳转
         handleRedirect();
@@ -110,7 +111,30 @@ router.get('/*', function (req, res, next) {
     }
 
     function handleIndex () {
+        var requestHome = http.request(target+'/', function (responseHome) {
+            var data = '';
+            responseHome.on('data', function (chunk) {
+                data = data + chunk;
+            });
 
+            responseHome.on('end', function () {
+                try {
+                    data = JSON.parse(data);
+                    res.render('home', {classes: data});
+                }
+                catch (err) {
+                    res.send([data,err]);
+                    return false;
+                }
+            });
+        });
+
+        requestHome.on('error', function (err) {
+            res.send(err);
+            return false;
+        });
+
+        requestHome.end();
     }
 
     function handleClass () {

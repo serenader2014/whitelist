@@ -169,10 +169,10 @@ block content
                     $(this).html(sum);
                 });
                 total = total + 20;
-                console.log(total);
                 if(total >= num){
                     $('.wl-next-page a').hide();
                 }
+                $('.wl-common').removeClass('wl-page-active');
             })
 
             $('.wl-prev-page a').on('click',function(event){
@@ -189,6 +189,7 @@ block content
                 if(newPage === 1){
                     $('.wl-prev-page a').hide();
                 }
+                $('.wl-common').removeClass('wl-page-active');
             })
 
             $('.wl-common a').on('click',function(event){
@@ -210,23 +211,60 @@ block content
                     success: function(data) {
                         $('.wl-tbody h2').remove();
                         var cdata = $.parseJSON(data);
-                        console.log(cdata);
                         var i = 1;
                         cdata.product.forEach(function (item,index) {
-                            var num = item.count*1 > 1000000 ? Math.ceil(item.count*1/1000000) + ' M' : (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count)
-                            var weight = item.weight*1 > 1000000 ? Math.ceil(item.weight*1/1000000) + ' M' : (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight)
+
+                            var num = item.count*1 > 1000000 ? 
+                                Math.ceil(item.count*1/1000000) + ' M' : 
+                                (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count);
+
+                            var weight = item.weight*1 > 1000000 ? 
+                                Math.ceil(item.weight*1/1000000) + ' M' : 
+                                (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight);
+
                             var t1 = '<td><span class="message-btn icon-pencil"></span><a class="product" href="'+href+'/'+item.name+'" data-id="'
                                     + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
                                     '</textarea><button type="submit">Submit</button></div></td>';
-                            var t2 = '<td>'+weight+'</td>';
-                            var t3 = '<td>'+num+'</td>';
-                            var t4 = '<td class="td-remark">'+item.remark+'</td>';
-                            var t = t1 + t2 + t3 + t4;
+
+
+
+
+
+                            var td = $('<td>')
+                                        .append($('<span class="message-btn icon-pencil">'))
+                                        .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
+                                        .append(
+                                            $('<div class="message-popup">')
+                                                .append(
+                                                    $('<div class="popup-wrapper">')
+                                                        .append($('<textarea>').html(item.remark))
+                                                        .append($('<button type="submit">').html('Submit'))))
+
+
+
+
+
+
+
+
+
+
+                            
 
                             if(index%2 === 0){
-                                $('.wl-tbody').append('<tr>'+t+'</tr>');
+                                $('.wl-tbody')
+                                    .append(
+                                        $('<tr>')
+                                            .append(td)
+                                            .append($('<td>').html(weight))
+                                            .append($('<td>').html(num))
+                                            .append($('<td>').html(item.remark).addClass('td-remark')));
                             }else{
-                                $('.wl-tbody tr').eq(index-i).append(t);
+                                $('.wl-tbody tr').eq(index-i)
+                                    .append(td)
+                                    .append($('<td>').html(weight))
+                                    .append($('<td>').html(num))
+                                    .append($('<td>').html(item.remark).addClass('td-remark'));
                             }
                             i++;
                         })

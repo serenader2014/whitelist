@@ -17,9 +17,14 @@
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
+html {
+    height: 100%;
+}
+
 body {
     padding: 0px;
     margin: 0px;
+    height: 100%;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     background: #3D3D4F;
 }
@@ -121,6 +126,7 @@ ul, ol {
 .wl-sort {
     position: relative;
     padding: 30px 50px 0;
+    margin-bottom: 30px;
     height: 70px;
 }
 
@@ -539,7 +545,15 @@ ol {
 
 ol.wl-pagination li {
     display: inline-block;
-    padding: 12px;
+    width: 4.5%;
+    text-align: center;
+}
+
+
+ol.wl-pagination li a {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 0;
 }
 
 .wl-pager {
@@ -567,8 +581,8 @@ ol.wl-pagination li {
 }
 
 .wl-pagination {
-    /*width: 1000000px;*/
-    position: relative;    
+    position: relative;
+    margin: 10px 0 30px;
 }
 
 .wl-pagination li {
