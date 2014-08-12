@@ -226,6 +226,7 @@ router.get('/*', function (req, res, next) {
 
                         res.render('index', {
                             urlArr: noQueryArr, 
+                            originalUrl: req.url,
                             current: current, 
                             parents: parents, 
                             ips: a, 

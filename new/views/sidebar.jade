@@ -46,13 +46,21 @@
         .main-area.product-wrapper#child-list
             table.wl-table
                 thead
-                    tr.wl-tr
-                        th product 
-                        th weight
+                   tr.wl-tr
+                        th
+                            a(href='javascript:;', data-sort='product_name').sort-type.wl-product product
+                            span.icon-arrow-up.sort-active
+                        th
+                            a(href='javascript:;', data-sort='weight').sort-type.wl-weight weight
+                            span.icon-arrow-up
                         th num
                         th.th-remark remark
-                        th product 
-                        th weight
+                        th
+                            a(href='javascript:;', data-sort='product_name').sort-type.wl-product product
+                            span.icon-arrow-up.sort-active 
+                        th
+                            a(href='javascript:;', data-sort='weight').sort-type.wl-weight weight
+                            span.icon-arrow-up
                         th num
                         th.th-remark remark
                 tbody.wl-tbody
@@ -100,6 +108,11 @@
                             textarea #{ip.remark}
                             button(type='submit') Submit
     script.
+        var sortType = '';
+        var url = '#{originalUrl}';
+        var chart = url.indexOf('?') === -1 ? '?' : '&';
+        var total = 1;
+        var num = #{current.current.pcount};
 
         var sort = '';
         $('.wl-main').width($('body').width()-$('.wl-sidebar').width());
@@ -239,8 +252,6 @@
             $('#'+type).fadeIn(200);
         });
 
-        var total = 1;
-        var num = #{current.current.pcount};
         $('.wl-next-page a').on('click',function(){
             event.preventDefault();
             if(! $('.wl-prev-page').is(':visible')) {
@@ -280,27 +291,79 @@
             $('.wl-common').removeClass('wl-page-active');
         })
 
+        var table = function (href,cdata) {
+            var i = 1;
+            cdata.product.forEach(function (item,index) {
+
+                var num = item.count*1 > 1000000 ? 
+                    Math.ceil(item.count*1/1000000) + ' M' : 
+                    (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count);
+
+                var weight = item.weight*1 > 1000000 ? 
+                    Math.ceil(item.weight*1/1000000) + ' M' : 
+                    (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight);
+
+                var td = $('<td>')
+                            .append($('<span class="message-btn icon-pencil">'))
+                            .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
+                            .append(
+                                $('<div class="message-popup">')
+                                    .append(
+                                        $('<div class="popup-wrapper">')
+                                            .append($('<textarea>').html(item.remark))
+                                            .append($('<button type="submit">').html('Submit'))))                           
+
+                if(index%2 === 0){
+                    $('.wl-tbody')
+                        .append(
+                            $('<tr>')
+                                .append(td)
+                                .append($('<td>').html(weight))
+                                .append($('<td>').html(num))
+                                .append($('<td>').html(item.remark).addClass('td-remark')));
+                }else{
+                    $('.wl-tbody tr').eq(index-i)
+                        .append(td)
+                        .append($('<td>').html(weight))
+                        .append($('<td>').html(num))
+                        .append($('<td>').html(item.remark).addClass('td-remark'));
+                }
+                i++;
+            })
+        }
+
         $('.wl-common a').on('click',function(event){
             event.preventDefault();
+
+            $('.wl-tbody tr').remove();
+            $('.wl-loading-container').fadeIn(200);
+
+            var sort = '';
+            var t;
+            var target = sortType === 'weight' ? '.wl-weight' : '.wl-product';
+
+            if ($(this).parent().hasClass('sort')) {
+
+                if ($(target).siblings('span').hasClass('icon-arrow-up')) {
+                    t = '';
+                } else {
+                    t = '-';
+                }
+
+                sort = '&order=' + t + sortType;
+            }
+
             $('.wl-common').removeClass('wl-page-active');
             $(this).parent().addClass('wl-page-active');
-            var href = $('.wl-breadcrumb li a').attr('href');
-            var url = '#{urlArr[urlArr.length-1]}';
+
+            
             page = $(this).html()*1;
             var n = 100;
             var offset = (page-1)*100;
-            var header = $('.wl-query-header');
-            var targetUrl;
-            if (header) {
-                var sortUrl = location.href.split('?')[1];
-                targetUrl = '/page/'+url+'?'+sortUrl+'&offset='+offset+'&limit='+n;
-                console.log(targetUrl);
-            } else {
-                targetUrl = '/page/'+url+'?offset='+offset+'&limit='+n;
-            }
-            var self = this;
-            $('.wl-tbody tr').remove();
-            $('.wl-loading-container').fadeIn(200);
+
+            var targetUrl = '/page' + url + chart + 'offset=' + offset + '&limit=' + n + sort;
+
+            console.log(targetUrl);
 
             $.ajax({
                 type: 'GET',
@@ -308,48 +371,49 @@
                 success: function(data) {
                     $('.wl-loading-container').fadeOut(200);
                     var cdata = $.parseJSON(data);
-                    var i = 1;
-                    cdata.product.forEach(function (item,index) {
-
-                        var num = item.count*1 > 1000000 ? 
-                            Math.ceil(item.count*1/1000000) + ' M' : 
-                            (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count);
-
-                        var weight = item.weight*1 > 1000000 ? 
-                            Math.ceil(item.weight*1/1000000) + ' M' : 
-                            (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight);
-
-                        var t1 = '<td><span class="message-btn icon-pencil"></span><a class="product" href="'+href+'/'+item.name+'" data-id="'
-                                + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
-                                '</textarea><button type="submit">Submit</button></div></td>';
-
-                        var td = $('<td>')
-                                    .append($('<span class="message-btn icon-pencil">'))
-                                    .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
-                                    .append(
-                                        $('<div class="message-popup">')
-                                            .append(
-                                                $('<div class="popup-wrapper">')
-                                                    .append($('<textarea>').html(item.remark))
-                                                    .append($('<button type="submit">').html('Submit'))))                           
-
-                        if (index%2 === 0) {
-                            $('.wl-tbody')
-                                .append(
-                                    $('<tr>')
-                                        .append(td)
-                                        .append($('<td>').html(weight))
-                                        .append($('<td>').html(num))
-                                        .append($('<td>').html(item.remark).addClass('td-remark')));
-                        } else {
-                            $('.wl-tbody tr').eq(index-i)
-                                .append(td)
-                                .append($('<td>').html(weight))
-                                .append($('<td>').html(num))
-                                .append($('<td>').html(item.remark).addClass('td-remark'));
-                        }
-                        i++;
-                    })
+                    table(url,cdata);
                 }
             })
+        })
+        
+        $('.sort-type').on('click',function(event) {
+            event.preventDefault();
+
+            $('.wl-tbody tr').remove();
+            $('.wl-loading-container').fadeIn(200);
+
+            sortType = $(this).data('sort');
+            var t;
+            var active = sortType === 'weight' ? '.wl-weight' : '.wl-product';
+            var inactive = sortType === 'weight' ? '.wl-product' : '.wl-weight';
+
+            if ($(this).siblings('span').hasClass('icon-arrow-up')) {
+                t = '-';
+                $(inactive).siblings('span').removeClass('sort-active');
+                $(active).siblings('span').removeClass('icon-arrow-up').addClass('icon-arrow-down').addClass('sort-active');
+            } else {
+                t  ='';
+                $(inactive).siblings('span').removeClass('sort-active');
+                $(active).siblings('span').removeClass('icon-arrow-down').addClass('icon-arrow-up').addClass('sort-active');
+            }
+
+            var targetUrl = '/single'+ url + chart + 'order=' + t + sortType;
+
+            console.log(targetUrl);
+
+            $.ajax({
+                type: 'GET',
+                url: targetUrl,
+                success: function (data) {
+                    $('.wl-loading-container').fadeOut(200);
+                    var cdata = $.parseJSON(data);
+                    table(url,cdata);
+                    $('.wl-common').addClass('sort').removeClass('wl-page-active');
+
+                    for (var i = 0; i <= 20; i++) {
+                        $('.wl-common a').eq(i).html(i+1);
+                    }
+                }
+            })
+
         })
