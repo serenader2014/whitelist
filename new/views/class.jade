@@ -67,22 +67,18 @@ block content
                         thead
                             tr.wl-tr
                                 th
-                                    a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down
-                                    span.icon-arrow-up
+                                    a(href='javascript:;', data-sort='product_name').sort-type.wl-product product
+                                    span.icon-arrow-up.sort-active
                                 th
-                                    a(href='javascript:;').wl-weight weight
-                                    span.icon-arrow-down
+                                    a(href='javascript:;', data-sort='weight').sort-type.wl-weight weight
                                     span.icon-arrow-up
                                 th num
                                 th.th-remark remark
                                 th
-                                    a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down
-                                    span.icon-arrow-up 
+                                    a(href='javascript:;', data-sort='product_name').sort-type.wl-product product
+                                    span.icon-arrow-up.sort-active 
                                 th
-                                    a(href='javascript:;').wl-weight weight
-                                    span.icon-arrow-down
+                                    a(href='javascript:;', data-sort='weight').sort-type.wl-weight weight
                                     span.icon-arrow-up
                                 th num
                                 th.th-remark remark
@@ -108,22 +104,18 @@ block content
                         thead
                             tr.wl-tr
                                 th
-                                    a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down
-                                    span.icon-arrow-up
+                                    a(href='javascript:;', data-sort='product_name').sort-type.wl-product product
+                                    span.icon-arrow-up.sort-active
                                 th
-                                    a(href='javascript:;').wl-weight weight
-                                    span.icon-arrow-down
+                                    a(href='javascript:;', data-sort='weight').sort-type.wl-weight weight
                                     span.icon-arrow-up
                                 th num
                                 th.th-remark remark
                                 th
-                                    a(href='javascript:;').wl-product product
-                                    span.icon-arrow-down
-                                    span.icon-arrow-up 
+                                    a(href='javascript:;', data-sort='product_name').sort-type.wl-product product
+                                    span.icon-arrow-up.sort-active 
                                 th
-                                    a(href='javascript:;').wl-weight weight
-                                    span.icon-arrow-down
+                                    a(href='javascript:;', data-sort='weight').sort-type.wl-weight weight
                                     span.icon-arrow-up
                                 th num
                                 th.th-remark remark
@@ -146,17 +138,24 @@ block content
                 ol.wl-pagination
                     li.wl-prev-page: a(href='') &laquo;
                     - var pnum;
-                    - classes.forEach(function(item,index) {
-                        - if(item.name === product.current.name) {
-                            - pnum =  Math.ceil(item.amount/100);
-                            - var t = pnum < 20 ? pnum : 20; 
-                            - pageNum = pageNum ? pageNum : 1;
-                            - for(var i=1; i<=t; i++)
-                                li.wl-common: a(href="javascript:;") #{i}
-                        - }
-                    - })
+                    - pnum =  Math.ceil(product.pcount/100);
+                    - var t = pnum < 20 ? pnum : 20; 
+                    - pageNum = pageNum ? pageNum : 1;
+                    - for(var i=1; i<=t; i++)
+                        li.wl-common: a(href="javascript:;") #{i}
                     li.wl-next-page: a(href='') &raquo;
         script.
+
+            var sortType = '';
+            var url = '#{originalUrl}';
+            var chart = url.indexOf('?') === -1 ? '?' : '&';
+            var total = 1;
+            var num = #{pnum};
+
+
+
+
+
             $('.wl-main').width($('body').width() - $('.wl-sidebar').width());
             $('.slide-btn a').on('click',function(event){
                 var self = this;
@@ -182,11 +181,6 @@ block content
                 }
             });
 
-
-
-
-            var total = 1;
-            var num = #{pnum};
             $('.wl-next-page a').on('click',function(){
                 event.preventDefault();
                 if($('.wl-prev-page').is(':hidden')) {
@@ -237,10 +231,6 @@ block content
                         Math.ceil(item.weight*1/1000000) + ' M' : 
                         (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight);
 
-                    var t1 = '<td><span class="message-btn icon-pencil"></span><a class="product" href="'+href+'/'+item.name+'" data-id="'
-                            + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
-                            '</textarea><button type="submit">Submit</button></div></td>';
-
                     var td = $('<td>')
                                 .append($('<span class="message-btn icon-pencil">'))
                                 .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
@@ -272,24 +262,36 @@ block content
 
             $('.wl-common a').on('click',function(event){
                 event.preventDefault();
+
+                $('.wl-tbody tr').remove();
+                $('.wl-loading-container').fadeIn(200);
+
+                var sort = '';
+                var t;
+                var target = sortType === 'weight' ? '.wl-weight' : '.wl-product';
+
+                if ($(this).parent().hasClass('sort')) {
+
+                    if ($(target).siblings('span').hasClass('icon-arrow-up')) {
+                        t = '';
+                    } else {
+                        t = '-';
+                    }
+
+                    sort = '&order=' + t + sortType;
+                }
+
                 $('.wl-common').removeClass('wl-page-active');
                 $(this).parent().addClass('wl-page-active');
-                var href = $('.wl-breadcrumb li a').attr('href');
-                var className = href.split('/')[1];
+
+                
                 page = $(this).html()*1;
                 var n = 100;
                 var offset = (page-1)*100;
-                var header = $('.wl-query-header');
-                var targetUrl;
-                if(header){
-                    var sortUrl = location.href.split('?')[1];
-                    targetUrl = '/page/'+className+'?'+sortUrl+'&offset='+offset+'&limit='+n;
-                }else{
-                    targetUrl = '/page/'+className+'?offset='+offset+'&limit='+n;
-                }
-                var self = this;
-                $('.wl-tbody tr').remove();
-                $('.wl-loading-container').fadeIn(200);
+
+                var targetUrl = '/page' + url + chart + 'offset=' + offset + '&limit=' + n + sort;
+
+                console.log(targetUrl);
 
                 $.ajax({
                     type: 'GET',
@@ -297,82 +299,55 @@ block content
                     success: function(data) {
                         $('.wl-loading-container').fadeOut(200);
                         var cdata = $.parseJSON(data);
-                        table(href,cdata);
+                        table(url,cdata);
                     }
                 })
-            })
-
-
-
-            $('.wl-product').on('click',function(event) {
-                event.preventDefault();
-                var product;
-                if($('.wl-product').siblings('.icon-arrow-up').is(':visible')) {
-                    $('.wl-product').siblings('.icon-arrow-up').hide();
-                    $('.wl-product').siblings('.icon-arrow-down').show();
-                    product = '-product_name';
-                }else if($('.wl-product').siblings('.icon-arrow-down').is(':visible')) {
-                    $('.wl-product').siblings('.icon-arrow-down').hide();
-                    $('.wl-product').siblings('.icon-arrow-up').show();
-                    product = 'product_name';
-                }
-
-                var href = $('.wl-breadcrumb li a').attr('href');
-                var className = href.split('/')[1];
-                $('.wl-tbody tr').remove();
-                $('.wl-loading-container').fadeIn(200);
-                console.log(product);
-                var targetUrl = '/single/'+className+'?order='+product;
-                console.log(targetUrl);
-                $.ajax({
-                    type: 'GET',
-                    url: targetUrl,
-                    success: function (data) {
-                        $('.wl-loading-container').fadeOut(200);
-                        console.log(data);
-                        var cdata = $.parseJSON(data);
-                        console.log(cdata);
-                        table(href,cdata);
-                    }
-                })
-
             })
             
-            $('.wl-weight').on('click',function(event) {
+            $('.sort-type').on('click',function(event) {
                 event.preventDefault();
-                var weight;
-                if($('.wl-weight').siblings('.icon-arrow-up').is(':visible')) {
-                    $('.wl-weight').siblings('.icon-arrow-up').hide();
-                    $('.wl-weight').siblings('.icon-arrow-down').show();
-                    weight = '-weight';
-                }else if($('.wl-weight').siblings('.icon-arrow-down').is(':visible')) {
-                    $('.wl-weight').siblings('.icon-arrow-down').hide();
-                    $('.wl-weight').siblings('.icon-arrow-up').show();
-                    weight = 'weight';
-                }
 
-                var href = $('.wl-breadcrumb li a').attr('href');
-                var className = href.split('/')[1];
                 $('.wl-tbody tr').remove();
                 $('.wl-loading-container').fadeIn(200);
-                var targetUrl = '/single/'+className+'?order='+weight;
+
+                sortType = $(this).data('sort');
+                var t;
+                var active = sortType === 'weight' ? '.wl-weight' : '.wl-product';
+                var inactive = sortType === 'weight' ? '.wl-product' : '.wl-weight';
+
+                if ($(this).siblings('span').hasClass('icon-arrow-up')) {
+                    t = '-';
+                    $(inactive).siblings('span').removeClass('sort-active');
+                    $(active).siblings('span').removeClass('icon-arrow-up').addClass('icon-arrow-down').addClass('sort-active');
+                } else {
+                    t  ='';
+                    $(inactive).siblings('span').removeClass('sort-active');
+                    $(active).siblings('span').removeClass('icon-arrow-down').addClass('icon-arrow-up').addClass('sort-active');
+                }
+
+                var targetUrl = '/single'+ url + chart + 'order=' + t + sortType;
+
                 console.log(targetUrl);
+
                 $.ajax({
                     type: 'GET',
                     url: targetUrl,
                     success: function (data) {
                         $('.wl-loading-container').fadeOut(200);
-                        console.log(data);
                         var cdata = $.parseJSON(data);
-                        console.log(cdata);
-                        table(href,cdata);
+                        table(url,cdata);
+                        $('.wl-common').addClass('sort').removeClass('wl-page-active');
+
+                        for (var i = 0; i <= 20; i++) {
+                            $('.wl-common a').eq(i).html(i+1);
+                        }
                     }
                 })
 
             })
-                             
+
+                                         
             $('body').on('click','.message-btn', function () {
-                console.log('click')
                 $(this).siblings('.message-popup').fadeIn(300);
             });
 
@@ -383,6 +358,7 @@ block content
                     }
                 }
             });
+
             $('body').on('click','.message-popup button', function () {
                 var id = $(this).parents('.product').data('id');
                 var self = this;
@@ -394,7 +370,7 @@ block content
                     data:{
                         description:$(self).siblings('textarea').val(),
                         id: id,
-                        type: product
+                        type: type,
                     },
                     success: function(data){
                         var data = $.parseJSON(data);

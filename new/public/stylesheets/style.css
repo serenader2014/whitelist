@@ -158,6 +158,10 @@ ul, ol {
     height: 70px;
 }
 
+.sort-active {
+  color: #FF666C !important;
+}
+
 .wl-sort-container {
     position: absolute;
     left: 50px;
@@ -645,10 +649,6 @@ ol.wl-pagination .wl-prev-page {
   font-size: 10px;
   color: rgba(255,255,255,0.5);
   padding: 10px;
-}
-
-.icon-arrow-down {
-  display: none;
 }
 
 input.wl-index-search {

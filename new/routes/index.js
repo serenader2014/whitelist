@@ -192,6 +192,7 @@ router.get('/*', function (req, res, next) {
                             classes: result[1], 
                             product: result[0], 
                             url: decodeURIComponent(req.url.split('?')[0]), 
+                            originalUrl: req.url,
                             sort: sort, 
                             pageNum: page,
                             search: search,
