@@ -42,13 +42,13 @@ block content
                                     .wl-product-info
                                         - var number = item.amount*1 > 1000000 ? Math.ceil(item.amount*1/1000000) + ' M' : (item.amount*1 > 1000 ? Math.ceil(item.amount*1/1000) + ' k' : item.amount)
                                         span.wl-product-amount #{number}
-                                    a(href='#{item.name}') #{item.name} 
+                                    a(href='#{item.id}') #{item.name} 
                             - else
                                 li
                                     .wl-product-info
                                          - var number = item.amount*1 > 1000000 ? Math.ceil(item.amount*1/1000000) + ' M' : (item.amount*1 > 1000 ? Math.ceil(item.amount*1/1000) + ' k' : item.amount)
                                         span.wl-product-amount #{number}
-                                    a(href='#{item.name}') #{item.name} 
+                                    a(href='#{item.id}') #{item.name} 
                         - })
                 .slide-btn: a(href="javascript:;").fold
         .wl-main
@@ -93,7 +93,7 @@ block content
                                 - }
                                         td  
                                             span.message-btn.icon-pencil
-                                            a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                            a.product(href='#{url}/#{item.id}',data-id='#{item.id}') #{item.name}
                                             .message-popup
                                                 .popup-wrapper
                                                     textarea #{item.remark}
@@ -134,7 +134,7 @@ block content
                                 - }
                                         td  
                                             span.message-btn.icon-pencil
-                                            a.product(href='#{url}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                            a.product(href='#{url}/#{item.id}',data-id='#{item.id}') #{item.name}
                                             .message-popup
                                                 .popup-wrapper
                                                     textarea #{item.remark}

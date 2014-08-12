@@ -8,10 +8,11 @@
                 button(type="submit").wl-btn 搜索
             ol.wl-breadcrumb
                 - var url = urlArr.reverse();
-                - each item in url
+                - each item,index in url
+                    - var name = current.current.name.split('.')[index]
                     - item = decodeURIComponent(item)
                     - var tmp = item.substring(item.lastIndexOf('/') + 1)
-                        li: a(href='/#{item}') #{tmp}
+                        li: a(href='/#{item}') #{index+1}
         .wl-nav-rdown
             - var title = current ? current.current.name : product.current.name
             span.wl-current-title #{title}

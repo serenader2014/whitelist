@@ -24,7 +24,7 @@
                                     - var num = product.pcount*1 > 1000000 ? Math.floor(product.pcount/1000000) + ' M' : (product.pcount*1 > 1000 ? Math.floor(product.pcount/1000) + ' K' : product.pcount)
                                     span.wl-product-weight #{weight}
                                     span.wl-product-amount #{num}
-                                a(href='/#{urlArr[index+1]}/#{product.name}') #{product.name} 
+                                a(href='/#{urlArr[urlArr.length-1]}/#{product.id}') #{product.name} 
                     - if (parent.current.pcount > 100)
                         - var str = urlArr[index+1]
                         .wl-more-product(data-current='#{str}')
@@ -62,7 +62,7 @@
                         - }
                                 td  
                                     span.message-btn.icon-pencil
-                                    a.product(href='/#{urlArr[urlArr.length-1]}/#{item.name}',data-id='#{item.id}') #{item.name}
+                                    a.product(href='/#{urlArr[urlArr.length-1]}/#{item.id}',data-id='#{item.id}') #{item.name}
                                     .message-popup
                                         .popup-wrapper
                                             textarea #{item.remark}
