@@ -224,6 +224,52 @@ block content
                 $('.wl-common').removeClass('wl-page-active');
             })
 
+
+            var table = function (href,cdata) {
+                var i = 1;
+                cdata.product.forEach(function (item,index) {
+
+                    var num = item.count*1 > 1000000 ? 
+                        Math.ceil(item.count*1/1000000) + ' M' : 
+                        (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count);
+
+                    var weight = item.weight*1 > 1000000 ? 
+                        Math.ceil(item.weight*1/1000000) + ' M' : 
+                        (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight);
+
+                    var t1 = '<td><span class="message-btn icon-pencil"></span><a class="product" href="'+href+'/'+item.name+'" data-id="'
+                            + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
+                            '</textarea><button type="submit">Submit</button></div></td>';
+
+                    var td = $('<td>')
+                                .append($('<span class="message-btn icon-pencil">'))
+                                .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
+                                .append(
+                                    $('<div class="message-popup">')
+                                        .append(
+                                            $('<div class="popup-wrapper">')
+                                                .append($('<textarea>').html(item.remark))
+                                                .append($('<button type="submit">').html('Submit'))))                           
+
+                    if(index%2 === 0){
+                        $('.wl-tbody')
+                            .append(
+                                $('<tr>')
+                                    .append(td)
+                                    .append($('<td>').html(weight))
+                                    .append($('<td>').html(num))
+                                    .append($('<td>').html(item.remark).addClass('td-remark')));
+                    }else{
+                        $('.wl-tbody tr').eq(index-i)
+                            .append(td)
+                            .append($('<td>').html(weight))
+                            .append($('<td>').html(num))
+                            .append($('<td>').html(item.remark).addClass('td-remark'));
+                    }
+                    i++;
+                })
+            }
+
             $('.wl-common a').on('click',function(event){
                 event.preventDefault();
                 $('.wl-common').removeClass('wl-page-active');
@@ -251,77 +297,79 @@ block content
                     success: function(data) {
                         $('.wl-loading-container').fadeOut(200);
                         var cdata = $.parseJSON(data);
-                        var i = 1;
-                        cdata.product.forEach(function (item,index) {
-
-                            var num = item.count*1 > 1000000 ? 
-                                Math.ceil(item.count*1/1000000) + ' M' : 
-                                (item.count*1 > 1000 ? Math.ceil(item.count*1/1000) + ' k' : item.count);
-
-                            var weight = item.weight*1 > 1000000 ? 
-                                Math.ceil(item.weight*1/1000000) + ' M' : 
-                                (item.weight*1 > 1000 ? Math.ceil(item.weight*1/1000) + ' k' : item.weight);
-
-                            var t1 = '<td><span class="message-btn icon-pencil"></span><a class="product" href="'+href+'/'+item.name+'" data-id="'
-                                    + item.id +'">'+item.name+'</a><div class="message-popup"><div class="popup-wrapper"><textarea>'+item.remark+
-                                    '</textarea><button type="submit">Submit</button></div></td>';
-
-                            var td = $('<td>')
-                                        .append($('<span class="message-btn icon-pencil">'))
-                                        .append($('<a class="product">').attr('href', href+'/'+item.name).data('id',item.id).html(item.name))
-                                        .append(
-                                            $('<div class="message-popup">')
-                                                .append(
-                                                    $('<div class="popup-wrapper">')
-                                                        .append($('<textarea>').html(item.remark))
-                                                        .append($('<button type="submit">').html('Submit'))))                           
-
-                            if(index%2 === 0){
-                                $('.wl-tbody')
-                                    .append(
-                                        $('<tr>')
-                                            .append(td)
-                                            .append($('<td>').html(weight))
-                                            .append($('<td>').html(num))
-                                            .append($('<td>').html(item.remark).addClass('td-remark')));
-                            }else{
-                                $('.wl-tbody tr').eq(index-i)
-                                    .append(td)
-                                    .append($('<td>').html(weight))
-                                    .append($('<td>').html(num))
-                                    .append($('<td>').html(item.remark).addClass('td-remark'));
-                            }
-                            i++;
-                        })
+                        table(href,cdata);
                     }
                 })
             })
 
 
 
-            //- $('.wl-product').on('click',function(event) {
-            //-     event.preventDefault();
-            //-     var weight;
-            //-     if($('.icon-arrow-up').is(':visible'){
-            //-         $('.icon-arrow-up').hide();
-            //-         $('.icon-arrow-down').show();
-            //-         weight = -weight;
-            //-     }
-            //-     if($('.icon-arrow-down').is(':visible'){
-            //-     $('.icon-arrow-down').hide();
-            //-     $('.icon-arrow-up').show();
-            //-     weight = weight;
-            //-     }
-            //-     var href = $('.wl-breadcrumb li a').attr('href');
-            //-     var className = href.split('/')[1];
-            //-     $('.wl-tbody tr').remove();
-            //-     var targetUrl = 
+            $('.wl-product').on('click',function(event) {
+                event.preventDefault();
+                var product;
+                if($('.wl-product').siblings('.icon-arrow-up').is(':visible')) {
+                    $('.wl-product').siblings('.icon-arrow-up').hide();
+                    $('.wl-product').siblings('.icon-arrow-down').show();
+                    product = '-product_name';
+                }else if($('.wl-product').siblings('.icon-arrow-down').is(':visible')) {
+                    $('.wl-product').siblings('.icon-arrow-down').hide();
+                    $('.wl-product').siblings('.icon-arrow-up').show();
+                    product = 'product_name';
+                }
 
-            //- })
+                var href = $('.wl-breadcrumb li a').attr('href');
+                var className = href.split('/')[1];
+                $('.wl-tbody tr').remove();
+                $('.wl-loading-container').fadeIn(200);
+                console.log(product);
+                var targetUrl = '/single/'+className+'?order='+product;
+                console.log(targetUrl);
+                $.ajax({
+                    type: 'GET',
+                    url: targetUrl,
+                    success: function (data) {
+                        $('.wl-loading-container').fadeOut(200);
+                        console.log(data);
+                        var cdata = $.parseJSON(data);
+                        console.log(cdata);
+                        table(href,cdata);
+                    }
+                })
 
+            })
+            
+            $('.wl-weight').on('click',function(event) {
+                event.preventDefault();
+                var weight;
+                if($('.wl-weight').siblings('.icon-arrow-up').is(':visible')) {
+                    $('.wl-weight').siblings('.icon-arrow-up').hide();
+                    $('.wl-weight').siblings('.icon-arrow-down').show();
+                    weight = '-weight';
+                }else if($('.wl-weight').siblings('.icon-arrow-down').is(':visible')) {
+                    $('.wl-weight').siblings('.icon-arrow-down').hide();
+                    $('.wl-weight').siblings('.icon-arrow-up').show();
+                    weight = 'weight';
+                }
 
+                var href = $('.wl-breadcrumb li a').attr('href');
+                var className = href.split('/')[1];
+                $('.wl-tbody tr').remove();
+                $('.wl-loading-container').fadeIn(200);
+                var targetUrl = '/single/'+className+'?order='+weight;
+                console.log(targetUrl);
+                $.ajax({
+                    type: 'GET',
+                    url: targetUrl,
+                    success: function (data) {
+                        $('.wl-loading-container').fadeOut(200);
+                        console.log(data);
+                        var cdata = $.parseJSON(data);
+                        console.log(cdata);
+                        table(href,cdata);
+                    }
+                })
 
-
+            })
                              
             $('body').on('click','.message-btn', function () {
                 console.log('click')
@@ -355,8 +403,3 @@ block content
                     }
                 })
             });
-
-
-
-                                        
-                                        

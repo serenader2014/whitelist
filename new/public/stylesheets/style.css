@@ -64,6 +64,7 @@ ul, ol {
 
 .wl-tile img {
     width: 150px;
+    border-radius: 10px;
 }
 
 .wl-current-title {
@@ -108,7 +109,7 @@ ul, ol {
     height: 100%;
     overflow: auto;
     background: #3D3D4F;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
 }
 
 .wl-query-header {
@@ -597,6 +598,10 @@ ol.wl-pagination .wl-prev-page {
     display: none;
 }
 
+.wl-prev-page {
+    float: left;
+}
+
 .wl-pagination-container {
     width:90%;
     height: 40px;
@@ -644,6 +649,36 @@ ol.wl-pagination .wl-prev-page {
 
 .icon-arrow-down {
   display: none;
+}
+
+input.wl-index-search {
+  height: 30px;
+  width: 300px;
+  border-radius: 10px;
+  border-style: none;
+  padding: 10px;
+}
+
+input.wl-index-search:focus {
+  outline:none;
+  border:#87C6F9 1px solid;
+  box-shadow: 0 0 20px rgba(103, 166, 217, 1);
+}
+
+.wl-container {
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  background: rgba(180,17,13,0.5);
+}
+
+.wl-container a:hover {
+  color: #ffffff;
+}
+
+.wl-header a:hover {
+  color: #ffffff;
 }
 
 /*loading css start*/
